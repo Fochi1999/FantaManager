@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.Scanner;
 
 public class trade_main{
-
+/*
 	public static void main(String[] args) {
 		
 		trade_main trade = new trade_main();
@@ -41,7 +41,7 @@ public class trade_main{
 			trade.createTradeDocuments(ins_trade);		
 		}
 	}	
-	
+	*/
 	
 	public void createTradeDocuments(int total_trades){
 		
@@ -101,7 +101,7 @@ public class trade_main{
 				collection.insertOne(doc);
 			}
 			catch(Exception e) {
-				System.out.print("MongoDB error, trade not inserted \n");
+				System.out.print("MongoDB error, trades not found. \n");
 			}  
 		}
 		

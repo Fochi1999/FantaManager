@@ -36,6 +36,18 @@ public class trade_class{
 		this.user_to = user_to_input;
 		this.status = 1; //setting the trade's status to 'complete'
 	}
+
+	//show all trades
+	public void show_trades(String user_input){
+		
+		//searched for no particular user
+		if(user_input.equals("none")) {
+			
+		}
+		
+	}
+	
+	
 	
 }
 
