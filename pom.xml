@@ -98,16 +98,16 @@
         
         
         <dependency>
- <groupId>com.google.code.gson</groupId>
-     <artifactId>gson</artifactId>
-     <version>2.3.1</version>
- </dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>
+        </dependency>
 
-  <dependency>
-<groupId>org.mongodb</groupId>
-<artifactId>mongodb-driver-sync</artifactId>
-<version>4.7.2</version>
-</dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.7.2</version>
+        </dependency>
         
         
         
