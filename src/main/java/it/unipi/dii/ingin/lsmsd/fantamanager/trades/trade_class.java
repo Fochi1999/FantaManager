@@ -6,8 +6,8 @@ public class trade_class{
 	int trade_id;
 	String user_from;
 	String user_to;
-	ArrayList<Integer> player_from;
-	ArrayList<Integer> player_to;
+	ArrayList<String> player_from;
+	ArrayList<String> player_to;
 	int credits;	// negative value: offered credits - positive value: wanted credits
 	int status; 	// 0: pending - 1:completed
 	
@@ -15,7 +15,7 @@ public class trade_class{
 	
 	//constructor
 	public trade_class(int trade_id_input, String user_from_input, String user_to_input, int credits_input, 
-			ArrayList<Integer> player_from_input, ArrayList<Integer> player_to_input, int status_input) {
+			ArrayList<String> player_from_input, ArrayList<String> player_to_input, int status_input) {
 		
 		//error prevention condition
 		if(status_input > 0)
@@ -36,17 +36,6 @@ public class trade_class{
 		this.user_to = user_to_input;
 		this.status = 1; //setting the trade's status to 'complete'
 	}
-
-	//show all trades
-	public void show_trades(String user_input){
-		
-		//searched for no particular user
-		if(user_input.equals("none")) {
-			
-		}
-		
-	}
-	
 	
 	
 }

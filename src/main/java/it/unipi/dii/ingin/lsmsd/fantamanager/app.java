@@ -4,10 +4,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.*;
 
 public class app extends Application {
+	
+	
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("home_page.fxml"));
@@ -18,6 +20,9 @@ public class app extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        
+    	//trade_main.createTrade();
+    	launch();
+        
     }
 }

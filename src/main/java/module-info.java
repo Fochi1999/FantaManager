@@ -13,10 +13,11 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     requires org.mongodb.driver.core;
     requires org.mongodb.bson;
     requires org.mongodb.driver.sync.client;
-    requires gson;
-
+    requires com.google.gson;
+    
     opens it.unipi.dii.ingin.lsmsd.fantamanager to javafx.fxml;
     exports it.unipi.dii.ingin.lsmsd.fantamanager;
     exports it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
     opens it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers to javafx.fxml;
+
 }

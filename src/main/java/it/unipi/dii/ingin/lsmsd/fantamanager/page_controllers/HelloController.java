@@ -9,6 +9,9 @@ import java.io.IOException;
 import javafx.stage.Stage;
 
 public class HelloController {
+	
+	Stage stage = new Stage();
+	
     @FXML
     private Label welcomeText;
 
@@ -19,7 +22,6 @@ public class HelloController {
     
     @FXML
     protected void click_trades() throws IOException {
-    	Stage stage = new Stage();
     	FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("trade_page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Trades page");
