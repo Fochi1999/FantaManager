@@ -14,7 +14,9 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     requires org.mongodb.bson;
     requires org.mongodb.driver.sync.client;
     requires com.google.gson;
-    
+    requires redis.clients.jedis;
+    requires json.simple;
+
     opens it.unipi.dii.ingin.lsmsd.fantamanager to javafx.fxml;
     exports it.unipi.dii.ingin.lsmsd.fantamanager;
     exports it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;

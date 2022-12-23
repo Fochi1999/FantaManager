@@ -37,5 +37,20 @@ public class HomeController {
         stage.setScene(scene);
         stage.show();
     }
+
+    @FXML
+    protected void click_collection() throws IOException {
+
+        Stage stage= (Stage)root.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("collection_page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Collection page");
+        stage.setScene(scene);
+        stage.show();
+
+        //CollectionController.apertura_pool();  //ok?
+
+        //CollectionController.create_table();   //ok?
+    }
     
 }
