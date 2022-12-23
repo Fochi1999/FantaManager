@@ -21,7 +21,7 @@ public class OptionController {
     @FXML
     protected void click_home() throws IOException {
 
-        Stage stage= (Stage)root.getScene().getWindow();
+        Stage stage = (Stage)root.getScene().getWindow();
         util_controller.back_to_home(stage);
     }
 

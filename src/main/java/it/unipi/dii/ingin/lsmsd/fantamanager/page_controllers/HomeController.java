@@ -11,17 +11,17 @@ import javafx.stage.Stage;
 
 public class HomeController {
 	
-	Stage stage = new Stage();
+	//Stage stage = new Stage();
 	
     @FXML
     private Label welcomeText;
     @FXML
-    private Parent root ;
+    private Parent root;
 
     @FXML
     protected void click_option() throws IOException {
 
-        Stage stage= (Stage)root.getScene().getWindow();
+        Stage stage = (Stage)root.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("option_page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Option page");
@@ -31,6 +31,8 @@ public class HomeController {
     
     @FXML
     protected void click_trades() throws IOException {
+    	
+    	Stage stage = (Stage)root.getScene().getWindow();
     	FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("trade_page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Trades page");
