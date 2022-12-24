@@ -28,7 +28,17 @@ public class HomeController {
         stage.setScene(scene);
         stage.show();
     }
-    
+
+    @FXML
+    protected void click_formation() throws IOException {
+
+        Stage stage = (Stage)root.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("formation_page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Option page");
+        stage.setScene(scene);
+        stage.show();
+    }
     @FXML
     protected void click_trades() throws IOException {
     	

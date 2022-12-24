@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.FormationController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="76.0" prefWidth="664.0">
+         <children>
+            <SplitMenuButton alignment="CENTER" mnemonicParsing="false" text="Formation" textAlignment="CENTER">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#print" text="4-3-3" />
+                <MenuItem mnemonicParsing="false" onAction="#print" text="4-4-2" />
+                  <MenuItem mnemonicParsing="false" onAction="#print" text="4-5-1" />
+                  <MenuItem mnemonicParsing="false" onAction="#print" text="5-4-1" />
+                  <MenuItem mnemonicParsing="false" onAction="#print" text="5-3-2" />
+                  <MenuItem mnemonicParsing="false" onAction="#print" text="3-4-3" />
+                  <MenuItem mnemonicParsing="false" onAction="#print" text="3-5-2" />
+              </items>
+            </SplitMenuButton>
+         </children>
+      </VBox>
+      <VBox layoutY="106.0" prefHeight="586.0" prefWidth="664.0">
+         <children>
+            <HBox fx:id="box_att" alignment="CENTER" prefHeight="120.0" prefWidth="665.0" spacing="20.0" />
+            <HBox fx:id="box_mid" alignment="CENTER" prefHeight="120.0" prefWidth="665.0" spacing="20.0" />
+            <HBox fx:id="box_def" alignment="CENTER" prefHeight="120.0" prefWidth="665.0" spacing="20.0" />
+            <HBox alignment="CENTER" prefHeight="120.0" prefWidth="665.0" spacing="20.0">
+               <children>
+                  <ChoiceBox prefWidth="150.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

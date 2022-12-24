@@ -51,7 +51,7 @@
                         </Text>
                      </children>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" prefWidth="150.0" styleClass="ChoiseBox">
+                  <VBox alignment="TOP_CENTER" onMouseClicked="#click_formation" prefWidth="150.0" styleClass="ChoiseBox">
                      <HBox.margin>
                         <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                      </HBox.margin>
