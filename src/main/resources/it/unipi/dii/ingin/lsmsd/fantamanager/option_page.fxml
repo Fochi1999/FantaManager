@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -29,7 +30,7 @@
             </Label>
          </center>
       </BorderPane>
-      <VBox layoutY="307.0" prefHeight="385.0" prefWidth="670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="307.0">
+      <VBox alignment="CENTER" layoutY="307.0" prefHeight="385.0" prefWidth="670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="307.0">
          <children>
             <Text fx:id="nick" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="nick:" wrappingWidth="662.9366767406464">
                <font>
@@ -49,10 +50,11 @@
             </Text>
             <Button mnemonicParsing="false" onMouseClicked="#click_home" text="Home">
                <VBox.margin>
-                  <Insets left="280.0" top="100.0" />
+                  <Insets top="100.0" />
                </VBox.margin>
             </Button>
          </children>
       </VBox>
+      <HBox fx:id="matchday_adm" alignment="CENTER" layoutY="583.0" prefHeight="110.0" prefWidth="664.0" />
    </children>
 </AnchorPane>

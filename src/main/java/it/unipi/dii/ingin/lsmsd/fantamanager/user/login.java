@@ -15,6 +15,7 @@ public class login {
         MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME);
         Document user = usersCollection.find(Filters.and(Filters.eq("username", nick), Filters.eq("password", password))).first();
         ret= user!=null;*/
+        global.liv_priv=2;
         global.nick=nick;
         return ret;
     }
@@ -27,6 +28,7 @@ public class login {
             return false;
         }
         usersCollection.insertOne(new Document().append("username", Nick).append("password", Pass));*/
+        global.liv_priv=2;
         global.nick=Nick;
         return true;
     }
