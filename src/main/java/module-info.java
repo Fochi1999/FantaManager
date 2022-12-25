@@ -16,6 +16,7 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     requires com.google.gson;
     requires redis.clients.jedis;
     requires json.simple;
+    requires org.apache.commons.pool2;
 
     opens it.unipi.dii.ingin.lsmsd.fantamanager to javafx.fxml;
     exports it.unipi.dii.ingin.lsmsd.fantamanager;
