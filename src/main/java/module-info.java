@@ -22,5 +22,7 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     exports it.unipi.dii.ingin.lsmsd.fantamanager;
     exports it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
     opens it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers to javafx.fxml;
+    exports it.unipi.dii.ingin.lsmsd.fantamanager.formation;
+    opens it.unipi.dii.ingin.lsmsd.fantamanager.formation to javafx.fxml;
 
 }

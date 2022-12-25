@@ -1,6 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.util;
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.formation;
+import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 
 public class global {
     String nick;
