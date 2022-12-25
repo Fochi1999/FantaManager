@@ -1,20 +1,26 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class HomeController {
+public class HomeController implements Initializable {
 	
 	//Stage stage = new Stage();
 	
     @FXML
-    private Label welcomeText;
+    private Text welcomeText;
     @FXML
     private Parent root;
 
@@ -64,5 +70,9 @@ public class HomeController {
 
         //CollectionController.create_table();   //ok?
     }
-    
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        welcomeText.setText("Benvenuto "+ global.nick);
+    }
 }

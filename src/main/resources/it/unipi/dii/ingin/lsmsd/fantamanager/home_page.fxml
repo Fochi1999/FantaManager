@@ -147,7 +147,7 @@
             </HBox>
          </children>
       </VBox>
-      <Text fx:id="welcome_id" fill="WHITE" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benvenuto" textAlignment="CENTER" wrappingWidth="670.0" AnchorPane.bottomAnchor="480.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="155.0">
+      <Text fx:id="welcomeText" fill="WHITE" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benvenuto" textAlignment="CENTER" wrappingWidth="670.0" AnchorPane.bottomAnchor="480.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="155.0">
          <font>
             <Font size="40.0" />
          </font>
