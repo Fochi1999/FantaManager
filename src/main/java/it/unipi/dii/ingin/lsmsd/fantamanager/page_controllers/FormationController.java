@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 public class FormationController implements Initializable {
 	
 	//Stage stage = new Stage();
+    ArrayList<player_collection> players;
     formation f;
     ArrayList<HBox> formationBoxes;
     @FXML
@@ -93,6 +94,7 @@ public class FormationController implements Initializable {
         formationBoxes.add(box_mid);
         formationBoxes.add(box_att);
         f=formation.getFormation(global.id_user);
+        players= collection.load_collection(global.id_user);
     }
     @FXML
     protected void click_deploy_player(ActionEvent event) {
@@ -100,13 +102,23 @@ public class FormationController implements Initializable {
         String role=((Button)event.getSource()).getText();
         System.out.println(role);
         String[] roles=role.split("-");
-        ArrayList<player_collection> players= collection.load_collection(global.id_user);
         if(roles.length==2){
             //titolare
-
+            String r=roles[0];
+            for(int i=0;i<players.size();i++){
+                if(players.get(i).get_position().equals(r)){
+                    //TODO aggiungi alla lista di giocatori visibili
+                }
+            }
         }
         else{
             //panchinaro
+            String r=roles[1];
+            for(int i=0;i<players.size();i++){
+                if(players.get(i).get_position().equals(r)){
+                    //TODO aggiungi alla lista di giocatori visibili
+                }
+            }
         }
 
     }
