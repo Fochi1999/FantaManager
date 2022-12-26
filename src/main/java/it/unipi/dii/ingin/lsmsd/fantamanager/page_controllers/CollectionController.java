@@ -7,8 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,11 +15,7 @@ import java.util.*;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.LineTable;
 
 import javafx.scene.control.TableColumn;
-import javafx.scene.layout.HBox;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.*;
 
 public class CollectionController implements Initializable {
 
@@ -34,7 +28,7 @@ public class CollectionController implements Initializable {
     @FXML
     protected void click_home() throws IOException {
 
-        closePool();
+        collection.closePool();
 
         Stage stage= (Stage)root.getScene().getWindow();
         util_controller.back_to_home(stage);
@@ -44,43 +38,11 @@ public class CollectionController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         System.out.println("Opening collection page...");
-        apertura_pool();
+        collection.apertura_pool();
         create_table();
     }
 
 
-
-    /*public void show_trades(MongoCursor<Document> result) {
-
-        //showing off trades
-        ObservableList<String> list = FXCollections.observableArrayList();
-        list.removeAll(list);	//clearing the list
-
-
-        while(result.hasNext()) {
-            Document trade_doc = result.next();
-            String player_from = trade_doc.get("player_from").toString();
-            String player_to = trade_doc.get("player_to").toString();
-            String credits = trade_doc.get("credits").toString();
-            String user_from = trade_doc.getString("user_from");
-            String trade_output = ">> Players offered: " + player_from + " /// <<  Players wanted: " + player_to +
-                    " /// $$$ Credits: " + credits +" - Trade request made by: "+ user_from;
-            list.add(trade_output);
-        }
-        trade_list.getItems().clear();
-        trade_list.getItems().addAll(list);
-    }*/
-
-    static JedisPool pool;
-
-    static void apertura_pool(){
-        pool=new JedisPool("localhost",6379);
-    }
-
-    public static String crea_chiave_load(int user_id) {  //solo per fare il retrieve delle info dell-user in questione
-        //return "user:"+this.userId+"*";   //dovrebbe essere cosi dopo la creazione di user
-        return "user_id:"+user_id+"*";
-    }
 
     public void create_table()
     {
@@ -90,7 +52,10 @@ public class CollectionController implements Initializable {
         System.out.println("creazione tabella");
 
         //TableView<LineTable> table = new TableView<>();
-        JSONArray databaseObject = load_collection();
+        //JSONArray databaseObject = collection.load_collection(1);  //mi serve id globale
+        ArrayList<player_collection> databaseObject = collection.load_collection(1);
+        System.out.println(databaseObject);
+
 
         String[] key_set={"Position","Team","Name","Quantity"};
         //double[] column_width={0.2,0.2,0.4,0.2};
@@ -115,16 +80,23 @@ public class CollectionController implements Initializable {
 
 
         for(int i=0; i<databaseObject.size();i++){
-            JSONObject player=(JSONObject) databaseObject.get(i);
+            //JSONObject player=(JSONObject) databaseObject.get(i);
+            player_collection player=databaseObject.get(i);
 
             System.out.println(player);
 
             Map<String, String> record = new HashMap<>();
             //record.put("id", (String) player.get("id"));
-            record.put("Position", (String) player.get("position"));
+            /*record.put("Position", (String) player.get("position"));
             record.put("Team", (String) player.get("team"));
             record.put("Name", (String) player.get("name"));
-            record.put("Quantity", (String) player.get("quantity"));
+            record.put("Quantity", (String) player.get("quantity"));*/
+
+            record.put("Position", player.get_position());
+            record.put("Team", player.get_team());
+            record.put("Name", player.get_name());
+            record.put("Quantity", String.valueOf(player.get_quantity()));
+
             //values.add(record);
             LineTable sequence =new LineTable(record);
             System.out.println(sequence);
@@ -145,7 +117,7 @@ public class CollectionController implements Initializable {
 
     }
 
-    public static JSONArray load_collection(){
+   /* public static JSONArray load_collection(){
 
         //List<Map<String, String>> values = new ArrayList<>();
         JSONArray players=new JSONArray();
@@ -209,5 +181,5 @@ public class CollectionController implements Initializable {
 
     public static void closePool(){
         pool.close();
-    }
+    }*/
 }
