@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class.*;
+
 public class OptionController implements Initializable {
 	
 
@@ -49,7 +51,9 @@ public class OptionController implements Initializable {
             Button btn=new Button("calcola");
             btn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
-                    System.out.println("QUI INSERIRE COME CALCOLARE LA GIORNATA");
+                    //System.out.println("QUI INSERIRE COME CALCOLARE LA GIORNATA");
+                    retrieve_info_matchday((Integer) day.getValue());
+                    calculate_matchday((Integer) day.getValue());
                 }
             });
             matchday_adm.getChildren().addAll(calc,day,btn);
