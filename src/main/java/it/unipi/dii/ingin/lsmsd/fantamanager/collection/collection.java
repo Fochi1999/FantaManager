@@ -177,31 +177,29 @@ public class collection {
                 return generatedString;
 
             }
-            public void create_collection(){
-                        apertura_pool();
-                        //String key_cart=this.crea_chiave();
-                        //JedisPool pool=new JedisPool("localhost",6379);
-                        Random random=new Random();
-                        String key1="user_id:"+1+"player_id:"+random.nextInt(50)+":name";
-                        String key2="user_id:"+1+"player_id:"+random.nextInt(50)+":quantiy";
-                        String key3="user_id:"+1+"player_id:"+random.nextInt(50)+":team";
-                        String key4="user_id:"+1+"player_id:"+random.nextInt(50)+":position";
+                public static void create_collection(){
+                    apertura_pool();
+                    //String key_cart=this.crea_chiave();
+                    //JedisPool pool=new JedisPool("localhost",6379);
+                    Random random=new Random();
 
-                       String[] position={"P","D","M","A"};
-                        for(int i=0;i<25;i++){
+                    String[] position={"P","D","M","A"};
+                    for(int i=0;i<25;i++){
 
-                            try(Jedis jedis=pool.getResource()){
+                        try(Jedis jedis=pool.getResource()){
 
-                                jedis.set(key1,generate_string());
-                                jedis.set(key2, String.valueOf(random.nextInt(10)));
-                                jedis.set(key3,generate_string());
-                                jedis.set(key4,position[random.nextInt(4)]);
+                            int player_id=random.nextInt(50);
 
-                            }
+                            jedis.set("user_id:"+1+"player_id:"+player_id+":name",generate_string());
+                            jedis.set("user_id:"+1+"player_id:"+player_id+":quantiy", String.valueOf(random.nextInt(10)));
+                            jedis.set("user_id:"+1+"player_id:"+player_id+":team",generate_string());
+                            jedis.set("user_id:"+1+"player_id:"+player_id+":position",position[random.nextInt(4)]);
+
                         }
+                    }
 
-                        closePool();
-            }
+                    closePool();
+                }
 
 
 }
