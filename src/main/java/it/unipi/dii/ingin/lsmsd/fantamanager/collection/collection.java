@@ -190,10 +190,10 @@ public class collection {
 
                             int player_id=random.nextInt(50);
 
-                            jedis.set("user_id:"+1+"player_id:"+player_id+":name",generate_string());
-                            jedis.set("user_id:"+1+"player_id:"+player_id+":quantiy", String.valueOf(random.nextInt(10)));
-                            jedis.set("user_id:"+1+"player_id:"+player_id+":team",generate_string());
-                            jedis.set("user_id:"+1+"player_id:"+player_id+":position",position[random.nextInt(4)]);
+                            jedis.set("user_id:"+1+":player_id:"+player_id+":name",generate_string());
+                            jedis.set("user_id:"+1+":player_id:"+player_id+":quantiy", String.valueOf(random.nextInt(10)));
+                            jedis.set("user_id:"+1+":player_id:"+player_id+":team",generate_string());
+                            jedis.set("user_id:"+1+":player_id:"+player_id+":position",position[random.nextInt(4)]);
 
                         }
                     }
