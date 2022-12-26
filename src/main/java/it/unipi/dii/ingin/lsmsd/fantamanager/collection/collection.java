@@ -161,6 +161,8 @@ public class collection {
                 pool.close();
             }
 
+
+            //prossime due funzioni solo per creazione collection casuale per utente user_id:1
             static String generate_string()
             {
 
