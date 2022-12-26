@@ -182,10 +182,10 @@ public class collection {
                         //String key_cart=this.crea_chiave();
                         //JedisPool pool=new JedisPool("localhost",6379);
                         Random random=new Random();
-                        String key1="user_id:"+1+"player_id:"+random.nextInt(50)+"name";
-                        String key2="user_id:"+1+"player_id:"+random.nextInt(50)+"quantiy";
-                        String key3="user_id:"+1+"player_id:"+random.nextInt(50)+"team";
-                        String key4="user_id:"+1+"player_id:"+random.nextInt(50)+"position";
+                        String key1="user_id:"+1+"player_id:"+random.nextInt(50)+":name";
+                        String key2="user_id:"+1+"player_id:"+random.nextInt(50)+":quantiy";
+                        String key3="user_id:"+1+"player_id:"+random.nextInt(50)+":team";
+                        String key4="user_id:"+1+"player_id:"+random.nextInt(50)+":position";
 
                        String[] position={"P","D","M","A"};
                         for(int i=0;i<25;i++){
