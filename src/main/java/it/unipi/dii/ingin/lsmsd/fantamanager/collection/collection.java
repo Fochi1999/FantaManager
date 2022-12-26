@@ -177,7 +177,7 @@ public class collection {
                 return generatedString;
 
             }
-            public void create_collection(player_class player){
+            public void create_collection(){
                         apertura_pool();
                         //String key_cart=this.crea_chiave();
                         //JedisPool pool=new JedisPool("localhost",6379);
