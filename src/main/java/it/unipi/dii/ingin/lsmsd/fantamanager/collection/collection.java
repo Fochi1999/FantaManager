@@ -91,20 +91,20 @@ public class collection {
                 //Gson gson=new Gson();
                 //ShoppingCart cart=null;
                 String key_load = crea_chiave_load(user_id);  //qui dovremmo inserire this.user_id, oppure togliere il parametro e farlo come commentato sopra
-                //System.out.println(key_load);
-                //JedisPool pool=new JedisPool("localhost",6379);
+                System.out.println(key_load);
+                JedisPool pool=new JedisPool("localhost",6379);
                 try (Jedis jedis = pool.getResource()) {
 
                     Set<String> set_keys = jedis.keys(key_load);
 
-                    //System.out.println(set_keys);
+                    System.out.println(set_keys);
 
                     Iterator<String> it = set_keys.iterator();
                     while (it.hasNext()) {
                         String key = it.next();
                         String value = jedis.get(key);
 
-                        //System.out.println(key + " " + value);
+                        System.out.println(key + " " + value);
 
                         int id = retrieve_id_player(key);
 
@@ -134,7 +134,7 @@ public class collection {
 
                     }
                 }
-                //System.out.println(players);
+                System.out.println(players);
                 return players;
             }
 
@@ -143,11 +143,11 @@ public class collection {
                 String[] words=key.split(":");
                 String attribute=words[4];
 
-                //System.out.println(player);
+                System.out.println(player);
 
                 player.set_key_info(attribute,value);
 
-                //System.out.println(player);
+                System.out.println(player);
 
             }
 
