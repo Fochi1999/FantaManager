@@ -1,13 +1,13 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.collection;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.*;
 
 public class collection {
 
@@ -159,6 +159,48 @@ public class collection {
 
             public static void closePool(){
                 pool.close();
+            }
+
+            static String generate_string()
+            {
+
+                int leftLimit = 97; // letter 'a'
+                int rightLimit = 122; // letter 'z'
+                int targetStringLength = 10;
+                Random random = new Random();
+
+                String generatedString = random.ints(leftLimit, rightLimit + 1)
+                        .limit(targetStringLength)
+                        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                        .toString();
+
+                return generatedString;
+
+            }
+            public void create_collection(player_class player){
+                        apertura_pool();
+                        //String key_cart=this.crea_chiave();
+                        //JedisPool pool=new JedisPool("localhost",6379);
+                        Random random=new Random();
+                        String key1="user_id:"+1+"player_id:"+random.nextInt(50)+"name";
+                        String key2="user_id:"+1+"player_id:"+random.nextInt(50)+"quantiy";
+                        String key3="user_id:"+1+"player_id:"+random.nextInt(50)+"team";
+                        String key4="user_id:"+1+"player_id:"+random.nextInt(50)+"position";
+
+                       String[] position={"P","D","C","A"};
+                        for(int i=0;i<25;i++){
+
+                            try(Jedis jedis=pool.getResource()){
+
+                                jedis.set(key1,generate_string());
+                                jedis.set(key2, String.valueOf(random.nextInt(10)));
+                                jedis.set(key3,generate_string());
+                                jedis.set(key4,position[random.nextInt(4)]);
+
+                            }
+                        }
+
+                        closePool();
             }
 
 
