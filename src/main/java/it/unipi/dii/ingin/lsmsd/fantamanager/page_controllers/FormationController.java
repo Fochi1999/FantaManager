@@ -50,7 +50,11 @@ public class FormationController implements Initializable {
         choise_por.getStyleClass().add("choise_player");
         choise_por.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                click_deploy_player(e);
+                try {
+                    click_deploy_player(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }});
         box_por.getChildren().add(choise_por);
         for(int i=0;i< numbers.length;i++){
@@ -72,7 +76,11 @@ public class FormationController implements Initializable {
                 Button choise_player=new Button(role);
                 choise_player.setOnAction(new EventHandler<ActionEvent>() {
                     @Override public void handle(ActionEvent e) {
-                        click_deploy_player(e);
+                        try {
+                            click_deploy_player(e);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }});
                 choise_player.getStyleClass().add("choise_player");
                 act.getChildren().add(choise_player);
@@ -94,32 +102,33 @@ public class FormationController implements Initializable {
         formationBoxes.add(box_mid);
         formationBoxes.add(box_att);
         f=formation.getFormation(global.id_user);
+        collection.create_collection(); //TODO togliere perchè popola il db
         players= collection.load_collection(global.id_user);
     }
     @FXML
-    protected void click_deploy_player(ActionEvent event) {
+    protected synchronized void click_deploy_player(ActionEvent event) throws IOException {
 
         String role=((Button)event.getSource()).getText();
         System.out.println(role);
         String[] roles=role.split("-");
+        String r;
         if(roles.length==2){
             //titolare
-            String r=roles[0];
-            for(int i=0;i<players.size();i++){
-                if(players.get(i).get_position().equals(r)){
-                    //TODO aggiungi alla lista di giocatori visibili
-                }
-            }
+           r=roles[0];
         }
         else{
             //panchinaro
-            String r=roles[1];
-            for(int i=0;i<players.size();i++){
-                if(players.get(i).get_position().equals(r)){
-                    //TODO aggiungi alla lista di giocatori visibili
-                }
+            r=roles[1];
+
+        }
+
+        ArrayList<player_collection> selectables=new ArrayList<>();
+        for(int i=0;i<players.size();i++){
+            if(players.get(i).get_position().equals(r)) {
+                selectables.add(players.get(i));
             }
         }
+        formation.choose_player(r,f,selectables);
 
     }
 
