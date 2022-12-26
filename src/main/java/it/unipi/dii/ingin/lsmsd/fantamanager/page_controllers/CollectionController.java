@@ -83,7 +83,7 @@ public class CollectionController implements Initializable {
             //JSONObject player=(JSONObject) databaseObject.get(i);
             player_collection player=databaseObject.get(i);
 
-            System.out.println(player);
+            //System.out.println(player);
 
             Map<String, String> record = new HashMap<>();
             //record.put("id", (String) player.get("id"));
@@ -99,12 +99,12 @@ public class CollectionController implements Initializable {
 
             //values.add(record);
             LineTable sequence =new LineTable(record);
-            System.out.println(sequence);
+            //System.out.println(sequence);
             data.add(sequence);
 
         }
 
-        System.out.println(data);
+        //System.out.println(data);
 
         table_collection.setItems(FXCollections.observableArrayList(data));
 
