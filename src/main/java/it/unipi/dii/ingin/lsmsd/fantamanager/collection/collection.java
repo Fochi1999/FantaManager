@@ -187,7 +187,7 @@ public class collection {
                         String key3="user_id:"+1+"player_id:"+random.nextInt(50)+"team";
                         String key4="user_id:"+1+"player_id:"+random.nextInt(50)+"position";
 
-                       String[] position={"P","D","C","A"};
+                       String[] position={"P","D","M","A"};
                         for(int i=0;i<25;i++){
 
                             try(Jedis jedis=pool.getResource()){
