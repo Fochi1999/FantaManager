@@ -1,11 +1,16 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
+import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -18,6 +23,7 @@ import java.util.ResourceBundle;
 public class FormationController implements Initializable {
 	
 	//Stage stage = new Stage();
+    formation f;
     ArrayList<HBox> formationBoxes;
     @FXML
     private Parent root;
@@ -39,17 +45,38 @@ public class FormationController implements Initializable {
         String formationString=scelta.getText();
         System.out.println("E' stata scelta la formazione:");
         String[] numbers=formationString.split("-");
-        ChoiceBox choise_por=new ChoiceBox();
+        Button choise_por=new Button("P-1");
         choise_por.getStyleClass().add("choise_player");
+        choise_por.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                click_deploy_player(e);
+            }});
         box_por.getChildren().add(choise_por);
         for(int i=0;i< numbers.length;i++){
             System.out.println(numbers[i]);
             HBox act= formationBoxes.get(i);
+            String role;
+            if(i==0){
+                role="D";
+            }
+            else if(i==1){
+                role="M";
+            }
+            else{
+                role="A";
+            }
+            role+="-";
             for(int j = 0; j<Integer.parseInt(numbers[i]);j++){
-                ChoiceBox choise_player=new ChoiceBox();
+                role+=Integer.toString(j+1);
+                Button choise_player=new Button(role);
+                choise_player.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override public void handle(ActionEvent e) {
+                        click_deploy_player(e);
+                    }});
                 choise_player.getStyleClass().add("choise_player");
                 act.getChildren().add(choise_player);
-                //aggiungi a ogni ChoiceBox la lista delle carte presenti nella collection per quel ruolo per i=0 d,1 mid,2 att
+                role=role.substring(0,role.length()-1);
+                //aggiungi a ogni Button la lista delle carte presenti nella collection per quel ruolo per i=0 d,1 mid,2 att
             }
             }
         }
@@ -65,6 +92,22 @@ public class FormationController implements Initializable {
         formationBoxes.add(box_def);
         formationBoxes.add(box_mid);
         formationBoxes.add(box_att);
+        f=formation.getFormation(global.id_user);
+    }
+    @FXML
+    protected void click_deploy_player(ActionEvent event) {
+
+        String role=((Button)event.getSource()).getText();
+        System.out.println(role);
+        String[] roles=role.split("-");
+        ArrayList<player_collection> players= collection.load_collection(global.id_user);
+        if(roles.length==2){
+            //titolare
+
+        }
+        else{
+            //panchinaro
+        }
 
     }
 
