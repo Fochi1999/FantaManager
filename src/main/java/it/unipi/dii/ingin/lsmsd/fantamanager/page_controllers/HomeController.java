@@ -83,6 +83,17 @@ public class HomeController implements Initializable {
     }
     
     
+    @FXML
+    protected void click_ranking() throws IOException {
+
+        Stage stage = (Stage)root.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("ranking_page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Ranking page");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         welcomeText.setText("Benvenuto "+ global.nick);

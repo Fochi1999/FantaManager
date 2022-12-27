@@ -76,7 +76,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                      <children>
-                        <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_ranking" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../../../imm/podio.png" />
                            </image>

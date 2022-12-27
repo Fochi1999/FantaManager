@@ -61,6 +61,7 @@ public class ShopController implements Initializable {
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
+		System.out.println("Opening shop page..."); 	
 		//disabling the button
 		see_card.setDisable(true);
 		
@@ -152,15 +153,15 @@ public class ShopController implements Initializable {
     	
     	
     	while(result.hasNext()) {	
-    		Document trade_doc = result.next();
-    		String card_id = trade_doc.get("_id").toString();
-    		String card_fullname = trade_doc.get("fullname").toString();
-    		String card_credits = trade_doc.get("credits").toString();
-    		String card_team = trade_doc.getString("team");
-    		String card_role = trade_doc.getString("position");
-    		String trade_output = "Card: " + card_fullname + " /// Cost: " + card_credits +
+    		Document card_doc = result.next();
+    		String card_id = card_doc.get("_id").toString();
+    		String card_fullname = card_doc.get("fullname").toString();
+    		String card_credits = card_doc.get("credits").toString();
+    		String card_team = card_doc.getString("team");
+    		String card_role = card_doc.getString("position");
+    		String card_output = "Card: " + card_fullname + " /// Cost: " + card_credits +
     				" /// Role: " + card_role + " /// Team: " + card_team + " // id: " + card_id;
-    		list.add(trade_output);
+    		list.add(card_output);
     	}
     	card_list.getItems().clear();
 		card_list.getItems().addAll(list);
