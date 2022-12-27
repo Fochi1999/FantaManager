@@ -24,7 +24,7 @@ public class FormationController implements Initializable {
 	
 	//Stage stage = new Stage();
     ArrayList<player_collection> players;
-    formation f;
+    static formation f;
     ArrayList<HBox> formationBoxes;
     @FXML
     private Parent root;
@@ -101,7 +101,10 @@ public class FormationController implements Initializable {
         formationBoxes.add(box_def);
         formationBoxes.add(box_mid);
         formationBoxes.add(box_att);
-        f=formation.getFormation(global.id_user);
+        f=(global.saved_formation);
+        if(f==null){
+            //TODO creare formazione vuota
+        }
         collection.create_collection(); //TODO togliere perchè popola il db
         players= collection.load_collection(global.id_user);
     }
@@ -112,14 +115,17 @@ public class FormationController implements Initializable {
         System.out.println(role);
         String[] roles=role.split("-");
         String r;
+        String p;
         if(roles.length==2){
             //titolare
            r=roles[0];
+           p=roles[1];
+
         }
         else{
             //panchinaro
             r=roles[1];
-
+            p=roles[2];
         }
 
         ArrayList<player_collection> selectables=new ArrayList<>();
@@ -128,7 +134,9 @@ public class FormationController implements Initializable {
                 selectables.add(players.get(i));
             }
         }
-        formation.choose_player(r,f,selectables);
+
+        ChoisePlayerFormationController.index=Integer.parseInt(p);
+        formation.choose_player(selectables);
 
     }
 

@@ -11,26 +11,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class formation {
-    public ArrayList<player_formation> defenders=new ArrayList<>();
-    public ArrayList<player_formation> attackers=new ArrayList<>();
-    public ArrayList<player_formation> midfielders=new ArrayList<>();
-    public ArrayList<player_formation> bench=new ArrayList<>();
+    public ArrayList<player_formation> players;
+    // 0: portiere, poi 11 giocatori a seconda del modulo es 3-4-3, 1-3: D, 4-7:M, 8-10: A, panchina, 11:P, 12-13:D,14-15:M,16-17:A
+    int[] modulo;
     public player_formation por;
     private static formation f;
-    public static formation getFormation(int user_id){
-        if(f==null){
-            f=new formation(user_id);
+    public formation(int[] m,ArrayList<player_formation> p){
+        modulo=new int[3];
+        for(int i=0;i<3;i++){
+            modulo[i]=m[i];
         }
-        return f;
+        for(int i=0;i<p.size();i++){
+            players.add(p.get(i));
+        }
     }
-    private formation(int user_id){
-        //TODO get formation da mongoDB utilizzando mathday_next
-        this.por=null;
-    }
-    public static void del_formation(){
-        f=null;
-    }
-    public static synchronized void choose_player(String role, formation f, ArrayList<player_collection> p) throws IOException {
+    public static synchronized void choose_player( ArrayList<player_collection> p) throws IOException {
         Stage stage=new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("choise_player_formation.fxml"));
         ChoisePlayerFormationController.p=p;

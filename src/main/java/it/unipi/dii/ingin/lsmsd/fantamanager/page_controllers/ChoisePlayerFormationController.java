@@ -3,6 +3,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -17,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class ChoisePlayerFormationController implements Initializable {
     public static ArrayList<player_collection> p;
-    public static formation f;
+    public static int index;
     @FXML
     Parent root;
     @FXML
@@ -36,5 +37,10 @@ public class ChoisePlayerFormationController implements Initializable {
         for(int i=0;i<p.size();i++){
             table_collection.getItems().add(new player_formation(p.get(i)));
         }
+    }
+    @FXML
+    public void click_table(ActionEvent e){
+        player_formation p= (player_formation) table_collection.getSelectionModel().getSelectedItem();
+        FormationController.f.players.add(index,p);
     }
 }
