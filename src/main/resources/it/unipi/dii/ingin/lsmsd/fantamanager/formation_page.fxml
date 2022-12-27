@@ -49,8 +49,8 @@
             <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-P-1" />
             <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-D-2" />
             <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-D-2" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-C-1" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-C-2" />
+            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-M-1" />
+            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-M-2" />
             <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-A-1" />
             <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-A-2" />
          </children>

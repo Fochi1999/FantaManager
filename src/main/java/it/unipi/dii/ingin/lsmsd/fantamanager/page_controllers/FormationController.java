@@ -23,7 +23,8 @@ import java.util.ResourceBundle;
 public class FormationController implements Initializable {
 	
 	//Stage stage = new Stage();
-    formation f;
+    ArrayList<player_collection> players;
+    static formation f;
     ArrayList<HBox> formationBoxes;
     @FXML
     private Parent root;
@@ -49,7 +50,11 @@ public class FormationController implements Initializable {
         choise_por.getStyleClass().add("choise_player");
         choise_por.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                click_deploy_player(e);
+                try {
+                    click_deploy_player(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }});
         box_por.getChildren().add(choise_por);
         for(int i=0;i< numbers.length;i++){
@@ -71,7 +76,11 @@ public class FormationController implements Initializable {
                 Button choise_player=new Button(role);
                 choise_player.setOnAction(new EventHandler<ActionEvent>() {
                     @Override public void handle(ActionEvent e) {
-                        click_deploy_player(e);
+                        try {
+                            click_deploy_player(e);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }});
                 choise_player.getStyleClass().add("choise_player");
                 act.getChildren().add(choise_player);
@@ -92,22 +101,42 @@ public class FormationController implements Initializable {
         formationBoxes.add(box_def);
         formationBoxes.add(box_mid);
         formationBoxes.add(box_att);
-        f=formation.getFormation(global.id_user);
+        f=(global.saved_formation);
+        if(f==null){
+            //TODO creare formazione vuota
+        }
+        collection.create_collection(); //TODO togliere perchè popola il db
+        players= collection.load_collection(global.id_user);
     }
     @FXML
-    protected void click_deploy_player(ActionEvent event) {
+    protected synchronized void click_deploy_player(ActionEvent event) throws IOException {
 
         String role=((Button)event.getSource()).getText();
         System.out.println(role);
         String[] roles=role.split("-");
-        ArrayList<player_collection> players= collection.load_collection(global.id_user);
+        String r;
+        String p;
         if(roles.length==2){
             //titolare
+           r=roles[0];
+           p=roles[1];
 
         }
         else{
             //panchinaro
+            r=roles[1];
+            p=roles[2];
         }
+
+        ArrayList<player_collection> selectables=new ArrayList<>();
+        for(int i=0;i<players.size();i++){
+            if(players.get(i).get_position().equals(r)) {
+                selectables.add(players.get(i));
+            }
+        }
+
+        ChoisePlayerFormationController.index=Integer.parseInt(p);
+        formation.choose_player(selectables);
 
     }
 

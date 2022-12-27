@@ -11,4 +11,5 @@ public class global {
     public static final String DATABASE_NAME = "mydatabase";
     public static final String USERS_COLLECTION_NAME = "users";
 
+
 }

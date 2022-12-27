@@ -250,7 +250,7 @@ public class collection {
                 public static void create_collection(){
                     apertura_pool();
                     //String key_cart=this.crea_chiave();
-                    //JedisPool pool=new JedisPool("localhost",6379);
+                    JedisPool pool=new JedisPool("localhost",6379);
                     Random random=new Random();
 
                     String[] position={"P","D","M","A"};

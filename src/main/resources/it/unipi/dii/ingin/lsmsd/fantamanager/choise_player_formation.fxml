@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="406.0" prefWidth="360.0" style="-fx-background-color: BLACK;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController">
+   <children>
+      <TableView fx:id="table_collection" layoutX="-1.0" prefHeight="375.0" prefWidth="360.0">
+         <columns>
+            <TableColumn fx:id="player" editable="false" prefWidth="161.59997862577438" text="Player" />
+            <TableColumn fx:id="squad" editable="false" minWidth="7.20001220703125" prefWidth="74.4000244140625" sortable="false" text="Squad" />
+            <TableColumn fx:id="id" editable="false" prefWidth="124.79997253417969" text="id" />
+         </columns></TableView>
+      <Button layoutX="153.0" layoutY="375.0" mnemonicParsing="false" onAction="#click_table" text="Select" />
+   </children>
+</AnchorPane>

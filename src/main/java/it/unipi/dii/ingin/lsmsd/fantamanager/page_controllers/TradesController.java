@@ -9,6 +9,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.*;
 import com.mongodb.client.result.*;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -93,7 +94,7 @@ public class TradesController implements Initializable{
 	@FXML
 	public void activate_buttons(String trade_text) {
 		
-		String myuser = "user1";
+		String myuser = global.nick;
 		
 		String words_arr[] = trade_text.split(" ");
 		String user_in = words_arr[words_arr.length-4]; //is the position where the user is saved in the string
@@ -167,7 +168,7 @@ public class TradesController implements Initializable{
 	
 	public void my_requests_button_onclick() {
 		
-		String my_user = "user1";
+		String my_user = global.nick;
 		search_user(my_user);
 	}
 	

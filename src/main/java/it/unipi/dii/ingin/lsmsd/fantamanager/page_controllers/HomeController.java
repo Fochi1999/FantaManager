@@ -71,6 +71,18 @@ public class HomeController implements Initializable {
         //CollectionController.create_table();   //ok?
     }
 
+    @FXML
+    protected void click_shop() throws IOException {
+
+        Stage stage = (Stage)root.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("shop_page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Shop page");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         welcomeText.setText("Benvenuto "+ global.nick);
