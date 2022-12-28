@@ -2,17 +2,29 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0"
-            style="-fx-background-color: BLACK;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.CollectionController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.CollectionController">
    <children>
-      <ButtonBar layoutX="14.0" layoutY="47.0" prefHeight="40.0" prefWidth="200.0" />
-    <Button layoutX="308.0" layoutY="599.0" mnemonicParsing="false" onMouseClicked="#click_home" text="Home" />
+      <ButtonBar layoutX="14.0" layoutY="47.0" prefHeight="40.0" prefWidth="200.0">
+         <buttons>
+            <Text fill="#fcfbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Squadra">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Text>
+         </buttons></ButtonBar>
+    <Button layoutX="332.0" layoutY="599.0" mnemonicParsing="false" onMouseClicked="#click_home" text="Home" />
       <TableView fx:id="table_collection" layoutX="125.0" layoutY="177.0" prefHeight="337.0" prefWidth="463.0">
 
       </TableView>
+      <Button layoutX="125.0" layoutY="599.0" mnemonicParsing="false" onMouseClicked="#click_shop" text="Shop" />
+      <Button layoutX="505.0" layoutY="599.0" mnemonicParsing="false" onMouseClicked="#click_delete" text="DeletePlayer" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <TextField fx:id="player_delete" layoutX="471.0" layoutY="573.0" />
    </children>
 </AnchorPane>

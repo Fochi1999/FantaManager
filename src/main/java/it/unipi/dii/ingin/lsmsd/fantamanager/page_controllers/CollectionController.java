@@ -5,7 +5,9 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,12 +28,33 @@ public class CollectionController implements Initializable {
     private Parent root;
 
     @FXML
+    private TextField player_delete;
+
+    @FXML
     protected void click_home() throws IOException {
 
         collection.closePool();
 
         Stage stage= (Stage)root.getScene().getWindow();
         util_controller.back_to_home(stage);
+    }
+
+    @FXML
+    protected void click_shop() throws IOException {
+
+        collection.closePool();
+
+        Stage stage= (Stage)root.getScene().getWindow();
+        util_controller.go_to_shop(stage);
+    }
+
+    @FXML
+    protected void click_delete() throws IOException {
+
+        //richiedere in qualche modo il nome o l-id del giocatore e chiamare la funzione adatta di collection
+            //credo andrebbe presa da user.collection (salvare su user l-arraylist dei suoi giocatori
+
+
     }
 
     @Override

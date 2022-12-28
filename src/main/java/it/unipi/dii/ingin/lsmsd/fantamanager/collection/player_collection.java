@@ -20,9 +20,9 @@ public class player_collection {
                     this.position=position;
             }
 
-            public player_collection get_player_by_id(int id){
-                    return this;
-            }
+            //public static player_collection get_player_by_name(String name){
+                //    return this;
+            //}
 
             public int get_id() {
         return player_id;
