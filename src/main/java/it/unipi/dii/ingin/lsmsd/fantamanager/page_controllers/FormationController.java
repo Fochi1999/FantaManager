@@ -12,7 +12,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
@@ -49,7 +48,7 @@ public class FormationController implements Initializable {
 
 
     @FXML
-    protected void print(ActionEvent event) throws IOException {
+    protected void click_choose_formation(ActionEvent event) throws IOException {
         for (HBox h: formationBoxes){
             h.getChildren().clear();
         }
@@ -124,7 +123,16 @@ public class FormationController implements Initializable {
     }
 
 
+    @FXML
+    protected void click_save_formation() throws IOException {
 
+        if(global.saved_formation_local.isValid()){
+            click_home();
+        }
+        else {
+            show_error_message("Formazione non valida");
+        }
+    }
     @FXML
     protected void click_home() throws IOException {
 
@@ -190,5 +198,9 @@ public class FormationController implements Initializable {
         formation.choose_player((Stage)root.getScene().getWindow(),selectables,role);
 
     }
+    private void show_error_message(String err) {
+    }
 
     }
+
+

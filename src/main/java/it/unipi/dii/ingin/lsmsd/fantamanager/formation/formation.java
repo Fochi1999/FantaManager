@@ -3,6 +3,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -75,9 +76,22 @@ public class formation {
                 if(posPl.equals(positions[i])){
                     return index+n;
                 }
-                index+=mod[i];
+                index+=2;
             }
         }
         return -1;
+    }
+
+    public boolean isValid() {
+        int[] ids=new int[19];
+        for(int i=0;i<19;i++){
+            if(players.get(i)==null){
+                return false;
+            }
+            else{
+                ids[i]=players.get(i).getId();
+            }
+        }
+        return(!utilities.has_duplicates(ids));
     }
 }

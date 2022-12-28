@@ -48,7 +48,9 @@ public class ChoisePlayerFormationController implements Initializable {
     @FXML
     public void click_table(ActionEvent e) throws IOException {
         player_formation p= (player_formation) table_collection.getSelectionModel().getSelectedItem();
-        global.saved_formation_local.insert_new_player(p,role);
+        if(p!=null){
+            global.saved_formation_local.insert_new_player(p,role);
+        }
         Stage stage=(Stage)root.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("formation_page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
