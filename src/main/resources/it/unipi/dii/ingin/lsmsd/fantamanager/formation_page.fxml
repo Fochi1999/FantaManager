@@ -46,13 +46,7 @@
       <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="146.0" prefHeight="392.0" prefWidth="108.0" spacing="20.0" style="-fx-border-color: white; -fx-border-width: 5;">
          <children>
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Bench" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-P-1" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-D-2" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-D-2" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-M-1" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-M-2" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-A-1" />
-            <Button mnemonicParsing="false" onAction="#click_deploy_player" text="S-A-2" />
+            <VBox fx:id="Bench" alignment="TOP_CENTER" prefHeight="347.0" prefWidth="98.0" spacing="5.0" />
          </children>
       </VBox>
    </children>
