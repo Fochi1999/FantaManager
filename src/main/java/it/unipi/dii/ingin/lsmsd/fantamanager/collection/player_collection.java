@@ -52,7 +52,7 @@ public class player_collection {
 
 
 
-                System.out.println(key+"..."+value);
+                //System.out.println(key+"..."+value);
 
                 switch(key) {
                     case "quantity":

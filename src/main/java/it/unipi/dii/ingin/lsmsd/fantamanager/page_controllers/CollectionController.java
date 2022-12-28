@@ -1,13 +1,14 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,7 +17,6 @@ import java.util.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.LineTable;
 
-import javafx.scene.control.TableColumn;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.*;
 
 public class CollectionController implements Initializable {
@@ -28,7 +28,10 @@ public class CollectionController implements Initializable {
     private Parent root;
 
     @FXML
-    private TextField player_delete;
+    private TextField player_selected;
+
+    @FXML
+    private Button delete_button;
 
     @FXML
     protected void click_home() throws IOException {
@@ -51,9 +54,28 @@ public class CollectionController implements Initializable {
     @FXML
     protected void click_delete() throws IOException {
 
-        //richiedere in qualche modo il nome o l-id del giocatore e chiamare la funzione adatta di collection
-            //credo andrebbe presa da user.collection (salvare su user l-arraylist dei suoi giocatori
+        String name_player=player_selected.getText();
 
+        int user_id=1;
+        ArrayList<player_collection> coll=collection.load_collection(user_id);  //anche se secondo me andrebbe salvata su user.collection e qui presa da li
+
+        for(int i=0; i<coll.size();i++){
+                if(coll.get(i).get_name().equals(name_player)){
+                        System.out.println(name_player);
+                        collection.delete_player_from_collection(coll.get(i).get_id());
+                }
+        }
+        //create_table(coll);
+        //qui se create user.collection, dovresti andare a toglierla da tale variabile
+
+
+        //ricarico la pagina
+        Stage stage= (Stage)root.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("collection_page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Collection page");
+        stage.setScene(scene);
+        stage.show();
 
     }
 
@@ -62,12 +84,29 @@ public class CollectionController implements Initializable {
 
         System.out.println("Opening collection page...");
         collection.apertura_pool();
-        create_table();
+        int user_id=1;
+        create_table(collection.load_collection(user_id));
+
+        delete_button.setDisable(true);
+
+        //TableView.TableViewSelectionModel<LineTable> player = table_collection.getSelectionModel();
+
+
+
+        table_collection.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+
+                //System.out.println(newValue.fieldProperty("Name").getValue());
+                player_selected.setText(newValue.fieldProperty("Name").getValue());
+
+                if(!player_selected.getText().isEmpty()){
+                        delete_button.setDisable(false);
+                }
+        });
     }
 
 
 
-    public void create_table()
+    public void create_table(ArrayList<player_collection> databaseObject)
     {
 
         //TableView<LineTable> table = new TableView<>();
@@ -76,8 +115,8 @@ public class CollectionController implements Initializable {
 
         //TableView<LineTable> table = new TableView<>();
         //JSONArray databaseObject = collection.load_collection(1);  //mi serve id globale
-        ArrayList<player_collection> databaseObject = collection.load_collection(1);
-        System.out.println(databaseObject);
+        //ArrayList<player_collection> databaseObject = collection.load_collection(1);
+        //System.out.println(databaseObject);
 
 
         String[] key_set={"Position","Team","Name","Quantity"};
@@ -95,10 +134,6 @@ public class CollectionController implements Initializable {
             col.prefWidthProperty().bind(table_collection.widthProperty().multiply());
         }*/
         List<LineTable> data = new ArrayList<>();
-        //LineTable sequence1 = new LineTable(databaseObject.get(0));
-        //LineTable sequence2 = new LineTable(databaseObject.get(1));
-        //data.add(sequence1);
-        //data.add(sequence2);
 
 
 
@@ -109,11 +144,7 @@ public class CollectionController implements Initializable {
             //System.out.println(player);
 
             Map<String, String> record = new HashMap<>();
-            //record.put("id", (String) player.get("id"));
-            /*record.put("Position", (String) player.get("position"));
-            record.put("Team", (String) player.get("team"));
-            record.put("Name", (String) player.get("name"));
-            record.put("Quantity", (String) player.get("quantity"));*/
+
 
             record.put("Position", player.get_position());
             record.put("Team", player.get_team());
@@ -140,69 +171,5 @@ public class CollectionController implements Initializable {
 
     }
 
-   /* public static JSONArray load_collection(){
 
-        //List<Map<String, String>> values = new ArrayList<>();
-        JSONArray players=new JSONArray();
-
-        //Gson gson=new Gson();
-        //ShoppingCart cart=null;
-        String key_load=crea_chiave_load(1);  //qui dovremmo inserire this.user_id, oppure togliere il parametro e farlo come commentato sopra
-        System.out.println(key_load);
-        //JedisPool pool=new JedisPool("localhost",6379);
-        try(Jedis jedis=pool.getResource()){
-
-            Set<String> set_keys=jedis.keys(key_load);
-
-            System.out.println(set_keys);
-
-            Iterator<String> it = set_keys.iterator();
-            while (it.hasNext()) {
-                String key= it.next();
-                String value=jedis.get(key);
-
-                System.out.println(key+" "+value);
-
-                int id=retrieve_id_player(key);
-
-                //JSONObject player=new JSONObject();
-                int present=0;
-                for(int i=0;i<players.size();i++) {
-                        JSONObject player=(JSONObject) players.get(i);
-
-                        if((Integer) player.get("id")==id){
-                            present=1;
-                            player.put(retrieve_key_info(key),value);
-                            break;
-                        }
-                }
-                if(present==0){
-                    JSONObject player1=new JSONObject();
-                    player1.put("id",id);
-                    player1.put(retrieve_key_info(key),value);
-                    players.add(player1);
-                }
-
-
-            }
-        }
-        System.out.println(players);
-        return players;
-    }
-
-    private static String retrieve_key_info(String key) {
-
-            String[] words=key.split(":");
-            return words[4];
-    }
-
-    private static int retrieve_id_player(String key) {
-
-                String[] words=key.split(":");
-                return Integer.parseInt(words[3]);
-    }
-
-    public static void closePool(){
-        pool.close();
-    }*/
 }
