@@ -1,7 +1,9 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
+
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
@@ -13,6 +15,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,8 +28,14 @@ public class FormationController implements Initializable {
 	
 	//Stage stage = new Stage();
     ArrayList<player_collection> players;
-    static formation f;
+
     ArrayList<HBox> formationBoxes;
+    @FXML
+    private Text module_text;
+    @FXML
+    private Text err_mess;
+    @FXML
+    private VBox Bench;
     @FXML
     private Parent root;
     @FXML
@@ -36,19 +46,68 @@ public class FormationController implements Initializable {
     private HBox box_def;
     @FXML
     private HBox box_por;
+
+
+
     @FXML
-    protected void print(ActionEvent event) throws IOException {
+    protected void click_choose_formation(ActionEvent event) throws IOException {
         for (HBox h: formationBoxes){
             h.getChildren().clear();
         }
+        Bench.getChildren().clear();
         box_por.getChildren().clear();
         MenuItem scelta= (MenuItem) event.getSource();
         String formationString=scelta.getText();
+
+        formationString="1-"+formationString; //aggiungo il portiere
         System.out.println("E' stata scelta la formazione:");
-        String[] numbers=formationString.split("-");
-        Button choise_por=new Button("P-1");
-        choise_por.getStyleClass().add("choise_player");
-        choise_por.setOnAction(new EventHandler<ActionEvent>() {
+        String[] modulo=formationString.split("-");
+        int[] mod=new int[4];
+        for(int i=0;i<4;i++){
+            mod[i]=Integer.parseInt(modulo[i]);
+        }
+        global.saved_formation_local=new formation(mod); //creo una nuova formazione con player vuoti e come modulo il modulo inserito
+        create_layout_formation(modulo);
+    }
+    public void create_layout_formation(String[] modulo ){
+        module_text.setText(modulo[1]+modulo[2]+modulo[3]);
+        for(int i=0;i< modulo.length;i++){
+            System.out.println(modulo[i]);
+            HBox act= formationBoxes.get(i);
+            String role;
+            if(i==0){
+                role="P";
+            }
+            else if(i==1){
+                role="D";
+            }
+            else if(i==2){
+                role="M";
+            }
+            else{
+                role="A";
+            }
+            role+="-";
+            for(int j = 0; j<Integer.parseInt(modulo[i]);j++){
+                role+=Integer.toString(j+1);
+                Button choise_player=create_button_player(role);
+                act.getChildren().add(choise_player);
+                role=role.substring(0,role.length()-1);
+            }
+            role="S-"+role;
+            for(int j=1;j<3;j++){
+                role=role+Integer.toString(j);
+                Button choise_player=create_button_player(role);
+                Bench.getChildren().add(choise_player);
+                role=role.substring(0,role.length()-1);
+            }
+        }
+
+    }
+    public Button create_button_player(String role){
+        Button choise_player=new Button(role);
+        choise_player.setId(role);
+        choise_player.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 try {
                     click_deploy_player(e);
@@ -56,39 +115,26 @@ public class FormationController implements Initializable {
                     throw new RuntimeException(ex);
                 }
             }});
-        box_por.getChildren().add(choise_por);
-        for(int i=0;i< numbers.length;i++){
-            System.out.println(numbers[i]);
-            HBox act= formationBoxes.get(i);
-            String role;
-            if(i==0){
-                role="D";
-            }
-            else if(i==1){
-                role="M";
-            }
-            else{
-                role="A";
-            }
-            role+="-";
-            for(int j = 0; j<Integer.parseInt(numbers[i]);j++){
-                role+=Integer.toString(j+1);
-                Button choise_player=new Button(role);
-                choise_player.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override public void handle(ActionEvent e) {
-                        try {
-                            click_deploy_player(e);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }});
-                choise_player.getStyleClass().add("choise_player");
-                act.getChildren().add(choise_player);
-                role=role.substring(0,role.length()-1);
-                //aggiungi a ogni Button la lista delle carte presenti nella collection per quel ruolo per i=0 d,1 mid,2 att
-            }
-            }
+        int index=formation.get_index(role,global.saved_formation_local.modulo);
+        player_formation p=global.saved_formation_local.players.get(index);
+        if(p!=null){
+            choise_player.setText(p.getName());
         }
+        choise_player.getStyleClass().add("choise_player");
+        return choise_player;
+    }
+
+
+    @FXML
+    protected void click_save_formation() throws IOException {
+
+        if(global.saved_formation_local.isValid()){
+            click_home();
+        }
+        else {
+            show_error_message("Formazione non valida");
+        }
+    }
     @FXML
     protected void click_home() throws IOException {
 
@@ -98,20 +144,38 @@ public class FormationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         formationBoxes =new ArrayList<>();
+        formationBoxes.add(box_por);
         formationBoxes.add(box_def);
         formationBoxes.add(box_mid);
         formationBoxes.add(box_att);
-        f=(global.saved_formation);
-        if(f==null){
-            //TODO creare formazione vuota
+        formation f=global.saved_formation_local;
+        if(f!=null){
+            //inizializzare la formazione
+            System.out.println("la formazione salvata è di modulo ");
+            String[] moduleString=new String[4];
+            for(int i=0;i<4;i++){
+                moduleString[i]=Integer.toString(f.modulo[i]);
+                System.out.println(moduleString[i]+" ");
+
+            }
+
+            for(int i=0;i<19;i++) {
+                player_formation p = f.players.get(i);
+                if(p!=null){
+                    System.out.println("index:"+i+" player: "+p.getName());
+                }
+            }
+            create_layout_formation(moduleString);
+
         }
-        collection.create_collection(); //TODO togliere perchè popola il db
+        //collection.create_collection(); //TODO togliere perchè popola il db
         players= collection.load_collection(global.id_user);
+
     }
     @FXML
     protected synchronized void click_deploy_player(ActionEvent event) throws IOException {
 
-        String role=((Button)event.getSource()).getText();
+        String role=((Button)event.getSource()).getId();
         System.out.println(role);
         String[] roles=role.split("-");
         String r;
@@ -119,13 +183,11 @@ public class FormationController implements Initializable {
         if(roles.length==2){
             //titolare
            r=roles[0];
-           p=roles[1];
 
         }
         else{
             //panchinaro
             r=roles[1];
-            p=roles[2];
         }
 
         ArrayList<player_collection> selectables=new ArrayList<>();
@@ -135,9 +197,13 @@ public class FormationController implements Initializable {
             }
         }
 
-        ChoisePlayerFormationController.index=Integer.parseInt(p);
-        formation.choose_player(selectables);
+        formation.choose_player((Stage)root.getScene().getWindow(),selectables,role);
 
+    }
+    private void show_error_message(String err) {
+        err_mess.setText(err);
     }
 
     }
+
+
