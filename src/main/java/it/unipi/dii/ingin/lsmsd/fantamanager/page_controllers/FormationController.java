@@ -33,6 +33,8 @@ public class FormationController implements Initializable {
     @FXML
     private Text module_text;
     @FXML
+    private Text err_mess;
+    @FXML
     private VBox Bench;
     @FXML
     private Parent root;
@@ -199,6 +201,7 @@ public class FormationController implements Initializable {
 
     }
     private void show_error_message(String err) {
+        err_mess.setText(err);
     }
 
     }

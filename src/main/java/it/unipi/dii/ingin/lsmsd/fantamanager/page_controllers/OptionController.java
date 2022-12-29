@@ -86,7 +86,8 @@ public class OptionController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         
     	//case of admin logged in: showing the 'calculate matchday' option
-    	if(global.liv_priv>=2){
+		int livpriv=global.user.get_liv_priv();
+    	if(livpriv>=2){
     		
     		for(int i=1;i<=38;i++){
                 matchday_list.getItems().add(i);
@@ -121,18 +122,18 @@ public class OptionController implements Initializable {
     
     	//connecting to mongoDB 
     	String uri = "mongodb://localhost:27017";
-    	MongoClient myClient = MongoClients.create(uri);
-    	MongoDatabase database = myClient.getDatabase("FantaManager");
-    	MongoCollection<Document> collection = database.getCollection("Users");
+    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
+    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+    	MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
     	Document resultDoc;
     	
     	//searching user
-    	Bson filter = Filters.eq("username", global.nick);
+    	Bson filter = Filters.eq("username", global.user.username);
     	try {
     		resultDoc = collection.find(filter).first();
     	}
     	catch(Exception e) {
-    		System.out.println("Error on searching user: " + global.nick);
+    		System.out.println("Error on searching user: " + global.user.username);
     		return;
     	}
     	
@@ -186,7 +187,7 @@ public class OptionController implements Initializable {
     	if(res) {
     		System.out.println("Username successfully changed to: " + new_value);
     	}
-    	global.nick = new_value;	//changing the global variable
+    	global.user.username = new_value;	//changing the global variable
     	find_user();	//refresh
     }
     

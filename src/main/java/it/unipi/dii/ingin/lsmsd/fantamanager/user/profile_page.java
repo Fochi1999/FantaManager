@@ -48,13 +48,13 @@ public class profile_page {
     	MongoCollection<Document> collection = database.getCollection("Users");
     	
     	//updating attribute
-    	Bson user = Filters.eq("username", global.nick);
+    	Bson user = Filters.eq("username", global.user.username);
     	Bson update = Updates.set(attribute_name, new_value);
     	try {
     		collection.updateOne(user, update);
     	}
     	catch(Exception e) {
-    		System.out.println("Error on updating " + attribute_name + "for user: " + global.nick);
+    		System.out.println("Error on updating " + attribute_name + "for user: " + global.user.username);
     		return false;
     	}
     	

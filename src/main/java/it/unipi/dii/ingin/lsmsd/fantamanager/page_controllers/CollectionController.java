@@ -1,6 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -56,8 +57,7 @@ public class CollectionController implements Initializable {
 
         String name_player=player_selected.getText();
 
-        int user_id=1;
-        ArrayList<player_collection> coll=collection.load_collection(user_id);  //anche se secondo me andrebbe salvata su user.collection e qui presa da li
+        ArrayList<player_collection> coll=collection.load_collection(global.id_user);  //anche se secondo me andrebbe salvata su user.collection e qui presa da li
 
         for(int i=0; i<coll.size();i++){
                 if(coll.get(i).get_name().equals(name_player)){
@@ -84,8 +84,7 @@ public class CollectionController implements Initializable {
 
         System.out.println("Opening collection page...");
         collection.apertura_pool();
-        int user_id=1;
-        create_table(collection.load_collection(user_id));
+        create_table(collection.load_collection(global.id_user));
 
         delete_button.setDisable(true);
 

@@ -96,6 +96,6 @@ public class HomeController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        welcomeText.setText("Benvenuto "+ global.nick);
+        welcomeText.setText("Benvenuto "+ global.user.username);
     }
 }

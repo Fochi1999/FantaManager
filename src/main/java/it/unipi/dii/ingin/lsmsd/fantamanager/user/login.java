@@ -10,33 +10,25 @@ public class login {
 
     public static boolean login(String nick, String password){
         boolean ret=true;
-        /*  MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
+        MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
         MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
         MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME);
         Document user = usersCollection.find(Filters.and(Filters.eq("username", nick), Filters.eq("password", password))).first();
-        ret= user!=null;*/
-        //INIZIALIZZARE LE VARIABILI GLOBAL
-        if(nick.equals("admin")) {
-        	global.liv_priv=2;
-        }
-        else {
-        	global.liv_priv=1;
-        }
-        global.nick=nick;
+        ret= user!=null;
+        global.user=new user(nick,password,null,user.get("_id").toString(),user.getInteger("credits"),0,user.getInteger("liv_priv"));
+        System.out.println(global.user._id);
         return ret;
     }
     public static boolean register(String Nick,String Pass){
-        /*MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
+        MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
         MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
         MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME);
         Document user = usersCollection.find(Filters.eq("username", Nick)).first();
         if (user != null) {
             return false;
         }
-        usersCollection.insertOne(new Document().append("username", Nick).append("password", Pass));*/
+        usersCollection.insertOne(new Document().append("username", Nick).append("password", Pass).append("liv_priv",1).append("region",null).append("credits",100));
         //INIZIALIZZARE LE VARIABILI GLOBAL
-        global.liv_priv=2;
-        global.nick=Nick;
-        return true;
+        return login(Nick,Pass);
     }
 }

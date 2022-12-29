@@ -94,7 +94,7 @@ public class TradesController implements Initializable{
 	@FXML
 	public void activate_buttons(String trade_text) {
 		
-		String myuser = global.nick;
+		String myuser = global.user.username;
 		
 		String words_arr[] = trade_text.split(" ");
 		String user_in = words_arr[words_arr.length-4]; //is the position where the user is saved in the string
@@ -168,7 +168,7 @@ public class TradesController implements Initializable{
 	
 	public void my_requests_button_onclick() {
 		
-		String my_user = global.nick;
+		String my_user = global.user.username;
 		search_user(my_user);
 	}
 	

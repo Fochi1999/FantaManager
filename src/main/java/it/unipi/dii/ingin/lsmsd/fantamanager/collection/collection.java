@@ -25,13 +25,13 @@ public class collection {
                 pool=new JedisPool("localhost",6379);
             }
 
-            public static String crea_chiave_load(int user_id) {  //solo per fare il retrieve delle info dell-user in questione
+            public static String crea_chiave_load(String user_id) {  //solo per fare il retrieve delle info dell-user in questione
                 //return "user:"+this.userId+"*";   //dovrebbe essere cosi dopo la creazione di user
                 return "user_id:"+user_id+"*";
             }
 
 
-            public static ArrayList<player_collection> load_collection(int user_id) {
+            public static ArrayList<player_collection> load_collection(String user_id) {
 
                 //List<Map<String, String>> values = new ArrayList<>();
                 //JSONArray players = new JSONArray();
