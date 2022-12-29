@@ -16,7 +16,12 @@ public class login {
         Document user = usersCollection.find(Filters.and(Filters.eq("username", nick), Filters.eq("password", password))).first();
         ret= user!=null;*/
         //INIZIALIZZARE LE VARIABILI GLOBAL
-        global.liv_priv=2;
+        if(nick.equals("admin")) {
+        	global.liv_priv=2;
+        }
+        else {
+        	global.liv_priv=1;
+        }
         global.nick=nick;
         return ret;
     }
