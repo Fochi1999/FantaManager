@@ -1,5 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import org.bson.Document;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -13,25 +15,26 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.ListView;
 import javafx.fxml.Initializable;
 
 import javafx.beans.value.ChangeListener;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.beans.value.ObservableValue;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.collections.*;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.json.simple.parser.ParseException;
+
+import static com.mongodb.client.model.Aggregates.*;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Indexes.descending;
 
 public class TradesController implements Initializable{
 
@@ -56,6 +59,9 @@ public class TradesController implements Initializable{
 	@FXML
 	private Button accept_button;
 
+	@FXML
+	private ChoiceBox offered_wanted;
+
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -66,8 +72,13 @@ public class TradesController implements Initializable{
     	//turning off the buttons
     	delete_button.setDisable(true);
     	accept_button.setDisable(true);
-    	
-    	
+
+		//assign value to choice box
+
+		offered_wanted.getItems().add("offered");
+		offered_wanted.getItems().add("wanted");
+
+
     	//handling the event: clicking on a trade from the list
         MultipleSelectionModel<String> trades = trade_list.getSelectionModel();
 
@@ -126,7 +137,7 @@ public class TradesController implements Initializable{
 		System.out.println("Deleting trade with object id: " + trade_id);
 		
 		//connecting to mongoDB 
-		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
     	
@@ -147,9 +158,9 @@ public class TradesController implements Initializable{
 	public void show_all_button_onclick() {
 		
 		//connecting to mongoDB 
-		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
+    	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
     	MongoCursor<Document> resultDoc;
 		
     	//searching for the trades
@@ -253,10 +264,11 @@ public class TradesController implements Initializable{
     	System.out.println("Searching trades made by: " + my_user);
     	
     	//connecting to mongoDB 
+
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
-       	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
-        MongoCursor<Document> resultDoc;
+    	MongoCursor<Document> resultDoc;
 		
     	//preparing bson
     	Bson user_equal = Filters.eq("user_from", my_user);	
@@ -274,5 +286,55 @@ public class TradesController implements Initializable{
     	show_trades(resultDoc);
     	myClient.close();	
     }
-    
+
+	public void show_most_present(MouseEvent mouseEvent) {
+
+			String player_trade="";
+
+			MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
+			MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
+			MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
+
+			if(offered_wanted.getValue().equals("offered")){
+					//10 most frequent player offered in completed trades
+					Bson match1=match(eq("status",1));
+					Bson u=unwind("$player_from");
+					Bson group=group("$player_from",Accumulators.sum("count",1));
+					Bson order=sort(descending("count"));
+					Bson limit=limit(5);
+
+					try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1,u,group,order,limit)).iterator()){
+						while(cursor.hasNext()){
+							//System.out.println(cursor.next().toJson());
+							//show_trades(cursor);
+							Document player=cursor.next();
+							player_trade += "" + player.get("_id")+"-->"+player.get("count")+"times\n";
+						}
+						selected_trade.setText(player_trade); //the trade will show up on the lower Area
+					}
+
+			}else{
+
+				//10 most frequent player wanted in completed trades
+				Bson match1=match(eq("status",1));
+				Bson u=unwind("$player_to");
+				Bson group=group("$player_to",Accumulators.sum("count",1));
+				Bson order=sort(descending("count"));
+				Bson limit=limit(5);
+
+				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1,u,group,order,limit)).iterator()){
+					while(cursor.hasNext()){
+						//System.out.println(cursor.next().toJson());
+						//show_trades(cursor);
+							Document player=cursor.next();
+							player_trade += "" + player.get("_id")+"-->"+player.get("count")+"times\n";
+
+					}
+					selected_trade.setText(player_trade); //the trade will show up on the lower Area
+				}
+			}
+
+
+
+	}
 }

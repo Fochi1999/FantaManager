@@ -180,7 +180,7 @@ public class ShopController implements Initializable {
 		Document card_doc = resultDoc.next();
 
 		//retrieve all general_statistics and put them on the choice box
-		//if(cont==0){
+
 
 			String player=card_doc.toJson();
 			//System.out.println(player);
@@ -196,7 +196,7 @@ public class ShopController implements Initializable {
 				//System.out.println(generic_skill);
 				skill.getItems().add(generic_skill);
 			}
-			//cont=1;
+
 
 		
     	show_cards(resultDoc);

@@ -2,9 +2,14 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Indexes;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import javafx.scene.input.MouseEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -14,7 +19,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Aggregates;
+import static com.mongodb.client.model.Projections.*;
+
+import static com.mongodb.client.model.Aggregates.*;
+import static com.mongodb.client.model.Aggregates.sort;
+import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Sorts.descending;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
@@ -34,10 +43,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import org.json.simple.parser.ParseException;
 
 public class RankingController implements Initializable{
 
-	
+
+	public TextField search_field_region;
+	public Button search_button_region;
 	@FXML
 	private Button view_profile;
 	
@@ -193,5 +205,37 @@ public class RankingController implements Initializable{
 	        stage.show();
 	    	
 	    }
-	
+
+	public void best_for_region(MouseEvent mouseEvent) {
+
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+
+		//Bson p1=project(fields(include("")));
+		Bson group=group("$region", Accumulators.first("username","$username"));
+
+		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(group)).iterator()){
+			while(cursor.hasNext()){
+				System.out.println(cursor.next().toJson());
+				//show_cards(cursor);
+			}
+		}
+	}
+
+	public void retrieve_users_by_region(MouseEvent mouseEvent) {
+
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+
+		Bson match1=match(eq("region",search_field_region.getText()));
+
+		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1)).iterator()){
+			while(cursor.hasNext()){
+				//System.out.println(cursor.next().toJson());
+				show_ranking(cursor);
+			}
+		}
+	}
 }
