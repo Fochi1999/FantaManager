@@ -29,6 +29,7 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Sorts.descending;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

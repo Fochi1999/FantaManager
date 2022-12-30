@@ -146,10 +146,9 @@ public class ShopController implements Initializable {
 		System.out.println("Searching for: "+ cards_input);
 		
 		//connecting to mongoDB 
-    	String uri = "mongodb://localhost:27017";
-    	MongoClient myClient = MongoClients.create(uri);
-    	MongoDatabase database = myClient.getDatabase("FantaManager");
-    	MongoCollection<Document> collection = database.getCollection("Player_Java_Final");
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME);
     	MongoCursor<Document> resultDoc;
 		
     	//blank search field
@@ -255,10 +254,10 @@ public class ShopController implements Initializable {
 			System.out.println(team.getValue());
 			System.out.println(skill.getValue());
 
-			String uri = "mongodb://localhost:27017";
-			MongoClient myClient = MongoClients.create(uri);
-			MongoDatabase database = myClient.getDatabase("fantamongo");
-			MongoCollection<Document> collection = database.getCollection("Player_emm");
+			//connecting to mongoDB 
+			MongoClient myClient = MongoClients.create(global.MONGO_URI);
+			MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+			MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME);
 
 			if(skill.getValue()==null && role.getValue()==null && team.getValue()==null) {
 				//non faccio nulla

@@ -137,7 +137,6 @@ public class TradesController implements Initializable{
 		System.out.println("Deleting trade with object id: " + trade_id);
 		
 		//connecting to mongoDB 
-    	//String uri = "mongodb://localhost:27017";
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
@@ -159,15 +158,15 @@ public class TradesController implements Initializable{
 	public void show_all_button_onclick() {
 		
 		//connecting to mongoDB 
-    	//String uri = "mongodb://localhost:27017";
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
     	MongoCursor<Document> resultDoc;
 		
     	//searching for the trades
+    	Bson filter = Filters.eq("status",0);
     	try {
-    		resultDoc = collection.find().iterator(); 
+    		resultDoc = collection.find(filter).iterator(); 
     	} catch (Exception e) {
     		System.out.println("An error has occured while viewing trades!");
     		return;
@@ -219,7 +218,6 @@ public class TradesController implements Initializable{
     	System.out.println("Searching trades -> offered: "+ from_input + " // wanted: " + to_input);
     	
     	//connecting to mongoDB 
-    	//String uri = "mongodb://localhost:27017";
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
@@ -266,7 +264,7 @@ public class TradesController implements Initializable{
     	System.out.println("Searching trades made by: " + my_user);
     	
     	//connecting to mongoDB 
-    	//String uri = "mongodb://localhost:27017";
+
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);

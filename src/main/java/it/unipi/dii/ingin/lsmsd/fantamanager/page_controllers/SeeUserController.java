@@ -14,6 +14,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -64,10 +65,9 @@ public class SeeUserController implements Initializable{
 		ObjectId user_id = new ObjectId(user_id_field.getText().toString());
 		
 		//connecting to mongoDB 
-    	String uri = "mongodb://localhost:27017";
-    	MongoClient myClient = MongoClients.create(uri);
-    	MongoDatabase database = myClient.getDatabase("FantaManager");
-    	MongoCollection<Document> collection = database.getCollection("Users");
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
     	Document resultDoc;
     	try {
     		resultDoc = collection.find(Filters.eq("_id", user_id)).first();
