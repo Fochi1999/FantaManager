@@ -19,6 +19,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+
+import static com.mongodb.client.model.Accumulators.*;
 import static com.mongodb.client.model.Projections.*;
 
 import static com.mongodb.client.model.Aggregates.*;
@@ -212,7 +214,7 @@ public class RankingController implements Initializable{
 		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
 
 		//Bson p1=project(fields(include("")));
-		Bson group=group("$region", Accumulators.first("username","$username"));
+		Bson group=group("$region", first("username","$username"));
 
 		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(group)).iterator()){
 			while(cursor.hasNext()){
