@@ -11,9 +11,12 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
 import java.util.regex.Pattern;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.hash;
 
 public class profile_page {
 	
@@ -23,7 +26,7 @@ public class profile_page {
 	
 	
 	
-	public static boolean edit_attribute(String attribute_name, String new_value){
+	public static boolean edit_attribute(String attribute_name, String new_value) throws NoSuchAlgorithmException{
 		
 		//validating inputs
 		if(attribute_name.equals("email")) {	//email
@@ -42,14 +45,18 @@ public class profile_page {
 		
 		
 		//connecting to mongoDB 
-    	String uri = "mongodb://localhost:27017";
-    	MongoClient myClient = MongoClients.create(uri);
-    	MongoDatabase database = myClient.getDatabase("FantaManager");
-    	MongoCollection<Document> collection = database.getCollection("Users");
+    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
+    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+    	MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
     	
     	//updating attribute
     	Bson user = Filters.eq("username", global.user.username);
+    	if(attribute_name.equals("password")) {	//case of password attribute: hashing the password
+    		new_value = hash.MD5(new_value);
+    	}
     	Bson update = Updates.set(attribute_name, new_value);
+    	
+    	
     	try {
     		collection.updateOne(user, update);
     	}
@@ -71,10 +78,9 @@ public class profile_page {
 	public static boolean validate_username(String new_username) {
 		
 		//connecting to mongoDB 
-    	String uri = "mongodb://localhost:27017";
-    	MongoClient myClient = MongoClients.create(uri);
-    	MongoDatabase database = myClient.getDatabase("FantaManager");
-    	MongoCollection<Document> collection = database.getCollection("Users");
+    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
+    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+    	MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
     	
     	//searching username
     	Bson filter = Filters.eq("username", new_username);

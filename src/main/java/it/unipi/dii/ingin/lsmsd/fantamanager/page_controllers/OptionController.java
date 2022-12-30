@@ -2,6 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.hash;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
 import org.bson.Document;
@@ -63,6 +65,11 @@ public class OptionController implements Initializable {
     @FXML private TextField email_field;
     @FXML private TextField credits_field;
     @FXML private TextField collection_field;
+    @FXML private TextField points_field;
+    
+    @FXML private Text username_warning;
+    @FXML private Text password_warning;
+    @FXML private Text email_warning;
     
     @FXML private ImageView username_edit;
     @FXML private ImageView username_confirm;
@@ -107,10 +114,14 @@ public class OptionController implements Initializable {
         	admin_hbox.setVisible(false);
         }
 
-    	//hiding buttons
+    	//hiding buttons and warnings
     	username_confirm.setVisible(false);
     	password_confirm.setVisible(false);
     	email_confirm.setVisible(false);
+    	
+    	username_warning.setText("");
+    	password_warning.setText("");
+    	email_warning.setText("");
 
     	//finding the user
     	find_user();
@@ -121,7 +132,6 @@ public class OptionController implements Initializable {
     protected void find_user() {
     
     	//connecting to mongoDB 
-    	String uri = "mongodb://localhost:27017";
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
@@ -139,37 +149,56 @@ public class OptionController implements Initializable {
     	
     	//showing info
     	myClient.close();
-    	show_user_info(resultDoc);
+    	try {
+    		show_user_info(resultDoc);
+    	}
+    	catch(Exception e) {
+    		System.out.println(e);
+    	}
     }
     
     
     
-    protected void show_user_info(Document user){
+    protected void show_user_info (Document user_input) throws NoSuchAlgorithmException{
     	
-    	username_field.setText(user.getString("username"));
-    	password_field.setText(user.getString("password"));
-    	region_field.setText(user.getString("region"));
-    	email_field.setText(user.getString("email"));
-    	credits_field.setText(user.get("credits").toString());
-    	collection_field.setText(user.get("collection").toString()); 	
+    	username_field.setText(user_input.getString("username"));
+    	password_field.setText("Hidden value");
+    	region_field.setText(user_input.getString("region"));
+    	email_field.setText(user_input.getString("email"));
+    	credits_field.setText(user_input.get("credits").toString());
+    	collection_field.setText(user_input.get("collection").toString()); 	
+    	points_field.setText(user_input.get("points").toString()); 
     }
     
     
     
     //edit buttons
     public void edit_username_click() {
+    	username_warning.setText("");
+    	password_warning.setText("");
+    	email_warning.setText("");
+    	
     	username_field.setEditable(true);
     	username_edit.setVisible(false);
     	username_confirm.setVisible(true);
     }
     
     public void edit_password_click() {
+    	username_warning.setText("");
+    	password_warning.setText("");
+    	email_warning.setText("");
+    	
     	password_field.setEditable(true);
+    	password_field.setText("");
     	password_edit.setVisible(false);
     	password_confirm.setVisible(true);
     }
     
     public void edit_email_click() {
+    	username_warning.setText("");
+    	password_warning.setText("");
+    	email_warning.setText("");
+    	
     	email_field.setEditable(true);
     	email_edit.setVisible(false);
     	email_confirm.setVisible(true);
@@ -182,12 +211,20 @@ public class OptionController implements Initializable {
     	username_field.setEditable(false);
     	username_edit.setVisible(true);
     	username_confirm.setVisible(false);
-    	String new_value = username_field.getText().toString();
-    	Boolean res = profile_page.edit_attribute("username", new_value);
-    	if(res) {
-    		System.out.println("Username successfully changed to: " + new_value);
+    	try {
+    		String new_value = username_field.getText().toString();
+    		Boolean res = profile_page.edit_attribute("username", new_value);
+    		if(res) {
+    			System.out.println("Username successfully changed to: " + new_value);
+    			global.user.username = new_value;	//changing the global variable
+    		}
+    		else {
+    			username_warning.setText("Username already in use!");
+    		}
     	}
-    	global.user.username = new_value;	//changing the global variable
+    	catch(Exception e) {
+    		System.out.println(e);
+    	}
     	find_user();	//refresh
     }
     
@@ -196,9 +233,17 @@ public class OptionController implements Initializable {
     	password_edit.setVisible(true);
     	password_confirm.setVisible(false);
     	String new_value = password_field.getText().toString();
-    	Boolean res = profile_page.edit_attribute("password", password_field.getText().toString());
-    	if(res) {
-    		System.out.println("Password successfully changed to: " + new_value);
+    	try {
+    		Boolean res = profile_page.edit_attribute("password", password_field.getText().toString());
+    		if(res) {
+        		System.out.println("Password successfully changed to: " + new_value);
+        	}
+        	else {
+        		username_warning.setText("Password not changed!");
+        	}
+    	}
+    	catch(Exception e) {
+    		System.out.println(e);
     	}
     	find_user();	//refresh
     }
@@ -208,9 +253,17 @@ public class OptionController implements Initializable {
     	email_edit.setVisible(true);
     	email_confirm.setVisible(false);
     	String new_value = email_field.getText().toString();
-    	Boolean res = profile_page.edit_attribute("email", new_value);
-    	if(res) {
-    		System.out.println("Email successfully changed to: " + new_value);
+    	try {
+    		Boolean res = profile_page.edit_attribute("email", new_value);
+    		if(res) {
+    			System.out.println("Email successfully changed to: " + new_value);
+    		}
+    		else {
+    			email_warning.setText("Invalid email input!");
+    		}
+    	}
+    	catch(Exception e) {
+    		System.out.println(e);
     	}
     	find_user();	//refresh
     }

@@ -18,6 +18,7 @@ import com.mongodb.client.model.Aggregates;
 import static com.mongodb.client.model.Sorts.descending;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -111,10 +112,9 @@ public class RankingController implements Initializable{
 		String user_input = search_field.getText().toString(); 
 		
 		//connecting to mongoDB 
-    	String uri = "mongodb://localhost:27017";
-    	MongoClient myClient = MongoClients.create(uri);
-    	MongoDatabase database = myClient.getDatabase("FantaManager");
-    	MongoCollection<Document> collection = database.getCollection("Users");
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
     	MongoCursor<Document> resultDoc;
     	
     	

@@ -24,6 +24,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 
 
 public class SeeCardController implements Initializable{
@@ -71,10 +72,9 @@ public class SeeCardController implements Initializable{
 		ObjectId card_id = new ObjectId(card_id_field.getText().toString());
 		
 		//connecting to mongoDB 
-    	String uri = "mongodb://localhost:27017";
-    	MongoClient myClient = MongoClients.create(uri);
-    	MongoDatabase database = myClient.getDatabase("FantaManager");
-    	MongoCollection<Document> collection = database.getCollection("Player_Java_Final");
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME);
     	Document resultDoc;
     	try {
     		resultDoc = collection.find(Filters.eq("_id", card_id)).first();
