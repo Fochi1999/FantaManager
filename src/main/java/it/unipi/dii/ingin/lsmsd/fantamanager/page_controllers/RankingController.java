@@ -19,7 +19,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Aggregates;
+import static com.mongodb.client.model.Projections.*;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Aggregates.sort;
@@ -211,6 +211,7 @@ public class RankingController implements Initializable{
 		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
 		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
 
+		//Bson p1=project(fields(include("")));
 		Bson group=group("$region", Accumulators.first("username","$username"));
 
 		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(group)).iterator()){
@@ -231,8 +232,8 @@ public class RankingController implements Initializable{
 
 		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1)).iterator()){
 			while(cursor.hasNext()){
-				System.out.println(cursor.next().toJson());
-				//show_cards(cursor);
+				//System.out.println(cursor.next().toJson());
+				show_ranking(cursor);
 			}
 		}
 	}
