@@ -36,14 +36,6 @@ public class profile_page {
 			}
 		}
 		
-		if(attribute_name.equals("username")) {	//username
-			if(!validate_username(new_value)) {
-				System.out.println("The username '"+ new_value+"' has already been taken!");
-				return false;
-			}
-		}
-		
-		
 		//connecting to mongoDB 
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
@@ -75,26 +67,33 @@ public class profile_page {
 		return matcher.find();
 	}
 	
-	public static boolean validate_username(String new_username) {
+	
+	
+	public static boolean find_duplicate(String attribute_name, String new_value){
 		
 		//connecting to mongoDB 
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+    	Document attribute_value;
     	
-    	//searching username
-    	Bson filter = Filters.eq("username", new_username);
-    	Document user = collection.find(filter).first();
-    	myClient.close();
+    	//updating attribute
+    	Bson filter = Filters.eq(attribute_name, new_value);
     	
-    	
-    	if(user == null) {	//user not found
+    	//finding the attribute
+    	try {
+    		attribute_value = collection.find(filter).first();
+    		myClient.close();
+    		if(attribute_value == null) {	//attribute not in use
+    			return false;
+    		}
+    	}
+    	catch(Exception e) {
+    		System.out.println("Error on finding " + attribute_name + "for user: " + global.user.username);
     		return true;
     	}
-    	
-    	return false;			//user found
-    	
+    	System.out.println("Duplicate found!");
+    	return true; //attribute already in use  	
 	}
-	
 	
 }

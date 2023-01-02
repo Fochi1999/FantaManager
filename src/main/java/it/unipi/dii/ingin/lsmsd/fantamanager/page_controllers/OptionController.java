@@ -162,7 +162,7 @@ public class OptionController implements Initializable {
     protected void show_user_info (Document user_input) throws NoSuchAlgorithmException{
     	
     	username_field.setText(user_input.getString("username"));
-    	password_field.setText("Hidden value");
+    	password_field.setText("***********************");
     	region_field.setText(user_input.getString("region"));
     	email_field.setText(user_input.getString("email"));
     	credits_field.setText(user_input.get("credits").toString());
@@ -174,9 +174,7 @@ public class OptionController implements Initializable {
     
     //edit buttons
     public void edit_username_click() {
-    	username_warning.setText("");
-    	password_warning.setText("");
-    	email_warning.setText("");
+    	refresh_warnings();
     	
     	username_field.setEditable(true);
     	username_edit.setVisible(false);
@@ -184,9 +182,7 @@ public class OptionController implements Initializable {
     }
     
     public void edit_password_click() {
-    	username_warning.setText("");
-    	password_warning.setText("");
-    	email_warning.setText("");
+    	refresh_warnings();
     	
     	password_field.setEditable(true);
     	password_field.setText("");
@@ -195,9 +191,7 @@ public class OptionController implements Initializable {
     }
     
     public void edit_email_click() {
-    	username_warning.setText("");
-    	password_warning.setText("");
-    	email_warning.setText("");
+    	refresh_warnings();
     	
     	email_field.setEditable(true);
     	email_edit.setVisible(false);
@@ -213,14 +207,23 @@ public class OptionController implements Initializable {
     	username_confirm.setVisible(false);
     	try {
     		String new_value = username_field.getText().toString();
+    		Boolean find = profile_page.find_duplicate("username",new_value);	
+    		if(find) {
+    			username_warning.setText("Username already in use!");
+    			System.out.println("Username already in use!");
+    			return;
+    		}
+    		
     		Boolean res = profile_page.edit_attribute("username", new_value);
     		if(res) {
     			System.out.println("Username successfully changed to: " + new_value);
     			global.user.username = new_value;	//changing the global variable
+    			username_warning.setText("Username successfully changed");
     		}
     		else {
-    			username_warning.setText("Username already in use!");
+    			username_warning.setText("Error! Try again later");
     		}
+    		
     	}
     	catch(Exception e) {
     		System.out.println(e);
@@ -237,9 +240,10 @@ public class OptionController implements Initializable {
     		Boolean res = profile_page.edit_attribute("password", password_field.getText().toString());
     		if(res) {
         		System.out.println("Password successfully changed to: " + new_value);
+        		password_warning.setText("Password changed");
         	}
         	else {
-        		username_warning.setText("Password not changed!");
+        		username_warning.setText("Error! Try again later.");
         	}
     	}
     	catch(Exception e) {
@@ -254,17 +258,33 @@ public class OptionController implements Initializable {
     	email_confirm.setVisible(false);
     	String new_value = email_field.getText().toString();
     	try {
-    		Boolean res = profile_page.edit_attribute("email", new_value);
-    		if(res) {
-    			System.out.println("Email successfully changed to: " + new_value);
+    		Boolean find = profile_page.find_duplicate("email",new_value);
+    		if(find) {
+    			email_warning.setText("Email address already in use!");
+    			return;
     		}
-    		else {
+    		
+    		Boolean res = profile_page.edit_attribute("email", new_value);
+    		if(!res) {
     			email_warning.setText("Invalid email input!");
     		}
+    		else {
+    			email_warning.setText("Email address successfully changed!");
+    		}
+    		
+    		
     	}
     	catch(Exception e) {
     		System.out.println(e);
     	}
     	find_user();	//refresh
+    }
+    
+    
+    public void refresh_warnings() {
+    	//refreshing text
+    	username_warning.setText("");
+    	password_warning.setText("");
+    	email_warning.setText("");
     }
 }
