@@ -2,14 +2,11 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.trades;
 
 
 import org.bson.Document;
-import com.google.gson.Gson;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.*;
-import com.mongodb.client.result.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 
@@ -55,7 +52,7 @@ public class trade_main{
 		//retieving cards name
 		ArrayList<String> card_names = new ArrayList<>();
 		try {
-			MongoCollection<Document> cards_collection = database.getCollection("Player_Java_Final");
+			MongoCollection<Document> cards_collection = database.getCollection(global.CARDS_COLLECTION_NAME);
 			MongoCursor<Document> cards_doc = cards_collection.find().iterator();
 			while(cards_doc.hasNext()) {
 				card_names.add(cards_doc.next().getString("fullname"));
@@ -136,10 +133,10 @@ public class trade_main{
 			collection.insertMany(TradeList);
 		}
 		catch(Exception e) {
-			System.out.println("Error while creating trades collection!");
+			System.out.println("Error while creating Trades collection!");
 		}  
 		
-		System.out.println("Trade collection created!");
+		System.out.println("Trades collection created!");
 		myClient.close();
 	}
 }	

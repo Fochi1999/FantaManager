@@ -1,6 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.user;
 
-//TODO decidere se lasciare la funzione in un file a parte o implementarlo in un altro
+//TODO decidere insieme se lasciare la funzione in un file a parte o implementarlo in un altro
 
 import org.bson.Document;
 import com.mongodb.client.MongoClient;
@@ -32,7 +32,7 @@ public class populate_user {
     	String admin_password = hash.MD5(admin_username);	//the password is the same as the username
 		int admin_credits = 0;
 		int admin_points = 0;
-		int admin_collection = 0;	//TODO will be increased in another function
+		int admin_collection = 0;	
 		String admin_email = generate_random_email();
 		String admin_region = generate_random_region();
 		Document admin = new Document();
