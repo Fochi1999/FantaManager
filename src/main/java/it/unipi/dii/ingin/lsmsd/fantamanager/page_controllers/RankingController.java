@@ -178,7 +178,8 @@ public class RankingController implements Initializable{
     		String user_id = user_doc.get("_id").toString();
     		String user_nickname = user_doc.getString("username");
     		String user_points = user_doc.get("points").toString();
-    		String user_output = i + ") " + user_nickname + " /// Points: " + user_points + " /// user_id: " + user_id;
+			String user_region = user_doc.getString("region");
+    		String user_output = i + ") " + user_nickname + " /// Points: " + user_points +"///user_region: "+user_region+ " /// user_id: " + user_id;
     		list.add(user_output);
     	}
     	user_list.getItems().clear();
@@ -214,13 +215,15 @@ public class RankingController implements Initializable{
 		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
 		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
 
-		//Bson p1=project(fields(include("")));
-		Bson group=group("$region", first("username","$username"));
+		//Bson p1=project(fields(include("points")));
+		Bson group=group("$region", first("username","$username"), first("credits","$credits"), first("points","$points"), first("id","$_id"));
+		Bson p1=project(fields(excludeId(),include("username"),include("points"),computed("_id","$id"),computed("region","$_id")));
+		Bson order=sort(descending("points"));
 
-		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(group)).iterator()){
+		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(group,p1,order)).iterator()){
 			while(cursor.hasNext()){
-				System.out.println(cursor.next().toJson());
-				//show_cards(cursor);
+				//System.out.println(cursor.next().toJson());
+				show_ranking(cursor);
 			}
 		}
 	}
@@ -232,8 +235,9 @@ public class RankingController implements Initializable{
 		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
 
 		Bson match1=match(eq("region",search_field_region.getText()));
+		Bson order=sort(descending("points"));
 
-		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1)).iterator()){
+		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1,order)).iterator()){
 			while(cursor.hasNext()){
 				//System.out.println(cursor.next().toJson());
 				show_ranking(cursor);
