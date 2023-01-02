@@ -19,9 +19,8 @@ public class util_controller {
     public static void go_to_shop(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("shop_page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Welcome to Shop!");
+        stage.setTitle("Shop page");
         stage.setScene(scene);
         stage.show();
-
     }
 }

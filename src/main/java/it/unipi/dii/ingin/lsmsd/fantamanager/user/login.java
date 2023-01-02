@@ -19,7 +19,7 @@ public class login {
         	return false;
         }
         
-        global.user=new user(nick,password,null,user.get("_id").toString(),user.getInteger("credits"),0,user.getInteger("liv_priv"));
+        global.user=new user(nick,password,null,user.get("_id").toString(),user.getInteger("credits"),0,user.getInteger("privilege"));
         System.out.println(global.user._id);
         return true;
     }
@@ -36,7 +36,7 @@ public class login {
             return false;
         }
         
-        usersCollection.insertOne(new Document().append("username", Nick).append("password", Pass).append("liv_priv",1).
+        usersCollection.insertOne(new Document().append("username", Nick).append("password", Pass).append("privilege",1).
         		append("region",Region).append("credits",100).append("points", 0).append("collection",0).append("email",Email));
         //INIZIALIZZARE LE VARIABILI GLOBAL
         return login(Nick,Pass);

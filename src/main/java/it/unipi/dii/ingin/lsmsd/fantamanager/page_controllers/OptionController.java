@@ -128,7 +128,7 @@ public class OptionController implements Initializable {
     	
     }
     
-    
+    //TODO decidere se va bene questo approccio
     protected void find_user() {
     
     	//connecting to mongoDB 

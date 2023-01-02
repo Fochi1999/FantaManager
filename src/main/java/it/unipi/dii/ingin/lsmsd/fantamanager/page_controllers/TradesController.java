@@ -151,7 +151,7 @@ public class TradesController implements Initializable{
     	}
     	
     	myClient.close();
-    	show_all_button_onclick(); //refreshing the available trade list
+    	my_requests_button_onclick(); //refreshing the available trade list
     }
     
     
