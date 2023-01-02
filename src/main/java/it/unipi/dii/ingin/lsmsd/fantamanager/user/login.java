@@ -38,7 +38,9 @@ public class login {
         
         usersCollection.insertOne(new Document().append("username", Nick).append("password", Pass).append("privilege",1).
         		append("region",Region).append("credits",100).append("points", 0).append("collection",0).append("email",Email));
+
         //INIZIALIZZARE LE VARIABILI GLOBAL
+        
         return login(Nick,Pass);
     }
 }
