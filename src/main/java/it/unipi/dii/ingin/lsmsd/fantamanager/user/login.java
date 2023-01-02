@@ -25,17 +25,17 @@ public class login {
         if(user == null) {
         	return false;
         }
-<<<<<<< Updated upstream
+
         
         global.user=new user(nick,password,null,user.get("_id").toString(),user.getInteger("credits"),0,user.getInteger("privilege"));
         System.out.println(global.user._id);
-=======
+
         global.id_user=user.get("_id").toString();
         global.user=new user(nick,password,user.getString("region"),user.getString("mail"),user.getInteger("credits"),0,user.getInteger("liv_priv"));
         ArrayList<formation> formations= (ArrayList<formation>) user.get("formations");
         global.saved_formation_server=formations.get(global.curr_matchday);
         System.out.println(global.id_user);
->>>>>>> Stashed changes
+
         return true;
     }
     
@@ -50,24 +50,20 @@ public class login {
         	System.out.println("This username is already in use!");
             return false;
         }
-<<<<<<< Updated upstream
+
         
         usersCollection.insertOne(new Document().append("username", Nick).append("password", Pass).append("privilege",1).
         		append("region",Region).append("credits",100).append("points", 0).append("collection",0).append("email",Email));
 
         //INIZIALIZZARE LE VARIABILI GLOBAL
-<<<<<<< Updated upstream
-        
-=======
-=======
-        user u=new user(Nick,Pass,Region,Email,100,0,1);
+
+        /*user u=new user(Nick,Pass,Region,Email,100,0,1);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(u);
         System.out.println(json);
         Document doc = Document.parse( json );
         usersCollection.insertOne(doc);
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+*/
         return login(Nick,Pass);
     }
 }
