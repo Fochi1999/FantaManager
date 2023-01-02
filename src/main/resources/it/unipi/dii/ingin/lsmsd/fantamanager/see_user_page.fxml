@@ -25,7 +25,10 @@
             </Text>
             <AnchorPane layoutX="23.0" layoutY="155.0" prefHeight="58.0" prefWidth="334.0">
                <children>
-                  <TextField fx:id="region_field" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0" />
+                  <TextField fx:id="region_field" editable="false" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></TextField>
                   <Text fill="WHITE" layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Region:">
                      <font>
                         <Font size="18.0" />
@@ -35,7 +38,10 @@
             </AnchorPane>
             <AnchorPane layoutX="21.0" layoutY="205.0" prefHeight="58.0" prefWidth="334.0">
                <children>
-                  <TextField fx:id="points_field" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0" />
+                  <TextField fx:id="points_field" editable="false" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></TextField>
                   <Text fill="WHITE" layoutX="13.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Points:">
                      <font>
                         <Font size="18.0" />
@@ -45,7 +51,10 @@
             </AnchorPane>
             <AnchorPane layoutX="21.0" layoutY="255.0" prefHeight="58.0" prefWidth="334.0">
                <children>
-                  <TextField fx:id="collection_field" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0" />
+                  <TextField fx:id="collection_field" editable="false" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></TextField>
                   <Text fill="WHITE" layoutX="13.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Collection:">
                      <font>
                         <Font size="18.0" />

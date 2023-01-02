@@ -47,6 +47,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import org.json.simple.parser.ParseException;
 
+
+//TODO discuss about adding a little animation while waiting for the ranking page to load 
+//few seconds of wait but it may be interpreted as a freeze (?)
+
+//or
+
+//TODO showing only top 100 players
+//Add button for a user to see his position in the ranking and some user near him/her
+
 public class RankingController implements Initializable{
 
 
@@ -85,23 +94,23 @@ public class RankingController implements Initializable{
         MultipleSelectionModel<String> card = user_list.getSelectionModel();
 
         card.selectedItemProperty().addListener(new ChangeListener<String>() {
-           public void changed(ObservableValue<? extends String> changed, String oldVal, String newVal) {
+        	public void changed(ObservableValue<? extends String> changed, String oldVal, String newVal) {
 
-        	  view_profile.setDisable(true);
-              String selItems = "";
-              ObservableList<String> selected = user_list.getSelectionModel().getSelectedItems();
+        	   view_profile.setDisable(true);
+              	String selItems = "";
+              	ObservableList<String> selected = user_list.getSelectionModel().getSelectedItems();
 
-               for (int i = 0; i < selected.size(); i++) {
-                  selItems += "" + selected.get(i); 
-               }
+               	for (int i = 0; i < selected.size(); i++) {
+            	   selItems += "" + selected.get(i); 
+               	}
+               	String full_text[] = selItems.split(" ");
+       			selected_user.setText(full_text[1] + " - Points: " + full_text[4]); //the user will show up on the lower Area
                
-               selected_user.setText(selItems); //the user will show up on the lower Area
-               
-               if(!selected_user.getText().isEmpty()) {
-            	   view_profile.setDisable(false);
-               }
+       			if(!selected_user.getText().isEmpty()) {
+       				view_profile.setDisable(false);
+       			}
             	   
-           }
+        	}
         });
 		
         //showing up users
@@ -177,11 +186,10 @@ public class RankingController implements Initializable{
     	while(result.hasNext()) {	
     		i=i+1;
     		Document user_doc = result.next();
-    		String user_id = user_doc.get("_id").toString();
     		String user_nickname = user_doc.getString("username");
     		String user_points = user_doc.get("points").toString();
 			String user_region = user_doc.getString("region");
-    		String user_output = i + ") " + user_nickname + " /// Points: " + user_points +"///user_region: "+user_region+ " /// user_id: " + user_id;
+    		String user_output = i + ") " + user_nickname + " - Points: " + user_points +" - Region: "+user_region;
     		list.add(user_output);
     	}
     	user_list.getItems().clear();
@@ -193,7 +201,7 @@ public class RankingController implements Initializable{
 		
 		//retrieving card id
 		String full_text[] = selected_user.getText().split(" ");
-		user_input = full_text[1];
+		user_input = full_text[0];
 		System.out.println("Viewing user: " + user_input);
 		
 		Stage stage = (Stage)root.getScene().getWindow();

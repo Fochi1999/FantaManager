@@ -84,8 +84,6 @@ public class SeeCardController implements Initializable{
     	}
     	myClient.close();
     	
-    	System.out.println(resultDoc);
-    	
     	//showing up the infos
     	//TODO
     	Text t1 = new Text(resultDoc.getString("fullname"));
