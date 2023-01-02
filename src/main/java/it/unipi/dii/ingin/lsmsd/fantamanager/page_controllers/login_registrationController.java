@@ -24,8 +24,8 @@ public class login_registrationController implements Initializable{
     //Stage stage = new Stage();
 
 	String regionList[] = {"Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna","Friuli-Venezia Giulia","Lazio","Liguria",
-	                     "Lombardy","Marche","Molise","Piemonte","Apulia","Sardinia","Sicily","Trentino Alto Adige","Tuscany",
-	                     "Umbria","Valle d'Aosta","Veneto"};	
+	                     "Lombardy","Marche","Molise","Piedmont","Apulia","Sardinia","Sicily","Trentino-South Tyrol","Tuscany",
+	                     "Umbria","Aosta Valley","Veneto"};	
     @FXML
     private Parent root;
     
