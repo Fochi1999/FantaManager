@@ -7,10 +7,12 @@ public class player_formation {
     String name;
     int id;
     String team;
+    float vote;
     public player_formation(player_collection p){
         this.name=p.get_name();
         this.id=p.get_id();
         this.team=p.get_team().substring(0,3);
+        this.vote=0;
 
     }
     public String getName(){

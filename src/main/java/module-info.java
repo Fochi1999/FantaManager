@@ -17,6 +17,7 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     requires redis.clients.jedis;
     requires json.simple;
     requires org.apache.commons.pool2;
+    requires com.fasterxml.jackson.databind;
 
     opens it.unipi.dii.ingin.lsmsd.fantamanager to javafx.fxml;
     exports it.unipi.dii.ingin.lsmsd.fantamanager;
@@ -24,5 +25,6 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     opens it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers to javafx.fxml;
     exports it.unipi.dii.ingin.lsmsd.fantamanager.formation;
     opens it.unipi.dii.ingin.lsmsd.fantamanager.formation to javafx.fxml;
+    exports it.unipi.dii.ingin.lsmsd.fantamanager.user to com.fasterxml.jackson.databind;
 
 }
