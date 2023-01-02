@@ -21,7 +21,16 @@ public class user {
         this.liv_priv=liv_priv;
         formations=new formation[38];
     }
-
+    public user(String nick, String hashPass,String region, int credits,int collection, int liv_priv){
+        username=nick;
+        password=hashPass;
+        this.region=region;
+        this._id=null;
+        this.credits=credits;
+        this.collection=collection;
+        this.liv_priv=liv_priv;
+        formations=new formation[38];
+    }
     public int get_liv_priv() {
         return liv_priv;
     }

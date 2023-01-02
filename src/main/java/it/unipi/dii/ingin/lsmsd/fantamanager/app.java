@@ -20,7 +20,6 @@ public class app extends Application {
     }
 
     public static void main(String[] args) {
-        
     	//trade_main.createTrade();
     	launch();
         
