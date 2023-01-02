@@ -6,17 +6,58 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-background-radius: 7; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.SeeUserController">
    <children>
-      <Button fx:id="back" layoutX="56.0" layoutY="620.0" mnemonicParsing="false" onMouseClicked="#click_back" prefHeight="38.0" prefWidth="150.0" text="Back to the ranking">
+      <Button fx:id="back" layoutX="22.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#click_back" prefHeight="38.0" prefWidth="90.0" text="Back">
          <font>
             <Font size="15.0" />
          </font></Button>
-      <AnchorPane layoutX="267.0" layoutY="27.0" prefHeight="645.0" prefWidth="370.0">
+      <AnchorPane layoutX="267.0" layoutY="27.0" prefHeight="645.0" prefWidth="370.0" style="-fx-border-color: WHITE; -fx-border-width: 3; -fx-border-radius: 8;">
          <children>
-            <TextFlow fx:id="text_flow" prefHeight="646.0" prefWidth="371.0" style="-fx-background-color: WHITE;" />
+            <TextFlow fx:id="text_flow" layoutX="12.0" layoutY="395.0" prefHeight="207.0" prefWidth="352.0" style="-fx-background-color: WHITE;" />
+            <Text fill="WHITE" layoutX="64.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="profile page" textAlignment="CENTER" wrappingWidth="239.73675537109375">
+               <font>
+                  <Font name="System Bold Italic" size="30.0" />
+               </font>
+            </Text>
+            <AnchorPane layoutX="23.0" layoutY="155.0" prefHeight="58.0" prefWidth="334.0">
+               <children>
+                  <TextField fx:id="region_field" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0" />
+                  <Text fill="WHITE" layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Region:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="21.0" layoutY="205.0" prefHeight="58.0" prefWidth="334.0">
+               <children>
+                  <TextField fx:id="points_field" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0" />
+                  <Text fill="WHITE" layoutX="13.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Points:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="21.0" layoutY="255.0" prefHeight="58.0" prefWidth="334.0">
+               <children>
+                  <TextField fx:id="collection_field" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0" />
+                  <Text fill="WHITE" layoutX="13.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Collection:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <Text fx:id="username_field" fill="WHITE" layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*username* 's" textAlignment="CENTER" wrappingWidth="340.53668212890625">
+               <font>
+                  <Font name="System Bold Italic" size="34.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="23.0" layoutY="27.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: WHITE; -fx-border-width: 10; -fx-border-radius: 20;">
@@ -33,10 +74,15 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <TextField fx:id="user_id_field" editable="false" layoutX="51.0" layoutY="243.0">
+      <Button fx:id="delete_user" layoutX="67.0" layoutY="247.0" mnemonicParsing="false" onMouseClicked="#click_delete" prefHeight="38.0" prefWidth="128.0" style="-fx-background-color: RED;" text="Delete user">
          <font>
-            <Font name="System Bold Italic" size="12.0" />
+            <Font size="15.0" />
          </font>
-      </TextField>
+      </Button>
+      <Button fx:id="back1" layoutX="150.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#click_home" prefHeight="38.0" prefWidth="90.0" text="Home">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

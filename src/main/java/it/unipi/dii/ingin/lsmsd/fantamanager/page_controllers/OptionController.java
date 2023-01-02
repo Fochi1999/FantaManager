@@ -93,7 +93,7 @@ public class OptionController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         
     	//case of admin logged in: showing the 'calculate matchday' option
-		int livpriv=global.user.get_liv_priv();
+		int livpriv=global.user.get_privilege();
     	if(livpriv>=2){
     		
     		for(int i=1;i<=38;i++){

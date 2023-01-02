@@ -70,12 +70,14 @@ public class RankingController implements Initializable{
 	@FXML
     private Parent root;
 	
-	static String user_id_input;
+	static String user_input;
 	
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
 		System.out.println("Opening ranking page..."); 	
+		user_input = "";
+		
 		//disabling the button
 		view_profile.setDisable(true);
 		
@@ -191,8 +193,8 @@ public class RankingController implements Initializable{
 		
 		//retrieving card id
 		String full_text[] = selected_user.getText().split(" ");
-		user_id_input = full_text[full_text.length-1];
-		System.out.println("Viewing user with object id: " + user_id_input);
+		user_input = full_text[1];
+		System.out.println("Viewing user: " + user_input);
 		
 		Stage stage = (Stage)root.getScene().getWindow();
 		view_user(stage);

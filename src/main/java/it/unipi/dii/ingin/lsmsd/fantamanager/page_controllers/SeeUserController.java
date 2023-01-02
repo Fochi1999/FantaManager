@@ -15,6 +15,7 @@ import com.mongodb.client.model.Filters;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,21 +30,34 @@ import javafx.stage.Stage;
 public class SeeUserController implements Initializable{
 
 	
+	@FXML private TextField region_field;
+	@FXML private TextField collection_field;
+	@FXML private TextField points_field;
+	@FXML private TextFlow text_flow;
+	@FXML private Text username_field;
+	
 	@FXML
-	private TextField user_id_field;
-
-	@FXML
-	private TextFlow text_flow;
-
+	private Button delete_user;
+	
 	@FXML
 	private Parent root;
+	
+	private String username = RankingController.user_input;
 	
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
 		System.out.println("Opening user page...");
-		user_id_field.setText(RankingController.user_id_input);	//retrieving the user id
+		username_field.setText(username+"'s");
 		search_user();
+		
+		//hiding delete button from normal users
+		int priv = global.user.get_privilege();
+    	if(priv < 2){
+    		delete_user.setVisible(false);
+    	}
+    		
+		
 	}
 	
 	
@@ -52,38 +66,64 @@ public class SeeUserController implements Initializable{
 
     	System.out.println("Returning back to the ranking page...");
         Stage stage = (Stage)root.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("ranking_page.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Ranking page");
-        stage.setScene(scene);
-        stage.show();
-        
+        util_controller.go_to_ranking(stage);   
+    }
+	
+	@FXML
+    protected void click_home() throws IOException {
+
+    	System.out.println("Returning back to the home page...");
+        Stage stage = (Stage)root.getScene().getWindow();
+        util_controller.back_to_home(stage);
     }
 	
 	protected void search_user() {
-		
-		ObjectId user_id = new ObjectId(user_id_field.getText().toString());
 		
 		//connecting to mongoDB 
 		MongoClient myClient = MongoClients.create(global.MONGO_URI);
 		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
 		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-    	Document resultDoc;
+    	
+		//searching user
+		Document user_doc;
     	try {
-    		resultDoc = collection.find(Filters.eq("_id", user_id)).first();
+    		user_doc = collection.find(Filters.eq("username", username)).first();
     	}catch (Exception e) {
     		System.out.println("Error on viewing card");
     		return;
     	}
     	myClient.close();
     	
-    	System.out.println(resultDoc);
-    	
     	//showing up the infos
-    	//TODO
-    	Text t1 = new Text(resultDoc.getString("username"));
+    	region_field.setText(user_doc.getString("region"));
+    	collection_field.setText(user_doc.get("collection").toString());
+    	points_field.setText(user_doc.get("points").toString());
+    	
+    	//TODO additional info (?)
+    	Text t1 = new Text("Analytics will be added here (?)");
     	text_flow.getChildren().add(t1);
 	}
 	
+	
+	public void click_delete() throws IOException{
+		
+		//connecting to mongoDB 
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+	
+		//delete user
+		try {
+			collection.deleteOne(Filters.eq("username", username));
+		}
+		catch(Exception e) {
+			System.out.println("Error! Cannot delete this user now. Try later");
+		}
+		myClient.close();
+		
+		//go back
+		System.out.println("User '"+ username + "' successfully deleted.");
+		click_back();	//automatically go back to the ranking page
+	}
 	
 }
