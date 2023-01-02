@@ -21,15 +21,16 @@ public class app extends Application {
     }
 
     public static void main(String[] args) {
-        
+
     	try {
-    		//populate_user.createUsers();
+    		//populate_user.createUsers();	
     		//trade_main.createTrade();
     	} catch(Exception e){
     		e.printStackTrace();
     	}
-    	
+
     	launch();
-        
+       
     }
+    
 }
