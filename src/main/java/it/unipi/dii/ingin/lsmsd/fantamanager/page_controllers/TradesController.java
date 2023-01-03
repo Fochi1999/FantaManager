@@ -1,6 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.bson.Document;
@@ -137,7 +138,7 @@ public class TradesController implements Initializable{
 		ObjectId trade_id = new ObjectId(words_arr[words_arr.length-1]);
 		System.out.println("Deleting trade with object id: " + trade_id);
 		
-		//connecting to mongoDB 
+		/*//connecting to mongoDB
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
@@ -149,9 +150,12 @@ public class TradesController implements Initializable{
     	} catch (Exception e) {
     		System.out.println("An error has occured while deleting the trade!");
     		return;
-    	}
+    	}*/
+		TradeMongoDriver.delete_my_trade(trade_id);
     	
-    	myClient.close();
+    	//myClient.close();
+		TradeMongoDriver.closeConnection();
+
     	my_requests_button_onclick(); //refreshing the available trade list
     }
     
@@ -173,14 +177,16 @@ public class TradesController implements Initializable{
     		return;
     	}*/
     	
-    	show_trades(Trade.trades_pending());
+    	show_trades(TradeMongoDriver.trades_pending());
+		TradeMongoDriver.closeConnection();
     	//myClient.close();
 	}
 	
 	public void my_requests_button_onclick() {
 		
 		String my_user = global.user.username;
-		show_trades(Trade.search_user(my_user));
+		show_trades(TradeMongoDriver.search_user(my_user));
+		TradeMongoDriver.closeConnection();
 	}
 	
 	public void search_button_onaction() {
@@ -188,8 +194,9 @@ public class TradesController implements Initializable{
 		String user_input = search_card_from.getText();
 		String card_input = search_card_to.getText();
 		if(!user_input.isEmpty() || !card_input.isEmpty()) { //not searching if the 'search' button is clicked when the text fields are empty
-    		show_trades(Trade.search_trade(user_input, card_input));
+    		show_trades(TradeMongoDriver.search_trade(user_input, card_input));
 		}
+		TradeMongoDriver.closeConnection();
 	}
 	
 	public void show_trades(MongoCursor<Document> result) {
@@ -212,6 +219,8 @@ public class TradesController implements Initializable{
     	}
     	trade_list.getItems().clear();
 		trade_list.getItems().addAll(list);
+
+		TradeMongoDriver.closeConnection();
 	}
 	
     /*public void search_trade(String from_input, String to_input) {
@@ -294,7 +303,7 @@ public class TradesController implements Initializable{
 
 
 
-			try(MongoCursor<Document> cursor= Trade.retrieve_most_present((String) offered_wanted.getValue())){
+			try(MongoCursor<Document> cursor= TradeMongoDriver.retrieve_most_present((String) offered_wanted.getValue())){
 				while(cursor.hasNext()){
 					//System.out.println(cursor.next().toJson());
 					//show_trades(cursor);
@@ -303,6 +312,6 @@ public class TradesController implements Initializable{
 				}
 				selected_trade.setText(player_trade); //the trade will show up on the lower Area
 			}
-
+			TradeMongoDriver.closeConnection();
 	}
 }
