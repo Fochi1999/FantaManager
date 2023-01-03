@@ -13,20 +13,57 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-background-radius: 7; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.SeeCardController">
    <children>
-      <Button fx:id="back" layoutX="72.0" layoutY="619.0" mnemonicParsing="false" onMouseClicked="#click_back" prefHeight="38.0" prefWidth="117.0" text="Back to the shop" />
-      <AnchorPane layoutX="267.0" layoutY="27.0" prefHeight="645.0" prefWidth="370.0">
+      <AnchorPane layoutX="267.0" layoutY="27.0" prefHeight="645.0" prefWidth="370.0" style="-fx-border-color: WHITE; -fx-border-width: 3; -fx-border-radius: 8;">
          <children>
-            <TextFlow fx:id="text_flow" prefHeight="646.0" prefWidth="371.0" style="-fx-background-color: WHITE;" />
+            <TextFlow fx:id="text_flow" layoutX="8.0" layoutY="209.0" prefHeight="430.0" prefWidth="354.0" style="-fx-background-color: WHITE;" />
+            <Text fx:id="fullname_field" fill="WHITE" layoutX="17.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*card_name*" textAlignment="CENTER" wrappingWidth="335.73675537109375">
+               <font>
+                  <Font name="System Bold" size="34.0" />
+               </font>
+            </Text>
+            <AnchorPane layoutX="18.0" layoutY="86.0" prefHeight="58.0" prefWidth="334.0">
+               <children>
+                  <TextField fx:id="team_field" editable="false" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </TextField>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="18.0" layoutY="145.0" prefHeight="58.0" prefWidth="334.0">
+               <children>
+                  <TextField fx:id="position_field" editable="false" layoutX="136.0" layoutY="12.0" prefHeight="26.0" prefWidth="174.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </TextField>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Position:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
-      <Button fx:id="buy_card" layoutX="72.0" layoutY="551.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="118.0" text="Buy Card" />
-      <MenuButton layoutX="92.0" layoutY="337.0" mnemonicParsing="false" text="Statistics">
+      <MenuButton layoutX="80.0" layoutY="314.0" mnemonicParsing="false" text="Statistics">
         <items>
           <MenuItem mnemonicParsing="false" text="Action 1" />
           <MenuItem mnemonicParsing="false" text="Action 2" />
         </items>
+         <font>
+            <Font size="15.0" />
+         </font>
       </MenuButton>
-      <Button fx:id="general_info" layoutX="71.0" layoutY="287.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="118.0" text="View general info" />
+      <Button fx:id="general_info" layoutX="55.0" layoutY="255.0" mnemonicParsing="false" onMouseClicked="#get_general_info" prefHeight="38.0" prefWidth="150.0" text="View general info">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
       <AnchorPane layoutX="23.0" layoutY="27.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: WHITE; -fx-border-width: 10; -fx-border-radius: 20;">
          <children>
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
@@ -41,11 +78,25 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <Text fx:id="buy_card_text" fill="RED" layoutX="72.0" layoutY="541.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insufficient credits!" textAlignment="CENTER" wrappingWidth="117.59999999999991" />
-      <TextField fx:id="card_id_field" editable="false" layoutX="51.0" layoutY="243.0">
+      <Button fx:id="back" layoutX="23.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#click_back" prefHeight="38.0" prefWidth="90.0" text="Back">
          <font>
-            <Font name="System Bold Italic" size="12.0" />
+            <Font size="15.0" />
          </font>
-      </TextField>
+      </Button>
+      <Button fx:id="home" layoutX="149.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#click_home" prefHeight="38.0" prefWidth="90.0" text="Home">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <AnchorPane layoutX="43.0" layoutY="554.0" prefHeight="80.0" prefWidth="174.0" style="-fx-border-radius: 20; -fx-border-width: 3;">
+         <children>
+            <Button fx:id="buy_card" layoutX="8.0" layoutY="21.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="158.0" style="-fx-background-color: GREEN;" text="Buy Card">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Text fx:id="buy_card_text" fill="RED" layoutX="28.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insufficient credits!" textAlignment="CENTER" wrappingWidth="117.59999999999991" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
