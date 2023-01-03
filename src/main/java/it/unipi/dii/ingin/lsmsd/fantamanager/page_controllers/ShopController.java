@@ -94,7 +94,8 @@ public class ShopController implements Initializable {
 				role.getItems().add(role_);
 		}
 		//choiceBox of team
-		String[] teams={"Atalanta","Bologna","Cagliari","Empoli","Fiorentina","Genoa","Inter","Juventus","Lazio","AC Milan","Napoli","AS Roma","Salernitana","Sampdoria","Sassuolo","Spezia","Torino","Udinese","Venezia","Verona"};
+		String[] teams={"Atalanta","Bologna","Cagliari","Empoli","Fiorentina","Genoa","Inter","Juventus","Lazio",
+				"AC Milan","Napoli","AS Roma","Salernitana","Sampdoria","Sassuolo","Spezia","Torino","Udinese","Venezia","Verona"};
 		for(String team_:teams){
 			team.getItems().add(team_);
 		}
@@ -104,23 +105,34 @@ public class ShopController implements Initializable {
         MultipleSelectionModel<String> card = card_list.getSelectionModel();
 
         card.selectedItemProperty().addListener(new ChangeListener<String>() {
-           public void changed(ObservableValue<? extends String> changed, String oldVal, String newVal) {
+        	public void changed(ObservableValue<? extends String> changed, String oldVal, String newVal) {
 
-        	  see_card.setDisable(true);
-              String selItems = "";
-              ObservableList<String> selected = card_list.getSelectionModel().getSelectedItems();
+        		see_card.setDisable(true);
+        		String selItems = "";
+        		ObservableList<String> selected = card_list.getSelectionModel().getSelectedItems();
 
-               for (int i = 0; i < selected.size(); i++) {
-                  selItems += "" + selected.get(i); 
-               }
+        		for (int i = 0; i < selected.size(); i++) {
+        			selItems += "" + selected.get(i); 
+        		}
+        		
+               	String full_text[] = selItems.split(" ");
+               	int text_size = full_text.length;
+               	String team = full_text[text_size-4];
+               	String text;
+               	if(team.equals("Roma") || team.equals("Milan")) {	//handling formatting error caused by 2 words team name
+               		text = full_text[text_size-14] + " - " + full_text[text_size-8] + " - " + full_text[text_size-4]; 
+               	}
+               	else {
+               		text = full_text[text_size-13] + " - " + full_text[text_size-7] + " - " + full_text[text_size-4]; 
+               	}
+               	card_id_input = full_text[text_size-1];
+       			selected_card.setText(text); //the card will show up on the lower Area
                
-               selected_card.setText(selItems); //the card will show up on the lower Area
-               
-               if(!selected_card.getText().isEmpty()) {
-            	   see_card.setDisable(false);
-               }
+       			if(!selected_card.getText().isEmpty()) {
+       				see_card.setDisable(false);
+       			}
             	   
-           }
+        	}
         });
 		
         //showing up cards
@@ -217,8 +229,8 @@ public class ShopController implements Initializable {
     		String card_credits = card_doc.get("credits").toString();
     		String card_team = card_doc.getString("team");
     		String card_role = card_doc.getString("position");
-    		String card_output = "Card: " + card_fullname + " /// Cost: " + card_credits +
-    				" /// Role: " + card_role + " /// Team: " + card_team + " // id: " + card_id;
+    		String card_output = card_fullname + " - Cost: " + card_credits +
+    				" - Role: " + card_role + " - Team: " + card_team + " - ID: " + card_id;
     		list.add(card_output);
     	}
     	card_list.getItems().clear();
@@ -228,10 +240,7 @@ public class ShopController implements Initializable {
 	public void click_see_card() throws IOException {
 		
 		//retrieving card id
-		String full_text[] = selected_card.getText().split(" ");
-		card_id_input = full_text[full_text.length-1];
 		System.out.println("Viewing card with object id: " + card_id_input);
-		
 		Stage stage = (Stage)root.getScene().getWindow();
 		view_card(stage);
 	}

@@ -68,16 +68,16 @@
       <AnchorPane layoutX="14.0" layoutY="278.0" prefHeight="338.0" prefWidth="635.0">
          <children>
             <ListView fx:id="card_list" prefHeight="277.0" prefWidth="635.0" />
-            <TextField fx:id="selected_card" editable="false" layoutX="82.0" layoutY="287.0" prefHeight="42.0" prefWidth="470.0" promptText="Click on a card to view...">
+            <TextField fx:id="selected_card" alignment="CENTER" editable="false" layoutX="82.0" layoutY="287.0" prefHeight="42.0" prefWidth="470.0" promptText="Click on a card to view...">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </TextField>
          </children>
       </AnchorPane>
-      <Button fx:id="search_by_skill" layoutX="357.0" layoutY="614.0" onMouseClicked="#search_by_skill" mnemonicParsing="false" text="Search_by_skills" />
+      <Button fx:id="search_by_skill" layoutX="357.0" layoutY="614.0" mnemonicParsing="false" onMouseClicked="#search_by_skill" text="Search_by_skills" />
       <ChoiceBox fx:id="team" layoutX="177.0" layoutY="648.0" />
-      <ChoiceBox fx:id="role" layoutX="334.0" layoutY="648.0"/>
+      <ChoiceBox fx:id="role" layoutX="334.0" layoutY="648.0" />
       <ChoiceBox fx:id="skill" layoutX="176.0" layoutY="614.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

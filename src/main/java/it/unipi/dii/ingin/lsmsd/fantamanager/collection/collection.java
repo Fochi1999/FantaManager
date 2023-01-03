@@ -1,5 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.collection;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -211,10 +212,10 @@ public class collection {
 
                             int player_id=random.nextInt(50);
 
-                            jedis.set("user_id:"+1+":player_id:"+player_id+":name",generate_string());
-                            jedis.set("user_id:"+1+":player_id:"+player_id+":quantity", String.valueOf(random.nextInt(10)));
-                            jedis.set("user_id:"+1+":player_id:"+player_id+":team",generate_string());
-                            jedis.set("user_id:"+1+":player_id:"+player_id+":position",position[random.nextInt(4)]);
+                            jedis.set("user_id:"+global.id_user+":player_id:"+player_id+":name",generate_string());
+                            jedis.set("user_id:"+global.id_user+":player_id:"+player_id+":quantity", String.valueOf(random.nextInt(10)));
+                            jedis.set("user_id:"+global.id_user+":player_id:"+player_id+":team",generate_string());
+                            jedis.set("user_id:"+global.id_user+":player_id:"+player_id+":position",position[random.nextInt(4)]);
 
                         }
                     }
