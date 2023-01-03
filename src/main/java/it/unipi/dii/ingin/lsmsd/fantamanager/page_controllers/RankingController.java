@@ -147,7 +147,7 @@ public class RankingController implements Initializable{
     	if(user_input.equals("")) {	//blank search field
     		
     		try {
-    			resultDoc = collection.find().sort(descending("points")).iterator();
+    			resultDoc = collection.find().sort(descending("points")).limit(100).iterator();	
     		}
     		catch(Exception e) {
     			System.out.println("Error on search.");

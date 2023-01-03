@@ -48,7 +48,7 @@ public class populate_user {
 		
 		//insert user from a file of 500k randomly generated usernames
 		try {
-			File myObj = new File("C:\\Users\\emman\\Desktop\\username_list.txt"); //TODO renderlo accessibile a tutti
+			File myObj = new File("C:\\Users\\emman\\Desktop\\username_list.txt"); 
 		    Scanner myReader = new Scanner(myObj);
 		    while (myReader.hasNextLine()) {
 		    
