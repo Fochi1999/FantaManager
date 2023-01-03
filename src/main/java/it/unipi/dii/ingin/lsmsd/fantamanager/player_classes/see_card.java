@@ -38,7 +38,7 @@ public class see_card {
 	public static String get_general_info(Document card_doc) {
 		String output = "";
 		
-		//retrieving infos
+		//retrieving info
 		String firstname = card_doc.getString("firstname");
 		String lastname = card_doc.getString("lastname");
 		String age = card_doc.get("age").toString();

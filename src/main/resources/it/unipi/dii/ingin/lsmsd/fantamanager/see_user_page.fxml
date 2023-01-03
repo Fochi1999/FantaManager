@@ -29,7 +29,7 @@
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font></TextField>
-                  <Text fill="WHITE" layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Region:">
+                  <Text fill="WHITE" layoutX="9.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Region:">
                      <font>
                         <Font size="18.0" />
                      </font>

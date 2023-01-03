@@ -3,24 +3,15 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-
-import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.see_user;
+
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -43,23 +34,22 @@ public class SeeUserController implements Initializable{
 	private Parent root;
 	
 	private String username = RankingController.user_input;
+	private Document user_doc;
 	
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
 		System.out.println("Opening user page...");
 		username_field.setText(username+"'s");
-		search_user();
 		
 		//hiding delete button from normal users
 		int priv = global.user.get_privilege();
     	if(priv < 2){
     		delete_user.setVisible(false);
     	}
-    		
-		
+    	
+    	search_user();
 	}
-	
 	
 	@FXML
     protected void click_back() throws IOException {
@@ -79,27 +69,20 @@ public class SeeUserController implements Initializable{
 	
 	protected void search_user() {
 		
-		//connecting to mongoDB 
-		MongoClient myClient = MongoClients.create(global.MONGO_URI);
-		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-    	
-		//searching user
-		Document user_doc;
-    	try {
-    		user_doc = collection.find(Filters.eq("username", username)).first();
-    	}catch (Exception e) {
-    		System.out.println("Error on viewing card");
-    		return;
-    	}
-    	myClient.close();
-    	
-    	//showing up the infos
+		user_doc = see_user.search_user(username);
+		if(user_doc == null) { //handling user not found error
+			Text t1 = new Text("An error has occurred while searching for the user. Please, exit the page and try again later.");
+			t1.setStyle("-fx-font: 30 system;");
+			text_flow.getChildren().add(t1);
+			return;
+		}
+		
+    	//showing up the info
     	region_field.setText(user_doc.getString("region"));
     	collection_field.setText(user_doc.get("collection").toString());
     	points_field.setText(user_doc.get("points").toString());
     	
-    	//TODO additional info (?)
+    	//TODO adding user profile info (?)
     	Text t1 = new Text("Analytics will be added here (?)");
     	text_flow.getChildren().add(t1);
 	}
@@ -107,22 +90,7 @@ public class SeeUserController implements Initializable{
 	
 	public void click_delete() throws IOException{
 		
-		//connecting to mongoDB 
-		MongoClient myClient = MongoClients.create(global.MONGO_URI);
-		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-	
-		//delete user
-		try {
-			collection.deleteOne(Filters.eq("username", username));
-		}
-		catch(Exception e) {
-			System.out.println("Error! Cannot delete this user now. Try later");
-		}
-		myClient.close();
-		
-		//go back
-		System.out.println("User '"+ username + "' successfully deleted.");
+		see_user.delete_user(username);
 		click_back();	//automatically go back to the ranking page
 	}
 	

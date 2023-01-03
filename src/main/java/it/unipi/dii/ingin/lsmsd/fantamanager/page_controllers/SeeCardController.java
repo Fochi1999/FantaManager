@@ -69,6 +69,7 @@ public class SeeCardController implements Initializable{
     	
 		if(card_doc == null) {	//handling error
 			Text t1 = new Text("An error has occurred while searching for the card. Please, exit the page and try again later.");
+			t1.setStyle("-fx-font: 30 system;");
 			text_flow.getChildren().add(t1);
 			return;
 		}
