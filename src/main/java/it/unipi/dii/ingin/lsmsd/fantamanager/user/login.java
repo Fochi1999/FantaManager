@@ -31,9 +31,9 @@ public class login {
         System.out.println(global.user._id);
 
         global.id_user=user.get("_id").toString();
-        global.user=new user(nick,password,user.getString("region"),user.getString("mail"),user.getInteger("credits"),0,user.getInteger("liv_priv"));
-        ArrayList<formation> formations= (ArrayList<formation>) user.get("formations");
-        global.saved_formation_server=formations.get(global.curr_matchday);
+        global.user=new user(nick,password,user.getString("region"),user.getString("mail"),user.getInteger("credits"),0,user.getInteger("privilege"));
+        //ArrayList<formation> formations= (ArrayList<formation>) user.get("formations");
+        //global.saved_formation_server=formations.get(global.curr_matchday);
         System.out.println(global.id_user);
 
         return true;

@@ -135,7 +135,7 @@ public class FormationController implements Initializable {
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             String json = ow.writeValueAsString(global.saved_formation_local);
             System.out.println(json);
-            global.user.formations[global.curr_matchday]=global.saved_formation_local;
+            //global.user.formations[global.curr_matchday]=global.saved_formation_local;
 
         }
         else {

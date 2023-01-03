@@ -230,7 +230,7 @@ public class RankingController implements Initializable{
 		Bson p1=project(fields(excludeId(),include("username"),include("points"),computed("_id","$id"),computed("region","$_id")));
 		Bson order=sort(descending("points"));
 
-		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(group,p1,order)).iterator()){
+		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(order,group,p1)).iterator()){
 			while(cursor.hasNext()){
 				//System.out.println(cursor.next().toJson());
 				show_ranking(cursor);
