@@ -410,4 +410,14 @@ public class ShopController implements Initializable {
 			}
 	}
 
+	public void reload_page(MouseEvent mouseEvent) throws IOException {
+
+		//ricarico la pagina
+		Stage stage= (Stage)root.getScene().getWindow();
+		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("shop_page.fxml"));
+		Scene scene = new Scene(fxmlLoader.load());
+		stage.setTitle("Shop page");
+		stage.setScene(scene);
+		stage.show();
+	}
 }

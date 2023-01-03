@@ -79,5 +79,10 @@
       <ChoiceBox fx:id="team" layoutX="177.0" layoutY="648.0" />
       <ChoiceBox fx:id="role" layoutX="334.0" layoutY="648.0" />
       <ChoiceBox fx:id="skill" layoutX="176.0" layoutY="614.0" prefWidth="150.0" />
+      <Button layoutX="177.0" layoutY="229.0" mnemonicParsing="false" prefHeight="42.0" onMouseClicked="#reload_page" prefWidth="99.0" text="Reset">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
