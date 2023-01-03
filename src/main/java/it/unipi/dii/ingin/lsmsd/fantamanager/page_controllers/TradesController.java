@@ -1,5 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.bson.Document;
@@ -289,52 +290,19 @@ public class TradesController implements Initializable{
 
 	public void show_most_present(MouseEvent mouseEvent) {
 
-			String player_trade="";
+		String player_trade="";
 
-			MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
-			MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
-			MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
 
-			if(offered_wanted.getValue().equals("offered")){
-					//10 most frequent player offered in completed trades
-					Bson match1=match(eq("status",1));
-					Bson u=unwind("$player_from");
-					Bson group=group("$player_from",Accumulators.sum("count",1));
-					Bson order=sort(descending("count"));
-					Bson limit=limit(5);
 
-					try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1,u,group,order,limit)).iterator()){
-						while(cursor.hasNext()){
-							//System.out.println(cursor.next().toJson());
-							//show_trades(cursor);
-							Document player=cursor.next();
-							player_trade += "" + player.get("_id")+"-->"+player.get("count")+"times\n";
-						}
-						selected_trade.setText(player_trade); //the trade will show up on the lower Area
-					}
-
-			}else{
-
-				//10 most frequent player wanted in completed trades
-				Bson match1=match(eq("status",1));
-				Bson u=unwind("$player_to");
-				Bson group=group("$player_to",Accumulators.sum("count",1));
-				Bson order=sort(descending("count"));
-				Bson limit=limit(5);
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1,u,group,order,limit)).iterator()){
-					while(cursor.hasNext()){
-						//System.out.println(cursor.next().toJson());
-						//show_trades(cursor);
-							Document player=cursor.next();
-							player_trade += "" + player.get("_id")+"-->"+player.get("count")+"times\n";
-
-					}
-					selected_trade.setText(player_trade); //the trade will show up on the lower Area
+			try(MongoCursor<Document> cursor= Trade.retrieve_most_present((String) offered_wanted.getValue())){
+				while(cursor.hasNext()){
+					//System.out.println(cursor.next().toJson());
+					//show_trades(cursor);
+					Document player=cursor.next();
+					player_trade += "" + player.get("_id")+"-->"+player.get("count")+"times\n";
 				}
+				selected_trade.setText(player_trade); //the trade will show up on the lower Area
 			}
-
-
 
 	}
 }
