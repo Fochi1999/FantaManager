@@ -15,7 +15,7 @@ public class user {
     int privilege;
 
 
-    public user(String nick, String hashPass,String region,String mail, int credits,int collection, int liv_priv){
+    public user(String nick, String hashPass,String region,String mail, int credits,int collection, int privilege){
 
         username=nick;
         password=hashPass;
