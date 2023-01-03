@@ -110,7 +110,7 @@ public class player_class{
 
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("../../../../../../../../json_stats/matchday_stats/kickest_stats.json")) {    //C:\Users\matte\DataMiningJupyter\fantacalcio_LSKickest_completo_portiere.json
+        try (FileReader reader = new FileReader("json_stats/matchday_stats/kickest_stats.json")) {    //C:\Users\matte\DataMiningJupyter\fantacalcio_LSKickest_completo_portiere.json
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -137,7 +137,7 @@ public class player_class{
     private static void findPlayerAPI(JSONObject player_kickest, MongoCollection<Document> collection) {
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("../../../../../../../../json_stats/APIFootball.json")) {   //C:\Users\matte\OneDrive\Desktop\LargeScale\jsonEdo\json_finali\APIFootball.json
+        try (FileReader reader = new FileReader("json_stats/APIFootball.json")) {   //C:\Users\matte\OneDrive\Desktop\LargeScale\jsonEdo\json_finali\APIFootball.json
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -406,7 +406,7 @@ public class player_class{
 
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("..\\..\\..\\..\\..\\..\\..\\..\\..\\json_stats\\matchday_stats\\kickest_stats.json")) {   //C:\Users\matte\OneDrive\Desktop\LargeScale\jsonEdo\json_stats\matchday_stats\kickest_stats.json  //C:\Users\matte\DataMiningJupyter\fantacalcio_LSKickest_completo_portiere.json
+        try (FileReader reader = new FileReader("json_stats/matchday_stats/kickest_stats.json")) {   //C:\Users\matte\OneDrive\Desktop\LargeScale\jsonEdo\json_stats\matchday_stats\kickest_stats.json  //C:\Users\matte\DataMiningJupyter\fantacalcio_LSKickest_completo_portiere.json
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -489,7 +489,7 @@ public class player_class{
     public static void take_from_understat(Integer matchday, JSONObject matchday_ins, String name_player) {
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("../../../../../../../../json_stats/matchday_stats/understat_file/statsUnderstatMatchday" + matchday + ".json")) {
+        try (FileReader reader = new FileReader("json_stats/matchday_stats/understat_file/statsUnderstatMatchday" + matchday + ".json")) {
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -773,7 +773,7 @@ public class player_class{
     private static void take_from_undershots(Integer matchday, JSONArray shots, String name_player) {
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("../../../../../../../../json_stats/matchday_stats/understat_file/shots_file/shotsUnderstatMatchday" + matchday + ".json")) {
+        try (FileReader reader = new FileReader("json_stats/matchday_stats/shots_file/shotsUnderstatMatchday" + matchday + ".json")) {
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
