@@ -6,6 +6,7 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.simple.JSONArray;
@@ -109,7 +110,7 @@ public class player_class{
 
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("C:\\Users\\matte\\DataMiningJupyter\\fantacalcio_LSKickest_completo_portiere.json")) {
+        try (FileReader reader = new FileReader("../../../../../../../../json_stats/matchday_stats/kickest_stats.json")) {    //C:\Users\matte\DataMiningJupyter\fantacalcio_LSKickest_completo_portiere.json
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -136,7 +137,7 @@ public class player_class{
     private static void findPlayerAPI(JSONObject player_kickest, MongoCollection<Document> collection) {
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("C:\\Users\\matte\\OneDrive\\Desktop\\LargeScale\\jsonEdo\\json_finali\\APIFootball.json")) {
+        try (FileReader reader = new FileReader("../../../../../../../../json_stats/APIFootball.json")) {   //C:\Users\matte\OneDrive\Desktop\LargeScale\jsonEdo\json_finali\APIFootball.json
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -258,14 +259,14 @@ public class player_class{
     }
 
     public static void calculate_matchday(int matchday) {
-        String url = "mongodb://localhost:27017";
-        MongoClient mongoClient2 = MongoClients.create(url);
+        //String url = "mongodb://localhost:27017";
+        MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
         // Access a Database
-        MongoDatabase database2 = mongoClient2.getDatabase("fantamongo");
+        MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
 
         // Access a Collection
-        MongoCollection<Document> coll = database2.getCollection("player_after_unicode");
+        MongoCollection<Document> coll = database2.getCollection(global.CARDS_COLLECTION_NAME);
 
         //scorre tutti gli elementi del Document
         try(MongoCursor<Document> cursor=coll.find().iterator()){
@@ -394,18 +395,18 @@ public class player_class{
     }
 
     public static void retrieve_info_matchday(Integer matchday) {
-        String url = "mongodb://localhost:27017";
-        MongoClient mongoClient2 = MongoClients.create(url);
+
+        MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
         // Access a Database
-        MongoDatabase database2 = mongoClient2.getDatabase("fantamongo");
+        MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
 
         // Access a Collection
-        MongoCollection<Document> coll = database2.getCollection("player_after_unicode");
+        MongoCollection<Document> coll = database2.getCollection(global.CARDS_COLLECTION_NAME);
 
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("C:\\Users\\matte\\DataMiningJupyter\\fantacalcio_LSKickest_completo_portiere.json")) {
+        try (FileReader reader = new FileReader("..\\..\\..\\..\\..\\..\\..\\..\\..\\json_stats\\matchday_stats\\kickest_stats.json")) {   //C:\Users\matte\OneDrive\Desktop\LargeScale\jsonEdo\json_stats\matchday_stats\kickest_stats.json  //C:\Users\matte\DataMiningJupyter\fantacalcio_LSKickest_completo_portiere.json
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -488,7 +489,7 @@ public class player_class{
     public static void take_from_understat(Integer matchday, JSONObject matchday_ins, String name_player) {
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("C:\\Users\\matte\\OneDrive\\Desktop\\LargeScale\\jsonEdo\\json_finali\\matchday_stats\\understat_file\\statsUnderstatMatchday" + matchday + ".json")) {
+        try (FileReader reader = new FileReader("../../../../../../../../json_stats/matchday_stats/understat_file/statsUnderstatMatchday" + matchday + ".json")) {
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -772,7 +773,7 @@ public class player_class{
     private static void take_from_undershots(Integer matchday, JSONArray shots, String name_player) {
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader("C:\\Users\\matte\\OneDrive\\Desktop\\LargeScale\\jsonEdo\\json_finali\\matchday_stats\\shots_file\\shotsUnderstatMatchday" + matchday + ".json")) {
+        try (FileReader reader = new FileReader("../../../../../../../../json_stats/matchday_stats/understat_file/shots_file/shotsUnderstatMatchday" + matchday + ".json")) {
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -803,6 +804,7 @@ public class player_class{
 
         //Get player object within list
         JSONArray playerObject = (JSONArray) player_understat.get("a");
+        JSONArray playerObject2 = (JSONArray) player_understat.get("h");
 
         playerObject.forEach(it ->{
             JSONObject play=(JSONObject) it;
@@ -876,6 +878,80 @@ public class player_class{
             }
         });
 
+        playerObject2.forEach(it ->{
+            JSONObject play=(JSONObject) it;
+            //System.out.println(play);
+            String player= (String) play.get("player");
+            //System.out.println(player);
+
+            player = trasformation(player);
+            /*if(name.equals("J. Veretout")) {
+                System.out.println(name);
+                System.out.println(player);
+            }*/
+
+            if (name.equals(player)) {
+
+                System.out.println("MATCHHHHHHHSHOTS----------------------------------------------------");
+
+
+                String X = (String) play.get("X");
+                //System.out.println(X);
+
+                String Y = (String) play.get("Y");
+                //System.out.println(Y);
+
+                String xG = (String) play.get("xG");
+                //System.out.println(xG);
+
+                String min = (String) play.get("minute");
+                //System.out.println(min);
+
+                String result = (String) play.get("result");
+                //System.out.println(result);
+
+                String situation = (String) play.get("situation");
+                //System.out.println(situation);
+
+                String shotType = (String) play.get("shotType");
+                //System.out.println(shotType);
+
+                String player_assist = (String) play.get("player_assisted");
+                //System.out.println(player_assist);
+
+                String Action = (String) play.get("lastAction");
+                //System.out.println(Action);
+
+                /*
+
+                 */
+                //JSONArray matchday_shots=new JSONArray();
+
+                JSONObject matchday_ins_shots = new JSONObject();
+
+                matchday_ins_shots.put("X", X);
+                matchday_ins_shots.put("Y", Y);
+                matchday_ins_shots.put("xG", xG);
+                matchday_ins_shots.put("min", min);
+                matchday_ins_shots.put("results",result);
+                matchday_ins_shots.put("situation", situation);
+                matchday_ins_shots.put("shotType", shotType);
+
+                JSONObject matchday_ins_shots_assist = new JSONObject();
+                matchday_ins_shots_assist.put("player", player_assist);
+                matchday_ins_shots_assist.put("action", Action);
+                matchday_ins_shots.put("assist", matchday_ins_shots_assist);
+
+                shots.add(matchday_ins_shots);
+
+                //System.out.println(shots);
+
+                //matchday_ins.put("shotsInfo", matchday_shots);
+
+                //System.out.println(matchday_ins);
+
+            }
+        });
 
     }
 }
