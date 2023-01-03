@@ -3,6 +3,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.login;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.profile_page;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.hash;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,11 +22,6 @@ import javafx.scene.control.*;
 
 public class login_registrationController implements Initializable{
 
-    //Stage stage = new Stage();
-
-	String regionList[] = {"Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna","Friuli-Venezia Giulia","Lazio","Liguria",
-	                     "Lombardy","Marche","Molise","Piedmont","Apulia","Sardinia","Sicily","Trentino-South Tyrol","Tuscany",
-	                     "Umbria","Aosta Valley","Veneto"};	
     @FXML
     private Parent root;
     
@@ -54,8 +50,8 @@ public class login_registrationController implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
     
     	//add region list to his field
-    	for(int i=0; i<regionList.length-1; i++) {
-    		loginRegionFieldReg.getItems().add(regionList[i]);
+    	for(int i=0; i<utilities.regionList.length-1; i++) {
+    		loginRegionFieldReg.getItems().add(utilities.regionList[i]);
     	}
     	
     	//hiding error texts

@@ -2,35 +2,16 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
-
-import com.mongodb.client.model.Accumulators;
-import com.mongodb.client.model.Indexes;
-import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import javafx.scene.input.MouseEvent;
+
+
 import org.bson.Document;
-import org.bson.conversions.Bson;
-
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-
-import static com.mongodb.client.model.Accumulators.*;
-import static com.mongodb.client.model.Projections.*;
-
-import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Aggregates.sort;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Sorts.descending;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.ranking;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -45,7 +26,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import org.json.simple.parser.ParseException;
+import javafx.scene.control.ChoiceBox;
+import java.util.ArrayList;
 
 
 //TODO discuss about adding a little animation while waiting for the ranking page to load 
@@ -58,9 +40,12 @@ import org.json.simple.parser.ParseException;
 
 public class RankingController implements Initializable{
 
-
-	public TextField search_field_region;
-	public Button search_button_region;
+	@FXML
+	private ChoiceBox search_field_region;
+	
+	@FXML
+	private Button search_button_region;
+	
 	@FXML
 	private Button view_profile;
 	
@@ -81,6 +66,8 @@ public class RankingController implements Initializable{
 	
 	static String user_input;
 	
+	private ArrayList<Document> users_doc;
+	
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
@@ -89,6 +76,11 @@ public class RankingController implements Initializable{
 		
 		//disabling the button
 		view_profile.setDisable(true);
+		
+		//add region list to his field
+    	for(int i=0; i<utilities.regionList.length-1; i++) {
+    		search_field_region.getItems().add(utilities.regionList[i]);
+    	}
 		
 		//handling the event: clicking on a user from the list
         MultipleSelectionModel<String> card = user_list.getSelectionModel();
@@ -103,9 +95,12 @@ public class RankingController implements Initializable{
                	for (int i = 0; i < selected.size(); i++) {
             	   selItems += "" + selected.get(i); 
                	}
-               	String full_text[] = selItems.split(" ");
-       			selected_user.setText(full_text[1] + " - Points: " + full_text[4]); //the user will show up on the lower Area
-               
+               	
+               	if(!selItems.equals("")) {
+               		String full_text[] = selItems.split(" ");
+               		selected_user.setText(full_text[1] + " - Points: " + full_text[4]); //the user will show up on the lower Area
+               	}
+               	
        			if(!selected_user.getText().isEmpty()) {
        				view_profile.setDisable(false);
        			}
@@ -128,6 +123,7 @@ public class RankingController implements Initializable{
 	@FXML
 	protected void view_global_rank() {
 		search_field.setText("");
+		search_field_region.setValue(null);	//resetting the choice box
 		retrieve_users();
 	}
 	
@@ -135,62 +131,41 @@ public class RankingController implements Initializable{
 	protected void retrieve_users() {
 		
 		String user_input = search_field.getText().toString(); 
+		search_field_region.setValue(null);	//resetting the choice box
+		Boolean search = true;
+		if(user_input.equals("")) {
+			search = false;
+		}
 		
-		//connecting to mongoDB 
-		MongoClient myClient = MongoClients.create(global.MONGO_URI);
-		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-    	MongoCursor<Document> resultDoc;
-    	
-    	
-		//searching for the user
-    	if(user_input.equals("")) {	//blank search field
-    		
-    		try {
-    			resultDoc = collection.find().sort(descending("points")).limit(100).iterator();	
-    		}
-    		catch(Exception e) {
-    			System.out.println("Error on search.");
-    			return;
-    		}  		
-    	}
-    	
-    	else {
-    		//filter
-    		Pattern pattern = Pattern.compile(user_input, Pattern.CASE_INSENSITIVE);
-        	Bson filter = Filters.regex("username", pattern);	
-        	
-    		try {
-    			resultDoc = collection.find(filter).sort(descending("points")).iterator();
-    		}
-    		catch(Exception e) {
-    			System.out.println("Error on search.");
-    			return;
-    		}  	
-    	}
-    	
-    	
-    	//print
-    	show_ranking(resultDoc);
-    	myClient.close();
-	}
+		//searching
+		users_doc = ranking.retrieve_user(search, user_input);
+		if(users_doc == null) {	//handling error
+			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
+			return;
+		}
+		
+    	//show up users
+    	show_ranking(users_doc);
+    }
 	
 	
-	protected void show_ranking(MongoCursor<Document> result){
+	protected void show_ranking(ArrayList<Document> result){
 
+		selected_user.setText(""); //clearing the selected user field
+		
 		//showing off trades
 		ObservableList<String> list = FXCollections.observableArrayList();
     	list.removeAll(list);	//clearing the list
     	
     	int i=0;
-    	while(result.hasNext()) {	
-    		i=i+1;
-    		Document user_doc = result.next();
+    	while(i < result.size()) {	
+    		Document user_doc = result.get(i);
     		String user_nickname = user_doc.getString("username");
     		String user_points = user_doc.get("points").toString();
 			String user_region = user_doc.getString("region");
-    		String user_output = i + ") " + user_nickname + " - Points: " + user_points +" - Region: "+user_region;
+    		String user_output = i+1 + ") " + user_nickname + " - Points: " + user_points +" - Region: "+user_region;
     		list.add(user_output);
+    		i=i+1;
     	}
     	user_list.getItems().clear();
 		user_list.getItems().addAll(list);
@@ -210,48 +185,43 @@ public class RankingController implements Initializable{
 	
 	 public static void view_user(Stage stage) throws IOException {
 		 	
-		 	System.out.println("Opening user page...");
-		 	FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("see_user_page.fxml"));
-	        Scene scene = new Scene(fxmlLoader.load());
-	        stage.setTitle("Card info");
-	        stage.setScene(scene);
-	        stage.show();
-	    	
-	    }
+		 System.out.println("Opening user page...");
+		 FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("see_user_page.fxml"));
+	     Scene scene = new Scene(fxmlLoader.load());
+	     stage.setTitle("Card info");
+	     stage.setScene(scene);
+	     stage.show();
+	 }
 
 	public void best_for_region(MouseEvent mouseEvent) {
 
-		MongoClient myClient = MongoClients.create(global.MONGO_URI);
-		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-
-		//Bson p1=project(fields(include("points")));
-		Bson group=group("$region", first("username","$username"), first("credits","$credits"), first("points","$points"), first("id","$_id"));
-		Bson p1=project(fields(excludeId(),include("username"),include("points"),computed("_id","$id"),computed("region","$_id")));
-		Bson order=sort(descending("points"));
-
-		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(order,group,p1)).iterator()){
-			while(cursor.hasNext()){
-				//System.out.println(cursor.next().toJson());
-				show_ranking(cursor);
-			}
+		search_field.setText("");
+		search_field_region.setValue(null);	//resetting the choice box
+		
+		//searching
+		users_doc = ranking.best_for_region();
+		if(users_doc == null) {	//handling error
+			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
+			return;
 		}
+				
+		//show up users
+		show_ranking(users_doc);
+		
 	}
 
 	public void retrieve_users_by_region(MouseEvent mouseEvent) {
 
-		MongoClient myClient = MongoClients.create(global.MONGO_URI);
-		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-
-		Bson match1=match(eq("region",search_field_region.getText()));
-		Bson order=sort(descending("points"));
-
-		try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1,order)).iterator()){
-			while(cursor.hasNext()){
-				//System.out.println(cursor.next().toJson());
-				show_ranking(cursor);
-			}
+		String region = search_field_region.getValue().toString();
+		
+		//searching
+		users_doc = ranking.search_users_by_region(region);
+		if(users_doc == null) {	//handling error
+			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
+			return;
 		}
+						
+		//show up users
+		show_ranking(users_doc);
 	}
 }
