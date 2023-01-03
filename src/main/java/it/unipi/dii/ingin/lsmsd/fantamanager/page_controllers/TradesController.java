@@ -159,7 +159,7 @@ public class TradesController implements Initializable{
 	public void show_all_button_onclick() {
 		
 		//connecting to mongoDB 
-    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
+    	/*MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
     	MongoCursor<Document> resultDoc;
@@ -171,16 +171,16 @@ public class TradesController implements Initializable{
     	} catch (Exception e) {
     		System.out.println("An error has occured while viewing trades!");
     		return;
-    	}
+    	}*/
     	
-    	show_trades(resultDoc);
-    	myClient.close();
+    	show_trades(Trade.trades_pending());
+    	//myClient.close();
 	}
 	
 	public void my_requests_button_onclick() {
 		
 		String my_user = global.user.username;
-		search_user(my_user);
+		show_trades(Trade.search_user(my_user));
 	}
 	
 	public void search_button_onaction() {
@@ -188,7 +188,7 @@ public class TradesController implements Initializable{
 		String user_input = search_card_from.getText();
 		String card_input = search_card_to.getText();
 		if(!user_input.isEmpty() || !card_input.isEmpty()) { //not searching if the 'search' button is clicked when the text fields are empty
-    		search_trade(user_input, card_input);
+    		show_trades(Trade.search_trade(user_input, card_input));
 		}
 	}
 	
@@ -214,7 +214,7 @@ public class TradesController implements Initializable{
 		trade_list.getItems().addAll(list);
 	}
 	
-    public void search_trade(String from_input, String to_input) {
+    /*public void search_trade(String from_input, String to_input) {
     	
     	System.out.println("Searching trades -> offered: "+ from_input + " // wanted: " + to_input);
     	
@@ -286,7 +286,7 @@ public class TradesController implements Initializable{
     	//print
     	show_trades(resultDoc);
     	myClient.close();	
-    }
+    }*/
 
 	public void show_most_present(MouseEvent mouseEvent) {
 

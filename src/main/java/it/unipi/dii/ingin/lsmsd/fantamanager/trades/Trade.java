@@ -1,6 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.trades;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Filters;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Aggregates.limit;
@@ -214,6 +216,100 @@ public class Trade{
 		}
 
 
+	}
+
+	public static MongoCursor<Document> search_user(String my_user) {
+
+		System.out.println("Searching trades made by: " + my_user);
+
+		//connecting to mongoDB
+
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
+		MongoCursor<Document> resultDoc;
+
+		//preparing bson
+		Bson user_equal = Filters.eq("user_from", my_user);
+
+		//searching for the trades
+		try {
+			resultDoc = collection.find(user_equal).iterator();
+
+		} catch (Exception e) {
+			System.out.println("An error has occured while viewing trades!");
+			return null;
+		}
+
+		//myClient.close();
+		//print
+		return resultDoc;
+		//show_trades(resultDoc);
+
+	}
+
+	public static MongoCursor<Document> search_trade(String from_input, String to_input) {
+
+		System.out.println("Searching trades -> offered: "+ from_input + " // wanted: " + to_input);
+
+		//connecting to mongoDB
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
+		MongoCursor<Document> resultDoc;
+
+		//preparing bsons
+		Pattern pattern0 = Pattern.compile(from_input, Pattern.CASE_INSENSITIVE);
+		Bson card_from_equal = Filters.regex("player_from", pattern0);
+
+		Pattern pattern1 = Pattern.compile(to_input, Pattern.CASE_INSENSITIVE);
+		Bson card_to_equal = Filters.regex("player_to", pattern1);
+
+
+		//searching for the trades
+		try {
+			if (!from_input.isEmpty() && !to_input.isEmpty()) { 	//both inputs
+				resultDoc = collection.find(Filters.and(card_from_equal,card_to_equal)).iterator();
+			}
+			else if(!from_input.isEmpty()) { 						//only user input
+				resultDoc = collection.find(card_from_equal).iterator();
+			}
+			else if(!to_input.isEmpty()) { 						//only card input
+				resultDoc = collection.find(card_to_equal).iterator();
+			}
+			else {													//no inputs
+				System.out.println("No elements to search....");
+				return null;
+			}
+
+		} catch (Exception e) {
+			System.out.println("An error has occured while viewing trades!");
+			return null;
+		}
+
+		//print
+		//myClient.close();
+		return resultDoc;
+
+	}
+
+	public static MongoCursor<Document> trades_pending(){
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
+		MongoCursor<Document> resultDoc;
+
+		//searching for the trades
+		Bson filter = Filters.eq("status",0);
+		try {
+			resultDoc = collection.find(filter).iterator();
+		} catch (Exception e) {
+			System.out.println("An error has occured while viewing trades!");
+			return null;
+		}
+
+		//myClient.close();
+		return resultDoc;
 	}
 }
 
