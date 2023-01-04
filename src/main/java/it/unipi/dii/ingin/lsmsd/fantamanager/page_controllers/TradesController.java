@@ -70,7 +70,7 @@ public class TradesController implements Initializable{
 	@FXML
 	private ChoiceBox offered_wanted;
 
-	Trade chosen_trade;
+
 
 	
 	@Override
@@ -140,7 +140,7 @@ public class TradesController implements Initializable{
     
     
     @FXML
-    protected void click_delete() {
+    protected void click_delete() {   //elimino solo una mia offerta di trade, questa funzione è cliccabile solo quando clicco su un trade mio
     	
     	String trade_text = selected_trade.getText();
     	if(trade_text.equals("")) {
@@ -152,48 +152,29 @@ public class TradesController implements Initializable{
 		ObjectId trade_id = new ObjectId(words_arr[words_arr.length-1]);
 		System.out.println("Deleting trade with object id: " + trade_id);
 		
-		/*//connecting to mongoDB
-    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
-    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-    	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
-    	
-    	//searching for the trades
-    	try {
-    		DeleteResult result = collection.deleteOne(Filters.eq("_id",trade_id)); 
-    		System.out.println(result);
-    	} catch (Exception e) {
-    		System.out.println("An error has occured while deleting the trade!");
-    		return;
-    	}*/
+
 		TradeMongoDriver.delete_my_trade(trade_id);
     	
     	//myClient.close();
 		TradeMongoDriver.closeConnection();
+
+		//devo riaggiungere i giocatori alla mia collection, visto che quando li propongo mi vengono tolti temporaneamente dalla collection
+		Trade chosen_trade=retrieve_trade();
+		for(String player:chosen_trade.get_player_from()){
+			player_collection player_from= CardMongoDriver.search_player_by_name(player);
+			collection.add_player_to_collection(player_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
+		}
 
     	my_requests_button_onclick(); //refreshing the available trade list
     }
     
     
 	public void show_all_button_onclick() {
-		
-		//connecting to mongoDB 
-    	/*MongoClient myClient = MongoClients.create(global.MONGO_URI);
-    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-    	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
-    	MongoCursor<Document> resultDoc;
-		
-    	//searching for the trades
-    	Bson filter = Filters.eq("status",0);
-    	try {
-    		resultDoc = collection.find(filter).iterator(); 
-    	} catch (Exception e) {
-    		System.out.println("An error has occured while viewing trades!");
-    		return;
-    	}*/
+
     	
     	show_trades(TradeMongoDriver.trades_pending());
 		TradeMongoDriver.closeConnection();
-    	//myClient.close();
+
 	}
 	
 	public void my_requests_button_onclick() {
@@ -237,79 +218,6 @@ public class TradesController implements Initializable{
 		TradeMongoDriver.closeConnection();
 	}
 	
-    /*public void search_trade(String from_input, String to_input) {
-    	
-    	System.out.println("Searching trades -> offered: "+ from_input + " // wanted: " + to_input);
-    	
-    	//connecting to mongoDB 
-    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
-    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-    	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
-    	MongoCursor<Document> resultDoc;
-		
-    	//preparing bsons
-    	Pattern pattern0 = Pattern.compile(from_input, Pattern.CASE_INSENSITIVE);
-    	Bson card_from_equal = Filters.regex("player_from", pattern0);	
-    	
-    	Pattern pattern1 = Pattern.compile(to_input, Pattern.CASE_INSENSITIVE);
-    	Bson card_to_equal = Filters.regex("player_to", pattern1);
-    	
-    	
-    	//searching for the trades
-    	try {
-    		if (!from_input.isEmpty() && !to_input.isEmpty()) { 	//both inputs
-    			resultDoc = collection.find(Filters.and(card_from_equal,card_to_equal)).iterator(); 
-    		}
-    		else if(!from_input.isEmpty()) { 						//only user input
-    			resultDoc = collection.find(card_from_equal).iterator(); 
-    		}
-    		else if(!to_input.isEmpty()) { 						//only card input
-    			resultDoc = collection.find(card_to_equal).iterator(); 
-    		}
-    		else {													//no inputs
-    			System.out.println("No elements to search....");
-    			return;
-    		}
-    		
-    	} catch (Exception e) {
-    		System.out.println("An error has occured while viewing trades!");
-    		return;
-    	}
-		
-    	//print
-    	show_trades(resultDoc);
-    	myClient.close();
-    	
-    }
-    
-    
-    private void search_user(String my_user) {
-    	
-    	System.out.println("Searching trades made by: " + my_user);
-    	
-    	//connecting to mongoDB 
-
-    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
-    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-    	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
-    	MongoCursor<Document> resultDoc;
-		
-    	//preparing bson
-    	Bson user_equal = Filters.eq("user_from", my_user);	
-    	
-    	//searching for the trades
-    	try {
-    		resultDoc = collection.find(user_equal).iterator(); 
-    		
-    	} catch (Exception e) {
-    		System.out.println("An error has occured while viewing trades!");
-    		return;
-    	}
-		
-    	//print
-    	show_trades(resultDoc);
-    	myClient.close();	
-    }*/
 
 	public void show_most_present(MouseEvent mouseEvent) {
 
@@ -330,32 +238,21 @@ public class TradesController implements Initializable{
 	}
 
 
-	/*private Trade retrieve_trade(String text) {
-			String words_arr[] = selected_trade.getText().split("\n");
-
-			ArrayList<String> value=new ArrayList<>();
-			for(int i=0;i< words_arr.length;i++){
-				String elem=words_arr[i].split(": ")[1];
-				value.add(elem);
-			}
-			ArrayList<String> 
-			return null;
-	}*/
-	public void accept_trade(MouseEvent mouseEvent) {
-
-		//String trade_output = ">> Players offered: " + player_from + " \n<< Players wanted: " + player_to
-		//		+ " \n$$$ Credits: " + credits +" \n--- Trade request made by: " + user_from + " \n%% trade_id: " + trade_id;
-
-
+	public Trade retrieve_trade() {
 				String words_arr[] = selected_trade.getText().split("\n");
-				
+
 				String elem = null;
 
 				for(int i=0;i< words_arr.length;i++){
 						elem=words_arr[i].split(": ")[1];
-						
+
 				}
-				chosen_trade=TradeMongoDriver.search_trade_byId(elem);  //elem ora contiene l' id del trade
+				return TradeMongoDriver.search_trade_byId(elem);  //elem ora contiene l' id del trade
+	}
+	public void accept_trade(MouseEvent mouseEvent) {
+
+
+				Trade chosen_trade=retrieve_trade();
 
 				for(String player:chosen_trade.get_player_from()){
 						player_collection player_from= CardMongoDriver.search_player_by_name(player);
@@ -369,5 +266,9 @@ public class TradesController implements Initializable{
 
 						collection.add_player_to_collection(player_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
 				}
+
+				//update status trade
+				TradeMongoDriver.update_trade(chosen_trade,"status");
+				show_all_button_onclick();
 	}
 }

@@ -4,11 +4,13 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -210,5 +212,18 @@ public class TradeMongoDriver {
 
         }
         return trade;
+    }
+
+    public static void update_trade(Trade chosen_trade, String field) { 
+        openConnection();
+
+        //searching for the trades
+        try {
+            UpdateResult result = collection.updateOne(eq("_id",new ObjectId(chosen_trade.trade_id)),Updates.set(field,1));
+            System.out.println(result);
+        } catch (Exception e) {
+            System.out.println("An error has occured while deleting the trade!");
+
+        }
     }
 }
