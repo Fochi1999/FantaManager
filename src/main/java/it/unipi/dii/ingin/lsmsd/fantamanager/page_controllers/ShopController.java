@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.bson.Document;
@@ -157,37 +158,9 @@ public class ShopController implements Initializable {
 		String cards_input = text_field.getText();
 		System.out.println("Searching for: "+ cards_input);
 		
-		//connecting to mongoDB 
-		MongoClient myClient = MongoClients.create(global.MONGO_URI);
-		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME);
-    	MongoCursor<Document> resultDoc;
-		
-    	//blank search field
-    	if(cards_input.equals("")) {
-    		
-    		try {
-    			resultDoc = collection.find().iterator();
-    		}
-    		catch(Exception e) {
-    			System.out.println("Error on search.");
-    			return;
-    		}  		
-    	}
-    	
-    	else {
-    		//filter
-    		Pattern pattern = Pattern.compile(cards_input, Pattern.CASE_INSENSITIVE);
-        	Bson filter = Filters.regex("fullname", pattern);	
-        	
-    		try {
-    			resultDoc = collection.find(filter).iterator();
-    		}
-    		catch(Exception e) {
-    			System.out.println("Error on search.");
-    			return;
-    		}  	
-    	}
+
+    	MongoCursor<Document> resultDoc=CardMongoDriver.retrieve_cards(cards_input);
+
 
 		Document card_doc = resultDoc.next();
 
@@ -212,7 +185,7 @@ public class ShopController implements Initializable {
 
 		
     	show_cards(resultDoc);
-    	myClient.close();
+    	CardMongoDriver.closeConnection();
     	
 	}
 	
@@ -257,157 +230,16 @@ public class ShopController implements Initializable {
 	}
 
 
-	public void search_by_skill(MouseEvent mouseEvent) {
+	public void search_by_skill(MouseEvent mouseEvent) throws ParseException {
 
 			System.out.println(role.getValue());
 			System.out.println(team.getValue());
 			System.out.println(skill.getValue());
 
-			//connecting to mongoDB 
-			MongoClient myClient = MongoClients.create(global.MONGO_URI);
-			MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-			MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME);
+			show_cards(CardMongoDriver.search_card_by((String) skill.getValue(), (String) team.getValue(), (String) role.getValue()));
 
-			if(skill.getValue()==null && role.getValue()==null && team.getValue()==null) {
-				//non faccio nulla
-				System.out.println("Inserisci valori");
-			} else if(skill.getValue()!=null && role.getValue()!=null && team.getValue()==null){
+			CardMongoDriver.closeConnection();
 
-				//search_by_skill.setDisable(false);
-
-				/*System.out.println("best 5 team for a specific role and a specific skill");
-				//System.out.println(role.getValue());
-
-				//con la riga sottostante mi dà la somma di quella skill per tutti i giocatori di un certo ruolo di ogni squadra, quindi 4*20 document
-				Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append((String) skill.getValue(),new Document("$sum","$general_statistics."+(String)skill.getValue())));
-				Bson match=match(eq("_id.position",role.getValue()));
-				Bson order=sort(descending((String) skill.getValue()));
-				Bson first_five=limit(5);
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(groupMultiple,match,order,first_five)).iterator()){
-					while(cursor.hasNext()){
-						System.out.println(cursor.next().toJson());
-
-					}
-				}*/
-
-				/*System.out.println("best 15 player for a specific role and a specific skill");
-
-				Bson match_role=match(eq("position",role.getValue()));
-
-				Bson order_skill=sort(descending((String) skill.getValue()));
-
-				Bson first_fifteen=limit(15);
-
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match_role,order_skill,first_fifteen)).iterator()){
-
-					show_cards(cursor);
-				} catch (ParseException e) {
-					throw new RuntimeException(e);
-				}*/
-
-				Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append("fullname",new Document("$first","$fullname"))
-						.append("credits",new Document("$first","$credits")).append("id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")));
-				Bson match=match(eq("_id.position",role.getValue()));
-				Bson order=sort(descending((String) skill.getValue()));
-				//Bson first_five=limit(5);
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(order,groupMultiple,match)).iterator()){
-					while(cursor.hasNext()){
-						//System.out.println(cursor.next().toJson());
-						show_cards(cursor);
-					}
-				} catch (ParseException e) {
-					throw new RuntimeException(e);
-				}
-
-			} else if (skill.getValue()!=null && team.getValue()!=null && role.getValue()==null) {
-
-				//search_by_skill.setDisable(false);
-
-				/*System.out.println("best 5 player for a specific team and a specific skill");
-
-				Bson match_team=match(eq("team",team.getValue()));
-
-				Bson order_skill=sort(descending((String) skill.getValue()));
-
-				Bson first_five=limit(5);
-
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match_team,order_skill,first_five)).iterator()){
-
-					show_cards(cursor);
-				} catch (ParseException e) {
-					throw new RuntimeException(e);
-				}*/
-				Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append("fullname",new Document("$first","$fullname"))
-						.append("credits",new Document("$first","$credits")).append("id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")));
-				Bson match=match(eq("_id.team",team.getValue()));
-				Bson order=sort(descending((String) skill.getValue()));
-				//Bson first_five=limit(5);
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(order,groupMultiple,match)).iterator()){
-					while(cursor.hasNext()){
-						//System.out.println(cursor.next().toJson());
-						show_cards(cursor);
-					}
-				} catch (ParseException e) {
-					throw new RuntimeException(e);
-				}
-			} else if (skill.getValue()!=null && team.getValue()==null && role.getValue()==null) {
-
-
-				//search_by_skill.setDisable(false);
-
-
-				//miglior giocatore per quella skill, per ogni team, per ogni ruolo
-				Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append("fullname",new Document("$first","$fullname"))
-						.append("credits",new Document("$first","$credits")).append("id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")));
-				//Bson match=match(eq("_id.position",role.getValue()));
-				Bson order=sort(descending((String) skill.getValue()));
-				//Bson first_five=limit(5);
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(order,groupMultiple)).iterator()){
-					while(cursor.hasNext()){
-						//System.out.println(cursor.next().toJson());
-						show_cards(cursor);
-					}
-				} catch (ParseException e) {
-					throw new RuntimeException(e);
-				}
-
-			} else if (skill.getValue()!=null && team.getValue()!=null && role.getValue()!=null) {
-
-				//prende primi 5 di una stessa squadra e position in base ad una certa skill
-				Bson match1=match(eq("team",team.getValue()));
-				Bson match2=match(eq("position",role.getValue()));
-				Bson order=sort(descending((String) skill.getValue()));
-				Bson first_five=limit(2);
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1,match2,order,first_five)).iterator()){
-					while(cursor.hasNext()){
-						//System.out.println(cursor.next().toJson());
-						show_cards(cursor);
-					}
-				} catch (ParseException e) {
-					throw new RuntimeException(e);
-				}
-			}
-			else{
-				//dovrebbe essere il caso con skill non selezionata e gli altri due si
-				Bson match1=match(eq("team",team.getValue()));
-				Bson match2=match(eq("position",role.getValue()));
-
-				try(MongoCursor<Document> cursor=collection.aggregate(Arrays.asList(match1,match2)).iterator()){
-					while(cursor.hasNext()){
-						//System.out.println(cursor.next().toJson());
-						show_cards(cursor);
-					}
-				} catch (ParseException e) {
-					throw new RuntimeException(e);
-				}
-			}
 	}
 
 	public void reload_page(MouseEvent mouseEvent) throws IOException {
