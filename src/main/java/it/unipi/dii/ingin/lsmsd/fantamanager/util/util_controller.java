@@ -12,7 +12,7 @@ public class util_controller {
     public static void back_to_home(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("home_page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Welcome to FantaManager!");
+        stage.setTitle("Homepage");
         stage.setScene(scene);
         stage.show();
     }

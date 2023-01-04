@@ -80,12 +80,17 @@ public class login_registrationController implements Initializable{
     	//login
     	String hashPass=hash.MD5(loginPasswordField.getText());
         if(login.login(loginUsernameField.getText(), hashPass)) {
-            Stage stage = (Stage) root.getScene().getWindow();
+        	//open a new window (prevents uncorrect positioning of the window)
+        	Stage stage = new Stage();
             FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("home_page.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
-            stage.setTitle("Homepage");
+            stage.setTitle("Welcome to Fantamanager!");
             stage.setScene(scene);
             stage.show();
+            
+            //close the login window
+            Stage loginstage = (Stage) root.getScene().getWindow();
+            loginstage.close();
         }
         else{
             System.out.println("Login failed!");
