@@ -2,7 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.login;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.profile_page;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.hash;
 import javafx.fxml.FXML;
@@ -125,7 +125,7 @@ public class login_registrationController implements Initializable{
             loginWarningTextReg.setText("Password fields does not match!");
             return;
         }
-    	if(!profile_page.validate_email(email)) {	//invalid email input
+    	if(!OptionsMongoDriver.validate_email(email)) {	//invalid email input
         	loginWarningTextReg.setText("Invalid email input!");
         	System.out.println("Invalid email input!");
         	return;

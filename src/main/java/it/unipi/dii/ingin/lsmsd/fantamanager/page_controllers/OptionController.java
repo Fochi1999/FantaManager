@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 import javafx.scene.control.TextField;
 
 import static it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class.*;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.profile_page;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 
 public class OptionController implements Initializable {
 	
@@ -160,14 +160,14 @@ public class OptionController implements Initializable {
     	username_confirm.setVisible(false);
     	String new_value = username_field.getText().toString();
     	try {
-    		Boolean find = profile_page.find_duplicate("username",new_value);	
+    		Boolean find = OptionsMongoDriver.find_duplicate("username",new_value);	
     		if(find) {
     			username_warning.setText("Username already in use!");
     			System.out.println("Username already in use!");
     			return;
     		}
     		
-    		Boolean res = profile_page.edit_attribute("username", new_value);
+    		Boolean res = OptionsMongoDriver.edit_attribute("username", new_value);
     		if(res) {
     			System.out.println("Username successfully changed to: " + new_value);
     			global.user.changeUsername(new_value);	//changing the global variable
@@ -198,7 +198,7 @@ public class OptionController implements Initializable {
     	}
     	
     	try {
-    		Boolean res = profile_page.edit_attribute("password", password_field.getText().toString());
+    		Boolean res = OptionsMongoDriver.edit_attribute("password", password_field.getText().toString());
     		if(res) {
         		System.out.println("Password successfully changed to: " + new_value);
         		global.user.changePassword(new_value);	//changing the global variable
@@ -220,13 +220,13 @@ public class OptionController implements Initializable {
     	email_confirm.setVisible(false);
     	String new_value = email_field.getText().toString();
     	try {
-    		Boolean find = profile_page.find_duplicate("email",new_value);
+    		Boolean find = OptionsMongoDriver.find_duplicate("email",new_value);
     		if(find) {
     			email_warning.setText("Email address already in use!");
     			return;
     		}
     		
-    		Boolean res = profile_page.edit_attribute("email", new_value);
+    		Boolean res = OptionsMongoDriver.edit_attribute("email", new_value);
     		if(!res) {
     			email_warning.setText("Invalid email input!");
     		}

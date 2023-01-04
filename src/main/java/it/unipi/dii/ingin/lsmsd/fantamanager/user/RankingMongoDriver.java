@@ -29,7 +29,7 @@ import static com.mongodb.client.model.Aggregates.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 
-public class ranking {
+public class RankingMongoDriver {
 
 	public static ArrayList<Document> retrieve_user(Boolean search, String username) {
 		
@@ -66,7 +66,7 @@ public class ranking {
 			Bson filter = Filters.regex("username", pattern);	
 		        	
 			try {
-				cursor = collection.find(filter).sort(descending("points")).iterator(); //no 'limit(100)' on search user
+				cursor = collection.find(filter).sort(descending("points")).limit(100).iterator(); 
 				System.out.println("Searching for user: " + username);
 		    }
 			catch(Exception e) {

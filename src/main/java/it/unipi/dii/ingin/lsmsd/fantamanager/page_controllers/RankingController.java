@@ -9,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 import org.bson.Document;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.ranking;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.RankingMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +30,7 @@ import javafx.scene.control.ChoiceBox;
 import java.util.ArrayList;
 
 
-//TODO Emmanuel - implementare caso in cui gli utenti hanno stesso punteggio in classifica
+//TODO Emmanuel - discutere caso in cui gli utenti hanno stesso punteggio in classifica (rimozione momentanea del numero di posizione)
 
 public class RankingController implements Initializable{
 
@@ -92,7 +92,7 @@ public class RankingController implements Initializable{
                	
                	if(!selItems.equals("")) {
                		String full_text[] = selItems.split(" ");
-               		selected_user.setText(full_text[1] + " - Points: " + full_text[4]); //the user will show up on the lower Area
+               		selected_user.setText(full_text[0] + " - Points: " + full_text[3]); //index: (0-3) without position - with position(1-4)
                	}
                	
        			if(!selected_user.getText().isEmpty()) {
@@ -132,7 +132,7 @@ public class RankingController implements Initializable{
 		}
 		
 		//searching
-		users_doc = ranking.retrieve_user(search, user_input);
+		users_doc = RankingMongoDriver.retrieve_user(search, user_input);
 		if(users_doc == null) {	//handling error
 			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
 			return;
@@ -157,7 +157,7 @@ public class RankingController implements Initializable{
     		String user_nickname = user_doc.getString("username");
     		String user_points = user_doc.get("points").toString();
 			String user_region = user_doc.getString("region");
-    		String user_output = i+1 + ") " + user_nickname + " - Points: " + user_points +" - Region: "+user_region;
+    		String user_output = /*i+1 + ") " +*/ user_nickname + " - Points: " + user_points +" - Region: "+user_region;
     		list.add(user_output);
     		i=i+1;
     	}
@@ -193,7 +193,7 @@ public class RankingController implements Initializable{
 		search_field_region.setValue(null);	//resetting the choice box
 		
 		//searching
-		users_doc = ranking.best_for_region();
+		users_doc = RankingMongoDriver.best_for_region();
 		if(users_doc == null) {	//handling error
 			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
 			return;
@@ -206,10 +206,15 @@ public class RankingController implements Initializable{
 
 	public void retrieve_users_by_region(MouseEvent mouseEvent) {
 
+		//case of no region selected
+		if(search_field_region.getValue() == null) {
+			return;
+		}
+		
 		String region = search_field_region.getValue().toString();
 		
 		//searching
-		users_doc = ranking.search_users_by_region(region);
+		users_doc = RankingMongoDriver.search_users_by_region(region);
 		if(users_doc == null) {	//handling error
 			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
 			return;
