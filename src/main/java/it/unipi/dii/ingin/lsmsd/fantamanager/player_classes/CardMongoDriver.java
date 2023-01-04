@@ -2,11 +2,15 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.player_classes;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.json.simple.parser.ParseException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -156,4 +160,30 @@ public class CardMongoDriver {
         return null;
     }
 
+
+    public static player_collection search_player_by_name(String name) {
+
+        openConnection();
+        MongoCursor<Document> resultDoc;
+        player_collection player=null;
+
+        Bson filter = Filters.eq("fullname",name);
+        try {
+            resultDoc = collection.find(filter).iterator();
+        } catch (Exception e) {
+            System.out.println("An error has occured while viewing trades!");
+            return null;
+        }
+        while(resultDoc.hasNext()){
+            Document player_doc = resultDoc.next();
+            Integer player_id = (Integer) player_doc.get("player_id");
+            String fullname=(String) player_doc.get("fullname");
+            String team = player_doc.getString("team");
+            String position = player_doc.getString("position");
+            player=new player_collection(player_id,fullname,1,team,position);
+            //update_status_trade();  //TODO
+
+        }
+        return player;
+    }
 }

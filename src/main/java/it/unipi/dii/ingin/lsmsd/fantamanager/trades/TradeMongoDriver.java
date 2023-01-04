@@ -8,7 +8,9 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -181,5 +183,32 @@ public class TradeMongoDriver {
 
         //myClient.close();
         return resultDoc;
+    }
+
+    public static Trade search_trade_byId(String id_trade) {
+
+        openConnection();
+        MongoCursor<Document> resultDoc;
+        Trade trade = null;
+
+        Bson filter = Filters.eq("_id",new ObjectId(id_trade));
+        try {
+            resultDoc = collection.find(filter).iterator();
+        } catch (Exception e) {
+            System.out.println("An error has occured while viewing trades!");
+            return null;
+        }
+        while(resultDoc.hasNext()){
+            Document trade_doc = resultDoc.next();
+            String trade_id = trade_doc.get("_id").toString();
+            ArrayList<String> player_from = (ArrayList<String>) trade_doc.get("player_from");
+            ArrayList<String> player_to = (ArrayList<String>) trade_doc.get("player_to");
+            Integer credits = (Integer) trade_doc.get("credits");
+            String user_from = trade_doc.getString("user_from");
+            trade=new Trade(trade_id,user_from,global.id_user,credits,player_from,player_to,1);
+            //update_status_trade();  //TODO
+
+        }
+        return trade;
     }
 }

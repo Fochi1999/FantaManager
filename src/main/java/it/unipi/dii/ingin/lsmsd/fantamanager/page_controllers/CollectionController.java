@@ -57,7 +57,7 @@ public class CollectionController implements Initializable {
 
         String name_player=player_selected.getText();
 
-        ArrayList<player_collection> coll=collection.load_collection(global.id_user);  //anche se secondo me andrebbe salvata su user.collection e qui presa da li
+        ArrayList<player_collection> coll=collection.load_collection(global.id_user);
 
         for(int i=0; i<coll.size();i++){
                 if(coll.get(i).get_name().equals(name_player)){
@@ -65,9 +65,6 @@ public class CollectionController implements Initializable {
                         collection.delete_player_from_collection(coll.get(i).get_id());
                 }
         }
-        //create_table(coll);
-        //qui se create user.collection, dovresti andare a toglierla da tale variabile
-
 
         //ricarico la pagina
         Stage stage= (Stage)root.getScene().getWindow();

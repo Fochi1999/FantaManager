@@ -1,25 +1,18 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.trades;
 import com.mongodb.client.*;
-import com.mongodb.client.model.Accumulators;
-import com.mongodb.client.model.Filters;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Pattern;
 
-import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Aggregates.limit;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Indexes.descending;
 
 public class Trade{
 
-	int trade_id;
+	String trade_id;
 	String user_from;
 	String user_to;
 	ArrayList<String> player_from;
@@ -30,8 +23,8 @@ public class Trade{
 
 	
 	//constructor
-	public Trade(int trade_id_input, String user_from_input, String user_to_input, int credits_input,
-			ArrayList<String> player_from_input, ArrayList<String> player_to_input, int status_input) {
+	public Trade(String trade_id_input, String user_from_input, String user_to_input, int credits_input,
+				 ArrayList<String> player_from_input, ArrayList<String> player_to_input, int status_input) {
 		
 		//error prevention condition
 		if(status_input > 0)
@@ -46,6 +39,34 @@ public class Trade{
 		this.player_from = player_from_input;
 		this.player_to = player_to_input;
 	}
+
+
+
+	public String get_id() {
+		return this.trade_id;
+	}
+
+	public String get_user_from(){
+		return this.user_from;
+	}
+
+	public String get_user_to(){
+		return this.user_to;
+	}
+
+	public int get_credits(){
+		return this.credits;
+	}
+
+	public int get_user_status(){
+		return this.status;
+	}
+
+	public ArrayList<String> get_player_from(){return this.player_from;}
+
+	public ArrayList<String> get_player_to(){return this.player_to;}
+
+
 	
 	//update a trade's status from pending to complete
 	public void complete_trade(String user_to_input) {

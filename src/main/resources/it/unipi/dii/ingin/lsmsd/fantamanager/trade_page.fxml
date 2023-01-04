@@ -36,7 +36,7 @@
       </ImageView>
       <TextField fx:id="search_card_to" layoutX="350.0" layoutY="52.0" prefHeight="26.0" prefWidth="191.0" promptText="Search for a wanted card..." />
       <Button layoutX="22.0" layoutY="622.0" mnemonicParsing="false" onMouseClicked="#click_home" prefHeight="38.0" prefWidth="74.0" text="Home" />
-      <Button fx:id="accept_button" layoutX="546.0" layoutY="622.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="94.0" text="Accept trade" />
+      <Button fx:id="accept_button" layoutX="546.0" layoutY="622.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="94.0" onMouseClicked="#accept_trade" text="Accept trade" />
       <Button fx:id="delete_button" layoutX="423.0" layoutY="622.0" mnemonicParsing="false" onMouseClicked="#click_delete" prefHeight="38.0" prefWidth="94.0" text="Delete trade" />
       <Button layoutX="285.0" layoutY="622.0" mnemonicParsing="false" onMouseClicked="#show_most_present" prefHeight="38.0" prefWidth="94.0" text="Most Present" />
       <ChoiceBox fx:id="offered_wanted" layoutX="144.0" layoutY="622.0" prefHeight="38.0" prefWidth="132.0" />

@@ -1,6 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.collection;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import org.bson.Document;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -28,7 +29,7 @@ public class collection {
 
             public static String crea_chiave_load(String user_id) {  //solo per fare il retrieve delle info dell-user in questione
                 //return "user:"+this.userId+"*";   //dovrebbe essere cosi dopo la creazione di user
-                return "user_id:"+user_id+"*";
+                return "user_id:"+global.id_user+"*";
             }
 
 
@@ -111,20 +112,39 @@ public class collection {
                 pool.close();
             }
 
-            public static void delete_player_from_collection(int player_id){
-                    //anche qui dobbiamo usare la variabile globale per l' id dell' utente
+            public static void delete_player_from_collection(int player_id){  //dalla  mia
+                    apertura_pool();
 
-                    System.out.println(player_id);
+                    System.out.println("player deleted:"+player_id);
 
                     int user_id=1;
 
                     try (Jedis jedis = pool.getResource()) {
-                        jedis.expire("user_id:"+user_id+":player_id:"+player_id+":name",0);
-                        jedis.expire("user_id:"+user_id+":player_id:"+player_id+":quantity",0);
-                        jedis.expire("user_id:"+user_id+":player_id:"+player_id+":team",0);
-                        jedis.expire("user_id:"+user_id+":player_id:"+player_id+":position",0);
+                        jedis.expire("user_id:"+global.id_user+":player_id:"+player_id+":name",0);
+                        jedis.expire("user_id:"+global.id_user+":player_id:"+player_id+":quantity",0);
+                        jedis.expire("user_id:"+global.id_user+":player_id:"+player_id+":team",0);
+                        jedis.expire("user_id:"+global.id_user+":player_id:"+player_id+":position",0);
                     }
+                    closePool();
             }
+
+    public static void add_player_to_collection(player_collection player, String retrieve_user) {
+            apertura_pool();
+
+            int user_id=1; //dovrebbe essere la variabile globale dell' id dell' utente
+            System.out.println("player added to"+retrieve_user+":+player.name");
+            try (Jedis jedis = pool.getResource()) {
+
+                jedis.set("user_id:"+retrieve_user+":player_id:"+player.player_id+":name",player.name);
+                jedis.set("user_id:"+retrieve_user+":player_id:"+player.player_id+":quantity", String.valueOf(player.quantity));
+                jedis.set("user_id:"+retrieve_user+":player_id:"+player.player_id+":team",player.team);
+                jedis.set("user_id:"+retrieve_user+":player_id:"+player.player_id+":position",player.position);
+
+
+            }
+
+            closePool();
+    }
 
             public void change_team_of_player(int player_id){   //funzione che potrebbe servire all' admin per cambiare il team di un certo giocatore su tutto redis (tipo se va via a gennaio)
                     System.out.println("Which team does he play for?");
@@ -164,22 +184,24 @@ public class collection {
 
             }
 
-            public void add_player_to_collection(int player_id, String name,int quantity, String team, String position){
+            /*public static void add_player_to_collection(player_collection player){   //add to my collection
+
+                    apertura_pool();
 
                     int user_id=1; //dovrebbe essere la variabile globale dell' id dell' utente
-
-                    player_collection player=new player_collection(player_id,name,quantity,team,position);  //forse inutile
-
+                    System.out.println("player accepted:"+player.name);
                     try (Jedis jedis = pool.getResource()) {
 
-                        jedis.set("user_id:"+user_id+":player_id:"+player_id+":name",player.name);
-                        jedis.set("user_id:"+user_id+":player_id:"+player_id+":quantity", String.valueOf(player.quantity));
-                        jedis.set("user_id:"+user_id+":player_id:"+player_id+":team",player.team);
-                        jedis.set("user_id:"+user_id+":player_id:"+player_id+":position",player.position);
+                        jedis.set("user_id:"+global.id_user+":player_id:"+player.player_id+":name",player.name);
+                        jedis.set("user_id:"+global.id_user+":player_id:"+player.player_id+":quantity", String.valueOf(player.quantity));
+                        jedis.set("user_id:"+global.id_user+":player_id:"+player.player_id+":team",player.team);
+                        jedis.set("user_id:"+global.id_user+":player_id:"+player.player_id+":position",player.position);
 
 
                     }
-            }
+
+                    closePool();
+            }*/
 
 
             //prossime due funzioni solo per creazione collection casuale per utente user_id:1
