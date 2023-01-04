@@ -73,7 +73,7 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Text fx:id="username_warning" layoutX="14.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="216.5367431640625" />
+                  <Text fx:id="username_warning" fill="RED" layoutX="14.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="216.5367431640625" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="385.0" layoutY="172.0" prefHeight="88.0" prefWidth="228.0">

@@ -30,13 +30,7 @@ import javafx.scene.control.ChoiceBox;
 import java.util.ArrayList;
 
 
-//TODO discuss about adding a little animation while waiting for the ranking page to load 
-//few seconds of wait but it may be interpreted as a freeze (?)
-
-//or
-
-//TODO showing only top 100 players
-//Add button for a user to see his position in the ranking and some user near him/her
+//TODO Emmanuel - implementare caso in cui gli utenti hanno stesso punteggio in classifica
 
 public class RankingController implements Initializable{
 
