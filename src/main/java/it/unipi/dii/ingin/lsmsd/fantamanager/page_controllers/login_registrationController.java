@@ -84,6 +84,7 @@ public class login_registrationController implements Initializable{
         	Stage stage = new Stage();
             FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("home_page.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
+            stage.setResizable(false);
             stage.setTitle("Welcome to Fantamanager!");
             stage.setScene(scene);
             stage.show();
