@@ -9,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 import org.bson.Document;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.ranking;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.RankingMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import javafx.beans.value.ChangeListener;
@@ -132,7 +132,7 @@ public class RankingController implements Initializable{
 		}
 		
 		//searching
-		users_doc = ranking.retrieve_user(search, user_input);
+		users_doc = RankingMongoDriver.retrieve_user(search, user_input);
 		if(users_doc == null) {	//handling error
 			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
 			return;
@@ -193,7 +193,7 @@ public class RankingController implements Initializable{
 		search_field_region.setValue(null);	//resetting the choice box
 		
 		//searching
-		users_doc = ranking.best_for_region();
+		users_doc = RankingMongoDriver.best_for_region();
 		if(users_doc == null) {	//handling error
 			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
 			return;
@@ -209,7 +209,7 @@ public class RankingController implements Initializable{
 		String region = search_field_region.getValue().toString();
 		
 		//searching
-		users_doc = ranking.search_users_by_region(region);
+		users_doc = RankingMongoDriver.search_users_by_region(region);
 		if(users_doc == null) {	//handling error
 			selected_user.setText("An error has occurred while searching for users. Please, exit the page and try again later.");
 			return;

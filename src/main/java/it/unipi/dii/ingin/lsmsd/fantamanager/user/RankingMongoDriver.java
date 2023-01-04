@@ -29,7 +29,7 @@ import static com.mongodb.client.model.Aggregates.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 
-public class ranking {
+public class RankingMongoDriver {
 
 	public static ArrayList<Document> retrieve_user(Boolean search, String username) {
 		
