@@ -5,7 +5,8 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.ranking;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.RankingMongoDriver;
+
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.bson.Document;
@@ -366,7 +367,7 @@ public class TradesController implements Initializable{
 						player_collection player_to= CardMongoDriver.search_player_by_name(player);
 						collection.delete_player_from_collection(player_to.get_id()); //elimino dalla collection del giocatore che ha accettato, i giocatori richiesti da chi ha generato il trade
 
-						collection.add_player_to_collection(player_to,(ranking.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
+						collection.add_player_to_collection(player_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
 				}
 	}
 }
