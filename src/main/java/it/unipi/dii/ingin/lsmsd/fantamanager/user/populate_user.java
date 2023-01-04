@@ -1,6 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.user;
 
-//TODO decidere insieme se lasciare la funzione in un file a parte o implementarlo in un altro
+//TODO Emmanuel - decidere insieme se lasciare la funzione in un file a parte o implementarlo in un altro
 
 import org.bson.Document;
 import com.mongodb.client.MongoClient;

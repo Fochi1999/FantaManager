@@ -1,39 +1,22 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
-import it.unipi.dii.ingin.lsmsd.fantamanager.util.hash;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
-
-import org.bson.Document;
-import org.bson.conversions.Bson;
-
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 
 import javafx.scene.control.TextField;
 
@@ -90,14 +73,10 @@ public class OptionController implements Initializable {
 
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle){
         
     	//case of admin logged in: showing the 'calculate matchday' option
-//// Updated upstream
-		int livpriv=global.user.get_privilege();
-
-		//int livpriv=global.user.liv_priv;
-
+    	int livpriv=global.user.get_privilege();
     	if(livpriv>=2){
     		
     		for(int i=1;i<=38;i++){
@@ -128,50 +107,20 @@ public class OptionController implements Initializable {
     	email_warning.setText("");
 
     	//finding the user
-    	find_user();
-    	
+    	//find_user();
+    	show_user_info();
     }
     
-    //TODO decidere se va bene questo approccio
-    protected void find_user() {
-    
-    	//connecting to mongoDB 
-    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
-    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-    	MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-    	Document resultDoc;
+
+    public void show_user_info (){
     	
-    	//searching user
-    	Bson filter = Filters.eq("username", global.user.username);
-    	try {
-    		resultDoc = collection.find(filter).first();
-    	}
-    	catch(Exception e) {
-    		System.out.println("Error on searching user: " + global.user.username);
-    		return;
-    	}
-    	
-    	//showing info
-    	myClient.close();
-    	try {
-    		show_user_info(resultDoc);
-    	}
-    	catch(Exception e) {
-    		System.out.println(e);
-    	}
-    }
-    
-    
-    
-    protected void show_user_info (Document user_input) throws NoSuchAlgorithmException{
-    	
-    	username_field.setText(user_input.getString("username"));
+    	username_field.setText(global.user.getUsername());
     	password_field.setText("***********************");
-    	region_field.setText(user_input.getString("region"));
-    	email_field.setText(user_input.getString("email"));
-    	credits_field.setText(user_input.get("credits").toString());
-    	collection_field.setText(user_input.get("collection").toString()); 	
-    	points_field.setText(user_input.get("points").toString()); 
+    	region_field.setText(global.user.getRegion());
+    	email_field.setText(global.user.getMail());
+    	credits_field.setText(Integer.toString(global.user.getCredits()));
+    	collection_field.setText(Integer.toString(global.user.getCollection())); 	
+    	points_field.setText(Integer.toString(global.user.getPoints())); 
     }
     
     
@@ -209,8 +158,8 @@ public class OptionController implements Initializable {
     	username_field.setEditable(false);
     	username_edit.setVisible(true);
     	username_confirm.setVisible(false);
+    	String new_value = username_field.getText().toString();
     	try {
-    		String new_value = username_field.getText().toString();
     		Boolean find = profile_page.find_duplicate("username",new_value);	
     		if(find) {
     			username_warning.setText("Username already in use!");
@@ -221,7 +170,7 @@ public class OptionController implements Initializable {
     		Boolean res = profile_page.edit_attribute("username", new_value);
     		if(res) {
     			System.out.println("Username successfully changed to: " + new_value);
-    			global.user.username = new_value;	//changing the global variable
+    			global.user.changeUsername(new_value);	//changing the global variable
     			username_warning.setText("Username successfully changed");
     		}
     		else {
@@ -232,7 +181,7 @@ public class OptionController implements Initializable {
     	catch(Exception e) {
     		System.out.println(e);
     	}
-    	find_user();	//refresh
+    	show_user_info();	//refresh fields
     }
     
     public void confirm_password_click() {
@@ -240,10 +189,19 @@ public class OptionController implements Initializable {
     	password_edit.setVisible(true);
     	password_confirm.setVisible(false);
     	String new_value = password_field.getText().toString();
+    	
+    	if(new_value.equals("")){	//empty field case
+    		System.out.println("Password not changed.");
+    		password_warning.setText("Password not changed");
+    		show_user_info();
+    		return;
+    	}
+    	
     	try {
     		Boolean res = profile_page.edit_attribute("password", password_field.getText().toString());
     		if(res) {
         		System.out.println("Password successfully changed to: " + new_value);
+        		global.user.changePassword(new_value);	//changing the global variable
         		password_warning.setText("Password changed");
         	}
         	else {
@@ -253,7 +211,7 @@ public class OptionController implements Initializable {
     	catch(Exception e) {
     		System.out.println(e);
     	}
-    	find_user();	//refresh
+    	show_user_info();	//refresh fields
     }
     
     public void confirm_email_click() {
@@ -273,6 +231,7 @@ public class OptionController implements Initializable {
     			email_warning.setText("Invalid email input!");
     		}
     		else {
+    			global.user.changeMail(new_value);	//changing the global variable
     			email_warning.setText("Email address successfully changed!");
     		}
     		
@@ -281,7 +240,7 @@ public class OptionController implements Initializable {
     	catch(Exception e) {
     		System.out.println(e);
     	}
-    	find_user();	//refresh
+    	show_user_info();	//refresh fields
     }
     
     

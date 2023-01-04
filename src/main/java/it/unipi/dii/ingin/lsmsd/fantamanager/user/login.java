@@ -21,21 +21,16 @@ public class login {
         MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
         MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME);
         
-        Document user = usersCollection.find(Filters.and(Filters.eq("username", nick), Filters.eq("password", password))).first();
-        if(user == null) {
+        Document user_doc = usersCollection.find(Filters.and(Filters.eq("username", nick), Filters.eq("password", password))).first();
+        if(user_doc == null) {
         	return false;
         }
 
-        
-        global.user=new user(nick,password,null,user.get("_id").toString(),user.getInteger("credits"),0,user.getInteger("privilege"));
-        System.out.println(global.user._id);
-
-        global.id_user=user.get("_id").toString();
-        global.user=new user(nick,password,user.getString("region"),user.getString("mail"),user.getInteger("credits"),0,user.getInteger("privilege"));
+        global.id_user=user_doc.get("_id").toString();
+        global.user=new user(nick,password,user_doc.getString("region"),user_doc.getString("email"),user_doc.getInteger("credits"),0,user_doc.getInteger("privilege"), user_doc.getInteger("points"));
         //ArrayList<formation> formations= (ArrayList<formation>) user.get("formations");
         //global.saved_formation_server=formations.get(global.curr_matchday);
-        System.out.println(global.id_user);
-
+        System.out.println("User logged in. ID: " + global.id_user);
         return true;
     }
     
@@ -63,7 +58,8 @@ public class login {
         System.out.println(json);
         Document doc = Document.parse( json );
         usersCollection.insertOne(doc);
-*/
+*/		
+        System.out.println("User registered.");
         return login(Nick,Pass);
     }
 }
