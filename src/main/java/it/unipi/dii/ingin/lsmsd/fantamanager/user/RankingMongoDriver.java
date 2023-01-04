@@ -66,7 +66,7 @@ public class RankingMongoDriver {
 			Bson filter = Filters.regex("username", pattern);	
 		        	
 			try {
-				cursor = collection.find(filter).sort(descending("points")).iterator(); //no 'limit(100)' on search user
+				cursor = collection.find(filter).sort(descending("points")).limit(100).iterator(); 
 				System.out.println("Searching for user: " + username);
 		    }
 			catch(Exception e) {
