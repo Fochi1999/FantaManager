@@ -1,6 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -97,5 +98,6 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         welcomeText.setText("Benvenuto "+ global.user.username);
+        collection.create_collection(); //TODO togliere
     }
 }

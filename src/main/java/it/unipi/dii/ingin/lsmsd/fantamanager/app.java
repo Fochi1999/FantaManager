@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.*;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.*;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.*;
 
 public class app extends Application {
 	
@@ -24,8 +25,9 @@ public class app extends Application {
     public static void main(String[] args) {
 
     	try {
-    		//populate_user.createUsers();	
-    		//trade_main.createTrade();
+    		//populateDB.create_users_collection_mongoDB();		//trades collection - mongo
+    		//populateDB.create_trade_collection_mongoDB(100);	//user collection - mongo
+    		//populateDB.create_user_card_collection_redis();	//user's card collection - redis
     	} catch(Exception e){
     		e.printStackTrace();
     	}

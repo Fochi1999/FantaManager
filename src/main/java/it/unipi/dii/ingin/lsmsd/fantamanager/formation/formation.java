@@ -3,6 +3,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +17,8 @@ public class formation {
     public HashMap<Integer,player_formation> players;
     // 0: portiere, poi 11 giocatori a seconda del modulo es 3-4-3, 1-3: D, 4-7:M, 8-10: A, panchina, 11-12:P, 13-14:D,15-16:M,17-18:A
     public int[] modulo;
+    public int tot;
+    public boolean valid;
     public formation(int[] m,ArrayList<player_formation> p){
         modulo=new int[3];
         for(int i=0;i<3;i++){
@@ -32,6 +35,12 @@ public class formation {
             modulo[i]=m[i];
         }
         players=new HashMap<>();
+        tot=0;
+    }
+    public formation(){
+        players=new HashMap<>();
+        modulo=new int[4];
+        tot=0;
     }
     public static void choose_player(Stage stage, ArrayList<player_collection> p, String roles) throws IOException {
 
@@ -42,6 +51,10 @@ public class formation {
         stage.setTitle("Collection page");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public static void save_formation_server(formation formation) {
+
     }
 
     public void insert_new_player(player_formation p, String role) {
