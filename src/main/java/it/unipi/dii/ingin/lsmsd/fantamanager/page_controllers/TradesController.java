@@ -134,7 +134,7 @@ public class TradesController implements Initializable{
 			Trade chosen_trade=retrieve_trade();
 			for(String player:chosen_trade.get_player_to()){
 				player_collection player_to= CardMongoDriver.search_player_by_name(player);
-				if(!collection.presence_player(player_to))
+				if(!collection.presence_player(player_to,global.id_user))
 						return false;
 			}
 			return true;
@@ -272,7 +272,7 @@ public class TradesController implements Initializable{
 
 				for(String player:chosen_trade.get_player_to()){
 						player_collection player_to= CardMongoDriver.search_player_by_name(player);
-						collection.delete_player_from_collection(player_to.get_id()); //elimino dalla collection del giocatore che ha accettato, i giocatori richiesti da chi ha generato il trade
+						collection.delete_player_from_collection(player_to); //elimino dalla collection del giocatore che ha accettato, i giocatori richiesti da chi ha generato il trade
 
 						collection.add_player_to_collection(player_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
 				}

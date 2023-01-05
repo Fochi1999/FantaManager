@@ -62,7 +62,7 @@ public class CollectionController implements Initializable {
         for(int i=0; i<coll.size();i++){
                 if(coll.get(i).get_name().equals(name_player)){
                         System.out.println(name_player);
-                        collection.delete_player_from_collection(coll.get(i).get_id());
+                        collection.delete_player_from_collection(coll.get(i));
                 }
         }
 
