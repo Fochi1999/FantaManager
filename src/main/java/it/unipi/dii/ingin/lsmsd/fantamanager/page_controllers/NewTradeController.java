@@ -95,12 +95,13 @@ public class NewTradeController implements Initializable{
 
 	private void open_cards_collection() {
 		//TODO retrieve cards from redis collection
+			collection.apertura_pool();
 			ArrayList<player_collection> collection_of_user= collection.load_collection(global.id_user);
 
 			for(player_collection player:collection_of_user){
 						//da qui ogni player ha le sue quattro informazioni e poi usarle agile
 			}
-
+			collection.closePool();
 	}
 	
 	
