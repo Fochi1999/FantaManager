@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.collections.FXCollections;
@@ -108,14 +109,45 @@ public class NewTradeController implements Initializable{
 			System.out.println("Error on input fields!");
 			return;
 		}
-		//TODO create with mongoDB
-		System.out.println("OK!");
+		//create with mongoDB
 
-		//ArrayList<String> player_from=ricava_player_from();
-		//Trade new_trade=new Trade("", global.id_user,"",player_from,player_to,credits_from.getText(),0);
+		ArrayList<String> player_from=new ArrayList<>();
+		player_from.add(retrieve_playerName_from_string(card_from1.getText()));
+		player_from.add(retrieve_playerName_from_string(card_from2.getText()));
+		player_from.add(retrieve_playerName_from_string(card_from3.getText()));
+		ArrayList<String> player_to=new ArrayList<>();
+		player_to.add(card_to1.getText());
+		player_to.add(card_to2.getText());
+		player_to.add(card_to3.getText());
+		Trade new_trade=new Trade("", global.id_user,"",Integer.parseInt(credits_from.getText()),player_from,player_to,0);
+		TradeMongoDriver.create_new_trade(new_trade);
 
-		//TODO delete dalla propria collection su redis
+		//delete dalla propria collection su redis
+		for(String player:player_from){
+				player_collection playerCollection=retrieve_player_from_string(player);
+				collection.delete_player_from_collection(playerCollection);
+		}
 
+	}
+
+	private player_collection retrieve_player_from_string(String player) {
+						ArrayList<String> values=new ArrayList<>();
+						String[] words=player.split("//");
+						for(String word:words){
+								String[] elem=word.split(": ");
+								values.add(elem[1]);
+						}
+						return new player_collection(Integer.parseInt(values.get(0)),values.get(1),Integer.parseInt(values.get(4)),values.get(2),values.get(3));
+	}
+
+	private String retrieve_playerName_from_string(String player) {
+		ArrayList<String> values=new ArrayList<>();
+		String[] words=player.split("//");
+		for(String word:words){
+			String[] elem=word.split(": ");
+			values.add(elem[1]);
+		}
+		return values.get(1);
 	}
 
 	/*private ArrayList<String> ricava_player_from() {
