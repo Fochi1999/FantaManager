@@ -31,7 +31,7 @@ public class utilities {
         {
             if(entry.getValue() > 1)
             {
-                System.out.println("Duplicate Element : "+entry.getKey()+" - found "+entry.getValue()+" times.");
+                System.out.println("Duplicate Element, id: "+entry.getKey()+" - found "+entry.getValue()+" times.");
                 return true;
             }
         }
