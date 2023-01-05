@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.*;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.*;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.*;
 
 public class app extends Application {
 	
@@ -26,6 +27,7 @@ public class app extends Application {
     	try {
     		//populate_user.createUsers();	
     		//trade_main.createTrade();
+    		//populateDB.create_user_card_collection_redis();
     	} catch(Exception e){
     		e.printStackTrace();
     	}
