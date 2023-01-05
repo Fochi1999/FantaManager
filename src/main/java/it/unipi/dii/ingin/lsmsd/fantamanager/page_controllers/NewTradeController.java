@@ -2,8 +2,13 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -64,6 +69,7 @@ public class NewTradeController implements Initializable{
 	}
 	
 	
+	@FXML
 	private void create_trade(){
 		
 		if(!check_fields()) {
@@ -72,11 +78,29 @@ public class NewTradeController implements Initializable{
 		}
 		//TODO create with mongoDB
 		System.out.println("OK!");
+
+		//ArrayList<String> player_from=ricava_player_from();
+		//Trade new_trade=new Trade("", global.id_user,"",player_from,player_to,credits_from.getText(),0);
+
+		//TODO delete dalla propria collection su redis
+
 	}
-	
-	
+
+	/*private ArrayList<String> ricava_player_from() {
+			ArrayList<String> player_from=new ArrayList<>();
+
+			//if()
+	}*/
+
+
 	private void open_cards_collection() {
 		//TODO retrieve cards from redis collection
+			ArrayList<player_collection> collection_of_user= collection.load_collection(global.id_user);
+
+			for(player_collection player:collection_of_user){
+						//da qui ogni player ha le sue quattro informazioni e poi usarle agile
+			}
+
 	}
 	
 	

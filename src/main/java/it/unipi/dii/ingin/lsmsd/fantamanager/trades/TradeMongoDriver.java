@@ -207,4 +207,17 @@ public class TradeMongoDriver {
 
         }
     }
+
+    public static void create_new_trade(Trade new_trade){  //TODO finire Emmanuel
+
+            openConnection();
+
+            Document doc = new Document();
+            doc.append("user_from", new_trade.user_from);
+            doc.append("user_to", new_trade.user_to);
+            doc.append("player_from", new_trade.player_from);
+            doc.append("player_to", new_trade.player_to);
+            doc.append("credits", new_trade.credits);
+            doc.append("status", 0);
+    }
 }
