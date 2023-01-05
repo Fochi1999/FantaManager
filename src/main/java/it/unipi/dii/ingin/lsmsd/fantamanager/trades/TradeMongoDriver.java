@@ -219,5 +219,9 @@ public class TradeMongoDriver {
             doc.append("player_to", new_trade.player_to);
             doc.append("credits", new_trade.credits);
             doc.append("status", 0);
+
+            collection.insertOne(doc);
+
+            closeConnection();
     }
 }
