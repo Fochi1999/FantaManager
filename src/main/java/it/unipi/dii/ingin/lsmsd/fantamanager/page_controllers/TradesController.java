@@ -125,12 +125,22 @@ public class TradesController implements Initializable{
 			delete_button.setDisable(false);
 		}
 
-		if(!myuser.equals(user_in)){
+		if(!myuser.equals(user_in) && control_owned_cards()){
 			accept_button.setDisable(false);
 		}
 	}
 
-    @FXML
+	private boolean control_owned_cards() {
+			Trade chosen_trade=retrieve_trade();
+			for(String player:chosen_trade.get_player_to()){
+				player_collection player_to= CardMongoDriver.search_player_by_name(player);
+				if(!collection.presence_player(player_to))
+						return false;
+			}
+			return true;
+	}
+
+	@FXML
     protected void click_home() throws IOException {
 
     	System.out.println("Closing trades page...");

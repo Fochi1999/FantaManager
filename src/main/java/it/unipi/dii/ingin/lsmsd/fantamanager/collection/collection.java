@@ -146,7 +146,32 @@ public class collection {
             closePool();
     }
 
-            public void change_team_of_player(int player_id){   //funzione che potrebbe servire all' admin per cambiare il team di un certo giocatore su tutto redis (tipo se va via a gennaio)
+    public static boolean presence_player(player_collection player) {
+
+                boolean result;
+                apertura_pool();
+
+                String key="user_id:"+global.id_user+":player_id:"+player.player_id+":name";
+                try (Jedis jedis = pool.getResource()) {
+                    String value=jedis.get(key);
+                    if(value==null){
+                            result=false;
+                    }
+                    else if(value.equals(player.name)){  //se non è nullo qui dovrebbe entrarci, quindi forse bastava un else
+                        result=true;
+                    }
+                    else{
+                        result=false;
+                    }
+                }
+
+                closePool();
+                return result;
+    }
+
+    public void change_team_of_player(int player_id){   //funzione che potrebbe servire all' admin per cambiare il team di un certo giocatore su tutto redis (tipo se va via a gennaio)
+
+                    apertura_pool();
                     System.out.println("Which team does he play for?");
                     Scanner scanner = new Scanner(System.in);
 
@@ -162,10 +187,13 @@ public class collection {
                             jedis.set(key,team);
                         }
                     }
-
+                    closePool();
             }
 
             public void change_position_of_player(int player_id){ //funzione che potrebbe servire all' admin per cambiare il ruolo di un certo giocatore su tutto redis
+
+                apertura_pool();
+
                 System.out.println("Which position does he play?");
                 Scanner scanner = new Scanner(System.in);
 
@@ -181,7 +209,7 @@ public class collection {
                         jedis.set(key,position);
                     }
                 }
-
+                closePool();
             }
 
             /*public static void add_player_to_collection(player_collection player){   //add to my collection
