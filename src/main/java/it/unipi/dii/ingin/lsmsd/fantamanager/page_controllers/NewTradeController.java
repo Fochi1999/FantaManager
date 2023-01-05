@@ -19,6 +19,10 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.Parent;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 
 public class NewTradeController implements Initializable{
 
@@ -28,6 +32,7 @@ public class NewTradeController implements Initializable{
 	@FXML private Button back;
 	@FXML private Text error_text;
 	@FXML private ListView<String> card_list;
+	@FXML private TextField selected_card;
 	
 	@FXML private TextField card_from1;
 	@FXML private TextField card_from2;
@@ -57,8 +62,31 @@ public class NewTradeController implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
 		error_text.setText("");
-		create_trade.setDisable(true);	//TODO create button disabled till finished controller page
+		
+		disable_fields();
+		add_checkbox_listeners();
+		
 		open_cards_collection();
+		
+		//handling the event: clicking on a card from the list
+        MultipleSelectionModel<String> card = card_list.getSelectionModel();
+
+        card.selectedItemProperty().addListener(new ChangeListener<String>() {
+        	public void changed(ObservableValue<? extends String> changed, String oldVal, String newVal) {
+
+        	   String selItems = "";
+              	ObservableList<String> selected = card_list.getSelectionModel().getSelectedItems();
+
+               	for (int i = 0; i < selected.size(); i++) {
+            	   selItems += "" + selected.get(i); 
+               	}
+               	
+               	if(!selItems.equals("")) {
+               		selected_card.setText(selItems);
+               	}
+               	   
+        	}
+        });
 	}
 	
 	
@@ -67,7 +95,7 @@ public class NewTradeController implements Initializable{
         Stage stage = (Stage)root.getScene().getWindow();
         util_controller.go_to_trades(stage);
 	}
-	
+	    
 	
 	@FXML
 	private void create_trade(){
@@ -94,17 +122,24 @@ public class NewTradeController implements Initializable{
 
 
 	private void open_cards_collection() {
+		
 		//TODO retrieve cards from redis collection
-			ArrayList<player_collection> collection_of_user= collection.load_collection(global.id_user);
-
-			for(player_collection player:collection_of_user){
-						//da qui ogni player ha le sue quattro informazioni e poi usarle agile
-			}
+		ArrayList<player_collection> collection_of_user= collection.load_collection(global.id_user);
+		for(player_collection player:collection_of_user){
+					
+		}
 
 	}
 	
 	
 	public Boolean check_fields(){
+		
+		//check if at least one card is selected
+		if(!card_from_checkbox1.isSelected() && !card_to_checkbox1.isSelected() && !card_from_checkbox2.isSelected() 
+			&& !card_to_checkbox3.isSelected() && !card_from_checkbox3.isSelected() && !card_to_checkbox3.isSelected()) {
+			error_text.setText("You must select at least one card to create trade!");
+			return false;
+		}
 		
 		//check if the card values are empty when ticked
 		if(card_from_checkbox1.isSelected() && card_from1.getText().equals("")) {
@@ -144,14 +179,85 @@ public class NewTradeController implements Initializable{
 			return false;
 		}	
 		
-		//check if at least one card is selected
-		if(!card_from_checkbox1.isSelected() && !card_to_checkbox1.isSelected() && !card_from_checkbox2.isSelected() 
-				&& !card_to_checkbox3.isSelected() && !card_from_checkbox3.isSelected() && !card_to_checkbox3.isSelected()) {
-			error_text.setText("You must select at least one card to create trade!");
-			return false;
-		}
-		
 		return true;
+	}
+	
+	
+	public void add_checkbox_listeners(){
+		
+		card_from_checkbox1.selectedProperty().addListener(
+			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+			         add_from1.setDisable(!add_from1.isDisabled());
+			         card_from1.setDisable(!card_from1.isDisabled());
+			         if(card_from1.isDisabled()) {
+			        	 card_from1.setText("");
+			         }
+			      });
+		card_from_checkbox2.selectedProperty().addListener(
+			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+			         add_from2.setDisable(!add_from2.isDisabled());
+			         card_from2.setDisable(!card_from2.isDisabled());
+			         if(card_from2.isDisabled()) {
+			        	 card_from2.setText("");
+			         }
+			      });
+		card_from_checkbox3.selectedProperty().addListener(
+			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+			         add_from3.setDisable(!add_from3.isDisabled());
+			         card_from3.setDisable(!card_from3.isDisabled());
+			         if(card_from3.isDisabled()) {
+			        	 card_from3.setText("");
+			         }
+			      });
+		
+		card_to_checkbox1.selectedProperty().addListener(
+			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+			         add_to1.setDisable(!add_to1.isDisabled());
+			         card_to1.setDisable(!card_to1.isDisabled());
+			         if(card_to1.isDisabled()) {
+			        	 card_to1.setText("");
+			         }
+			      });
+		card_to_checkbox2.selectedProperty().addListener(
+			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+			         add_to2.setDisable(!add_to2.isDisabled());
+			         card_to2.setDisable(!card_to2.isDisabled());
+			         if(card_to2.isDisabled()) {
+			        	 card_to2.setText("");
+			         }
+			      });
+		card_to_checkbox3.selectedProperty().addListener(
+			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+			         add_to3.setDisable(!add_to3.isDisabled());
+			         card_to3.setDisable(!card_to3.isDisabled());
+			         if(card_to3.isDisabled()) {
+			        	 card_to3.setText("");
+			         }
+			      });
+		
+		credits_checkbox.selectedProperty().addListener(
+			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+				         credits_to.setDisable(!credits_to.isDisabled());
+				         credits_from.setDisable(!credits_from.isDisabled());
+				      });
+		
+	}
+
+	private void disable_fields() {
+		add_from1.setDisable(true);
+		add_from2.setDisable(true);
+		add_from3.setDisable(true);
+		add_to1.setDisable(true);
+		add_to2.setDisable(true);
+		add_to3.setDisable(true);
+		credits_to.setDisable(true);
+		credits_from.setDisable(true);
+		card_from1.setDisable(true);
+		card_from2.setDisable(true);
+		card_from3.setDisable(true);
+		card_to1.setDisable(true);
+		card_to2.setDisable(true);
+		card_to3.setDisable(true);
 	}
 	
 }

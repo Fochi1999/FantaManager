@@ -26,7 +26,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="card_from2" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Select a card..." />
+                  <TextField fx:id="card_from2" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Add a card..." />
                   <CheckBox fx:id="card_from_checkbox2" layoutX="-14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="27.0" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
@@ -42,7 +42,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="card_from3" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Select a card..." />
+                  <TextField fx:id="card_from3" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Add a card..." />
                   <CheckBox fx:id="card_from_checkbox3" layoutX="-14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="27.0" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
@@ -58,7 +58,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="credits_from" alignment="CENTER" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" text="0" />
+                  <TextField fx:id="credits_from" alignment="CENTER" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" text="0" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="33.0" layoutY="14.0" prefHeight="62.0" prefWidth="184.0">
@@ -68,7 +68,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="card_from1" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Select a card..." />
+                  <TextField fx:id="card_from1" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Add a card..." />
                   <CheckBox fx:id="card_from_checkbox1" layoutX="-14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="27.0" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
@@ -88,7 +88,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="credits_to" alignment="CENTER" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" text="0" />
+                  <TextField fx:id="credits_to" alignment="CENTER" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" text="0" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="33.0" layoutY="93.0" prefHeight="62.0" prefWidth="184.0">
@@ -98,7 +98,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="card_from21" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Select a card..." />
+                  <TextField fx:id="card_to2" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Add a card..." />
                   <CheckBox fx:id="card_to_checkbox2" layoutX="-14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="27.0" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
@@ -114,7 +114,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="card_from211" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Select a card..." />
+                  <TextField fx:id="card_to3" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Add a card..." />
                   <CheckBox fx:id="card_to_checkbox3" layoutX="-14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="27.0" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
@@ -130,7 +130,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="card_to1" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Select a card..." />
+                  <TextField fx:id="card_to1" editable="false" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="130.0" promptText="Add a card..." />
                   <CheckBox fx:id="card_to_checkbox1" layoutX="-14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="27.0" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
@@ -141,7 +141,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <Button fx:id="create_trade" layoutX="512.0" layoutY="625.0" mnemonicParsing="false" prefHeight="54.0" onMouseClicked="#create_trade" prefWidth="115.0" style="-fx-background-color: GREEN;" text="Create Trade">
+      <Button fx:id="create_trade" layoutX="512.0" layoutY="625.0" mnemonicParsing="false" onMouseClicked="#create_trade" prefHeight="54.0" prefWidth="115.0" style="-fx-background-color: GREEN;" text="Create Trade">
          <font>
             <Font size="15.0" />
          </font>
@@ -166,11 +166,16 @@
             <Font size="15.0" />
          </font>
       </CheckBox>
-      <Text fx:id="error_text" fill="RED" layoutX="140.0" layoutY="659.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error text" textAlignment="CENTER" wrappingWidth="383.99997253417973">
+      <Text fx:id="error_text" fill="RED" layoutX="138.0" layoutY="658.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error text" textAlignment="CENTER" wrappingWidth="383.99997253417973">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <ListView fx:id="card_list" layoutX="33.0" layoutY="430.0" prefHeight="186.0" prefWidth="598.0" />
+      <ListView fx:id="card_list" layoutX="33.0" layoutY="474.0" prefHeight="142.0" prefWidth="598.0" />
+      <TextField fx:id="selected_card" alignment="CENTER" layoutX="127.0" layoutY="428.0" prefHeight="38.0" prefWidth="406.0" promptText="Select a card to view..." style="-fx-border-color: BLUE;">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>
