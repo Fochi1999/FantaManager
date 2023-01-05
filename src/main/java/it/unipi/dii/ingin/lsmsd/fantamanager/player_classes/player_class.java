@@ -6,6 +6,7 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
+import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -16,6 +17,8 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -259,6 +262,9 @@ public class player_class{
     }
 
     public static void calculate_matchday(int matchday) {
+
+        Map<String,Float> player_score=new HashMap<String,Float>();  //per calcolo score di un team di un player
+
         //String url = "mongodb://localhost:27017";
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
@@ -370,13 +376,14 @@ public class player_class{
                 UpdateOptions options = new UpdateOptions().upsert(true);
                 System.out.println(coll.updateOne(filter, update, options));
 
-
+                player_score.put(player_name,score);
 
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
+        formation.calculate_team_score(player_score);  //per calcolo score di un team di un player
     }
 
     private static float calculate_mod_value(float score) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore

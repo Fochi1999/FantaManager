@@ -1,13 +1,10 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.collection;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
-import org.bson.Document;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.*;
-
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.*;
 
 public class collection {
 
@@ -112,62 +109,84 @@ public class collection {
                 pool.close();
             }
 
-            public static void delete_player_from_collection(int player_id){  //dalla  mia
+            public static void delete_player_from_collection(player_collection player){  //dalla  mia, viene sempre eliminato dall apropria, quindi non l' ho generalizzata
+
+
+                    System.out.println("player deleted:"+ player);
+
+                if(presence_player(player,global.id_user)) {
                     apertura_pool();
-
-                    System.out.println("player deleted:"+player_id);
-
-                    int user_id=1;
-
+                    //devo aumentare solo la quantity
+                    String key = "user_id:" + global.id_user + ":player_id:" + player.player_id + ":quantity";
                     try (Jedis jedis = pool.getResource()) {
-                        jedis.expire("user_id:"+global.id_user+":player_id:"+player_id+":name",0);
-                        jedis.expire("user_id:"+global.id_user+":player_id:"+player_id+":quantity",0);
-                        jedis.expire("user_id:"+global.id_user+":player_id:"+player_id+":team",0);
-                        jedis.expire("user_id:"+global.id_user+":player_id:"+player_id+":position",0);
+                        String value = jedis.get(key);
+                        Integer quantity = Integer.parseInt(value);
+                        if (quantity > 1) {
+                            jedis.set("user_id:" + global.id_user + ":player_id:" + player.player_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
+                        }
+                        else{
+                            jedis.expire("user_id:" + global.id_user + ":player_id:" + player.player_id + ":name", 0);
+                            jedis.expire("user_id:" + global.id_user + ":player_id:" + player.player_id + ":quantity", 0);
+                            jedis.expire("user_id:" + global.id_user + ":player_id:" + player.player_id + ":team", 0);
+                            jedis.expire("user_id:" + global.id_user + ":player_id:" + player.player_id + ":position", 0);
+                        }
+                    }
+                }
+                    closePool();
+            }
+
+            public static void add_player_to_collection(player_collection player, String retrieve_user) {
+                    System.out.println("player added to"+retrieve_user+":"+player.name);
+
+
+                    if(presence_player(player,retrieve_user)){
+                        apertura_pool();
+                        //devo aumentare solo la quantity
+                        String key="user_id:"+retrieve_user+":player_id:"+player.player_id+":quantity";
+                        try (Jedis jedis = pool.getResource()) {
+                            String value=jedis.get(key);
+                            Integer quantity=Integer.parseInt(value);
+                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":quantity", String.valueOf(quantity+1));  //TODO provare funzionamento
+                        }
+                    }
+                    else {
+                        apertura_pool();
+                        //devo aggiungerlo per intero
+                        try (Jedis jedis = pool.getResource()) {
+
+                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":name", player.name);
+                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":quantity", String.valueOf(player.quantity));
+                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":team", player.team);
+                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":position", player.position);
+
+
+                        }
                     }
                     closePool();
             }
 
-    public static void add_player_to_collection(player_collection player, String retrieve_user) {
-            apertura_pool();
+            public static boolean presence_player(player_collection player, String retrieve_user) {
 
-            int user_id=1; //dovrebbe essere la variabile globale dell' id dell' utente
-            System.out.println("player added to"+retrieve_user+":+player.name");
-            try (Jedis jedis = pool.getResource()) {
+                        boolean result;
+                        apertura_pool();
 
-                jedis.set("user_id:"+retrieve_user+":player_id:"+player.player_id+":name",player.name);
-                jedis.set("user_id:"+retrieve_user+":player_id:"+player.player_id+":quantity", String.valueOf(player.quantity));
-                jedis.set("user_id:"+retrieve_user+":player_id:"+player.player_id+":team",player.team);
-                jedis.set("user_id:"+retrieve_user+":player_id:"+player.player_id+":position",player.position);
+                        String key="user_id:"+retrieve_user+":player_id:"+player.player_id+":name";
+                        try (Jedis jedis = pool.getResource()) {
+                            String value=jedis.get(key);
+                            if(value==null){
+                                    result=false;
+                            }
+                            else if(value.equals(player.name)){  //se non è nullo qui dovrebbe entrarci, quindi forse bastava un else
+                                result=true;
+                            }
+                            else{
+                                result=false;
+                            }
+                        }
 
-
+                        closePool();
+                        return result;
             }
-
-            closePool();
-    }
-
-    public static boolean presence_player(player_collection player) {
-
-                boolean result;
-                apertura_pool();
-
-                String key="user_id:"+global.id_user+":player_id:"+player.player_id+":name";
-                try (Jedis jedis = pool.getResource()) {
-                    String value=jedis.get(key);
-                    if(value==null){
-                            result=false;
-                    }
-                    else if(value.equals(player.name)){  //se non è nullo qui dovrebbe entrarci, quindi forse bastava un else
-                        result=true;
-                    }
-                    else{
-                        result=false;
-                    }
-                }
-
-                closePool();
-                return result;
-    }
 
     public void change_team_of_player(int player_id){   //funzione che potrebbe servire all' admin per cambiare il team di un certo giocatore su tutto redis (tipo se va via a gennaio)
 
