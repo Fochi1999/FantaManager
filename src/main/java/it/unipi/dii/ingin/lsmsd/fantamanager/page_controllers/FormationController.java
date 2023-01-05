@@ -7,6 +7,7 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.formationMongoDriver;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -132,10 +133,8 @@ public class FormationController implements Initializable {
 
         if(global.saved_formation_local.isValid()){
             click_home();
-            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            String json = ow.writeValueAsString(global.saved_formation_local);
-            System.out.println(json);
-            //global.user.formations[global.curr_matchday]=global.saved_formation_local;
+            global.user.formations.put(global.curr_matchday,global.saved_formation_local);
+            formationMongoDriver.change_formation();
 
         }
         else {
@@ -175,7 +174,7 @@ public class FormationController implements Initializable {
             create_layout_formation(moduleString);
 
         }
-        //collection.create_collection(); //TODO togliere perchè popola il db
+
         players= collection.load_collection(global.id_user);
 
     }
