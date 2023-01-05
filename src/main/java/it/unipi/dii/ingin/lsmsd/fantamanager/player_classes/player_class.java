@@ -383,7 +383,7 @@ public class player_class{
             throw new RuntimeException(e);
         }
 
-        formation.calculate_team_score(player_score);  //per calcolo score di un team di un player
+        //formation.calculate_team_score(player_score);  //TODO per calcolo score di un team di un player
     }
 
     private static float calculate_mod_value(float score) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore
