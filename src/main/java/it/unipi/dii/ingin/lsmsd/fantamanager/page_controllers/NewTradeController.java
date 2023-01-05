@@ -100,7 +100,9 @@ public class NewTradeController implements Initializable{
         Stage stage = (Stage)root.getScene().getWindow();
         util_controller.go_to_trades(stage);
 	}
-	    
+
+
+	//TODO gestire inserimento giocatori player_to
 	
 	@FXML
 	private void create_trade(){
