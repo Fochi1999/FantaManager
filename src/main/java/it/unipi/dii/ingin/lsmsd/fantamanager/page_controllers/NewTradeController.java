@@ -10,10 +10,14 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -122,6 +126,10 @@ public class NewTradeController implements Initializable{
 
 
 	private void open_cards_collection() {
+
+		//showing off cards
+		ObservableList<String> list = FXCollections.observableArrayList();
+		list.removeAll(list);	//clearing the list
 		
 		//TODO retrieve cards from redis collection
 		collection.apertura_pool();
@@ -129,7 +137,12 @@ public class NewTradeController implements Initializable{
 
 		for(player_collection player:collection_of_user){
 						//da qui ogni player ha le sue quattro informazioni e poi usarle agile
+			String card_output = "id: " + player.get_id() + "//name: " + player.get_name()
+					+ "//role: " + player.get_position() +"//team: " + player.get_team() + "//quantity: " + player.get_quantity();
+			list.add(card_output);
 		}
+		card_list.getItems().clear();
+		card_list.getItems().addAll(list);
 		collection.closePool();
 
 	}
@@ -195,6 +208,14 @@ public class NewTradeController implements Initializable{
 			         if(card_from1.isDisabled()) {
 			        	 card_from1.setText("");
 			         }
+					 else{
+						 	add_from1.setOnAction(new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent actionEvent) {
+									card_from1.setText(selected_card.getText());
+								}
+							});
+					 }
 			      });
 		card_from_checkbox2.selectedProperty().addListener(
 			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
@@ -202,7 +223,14 @@ public class NewTradeController implements Initializable{
 			         card_from2.setDisable(!card_from2.isDisabled());
 			         if(card_from2.isDisabled()) {
 			        	 card_from2.setText("");
-			         }
+			         }else{
+						 add_from2.setOnAction(new EventHandler<ActionEvent>() {
+							 @Override
+							 public void handle(ActionEvent actionEvent) {
+								 card_from2.setText(selected_card.getText());
+							 }
+						 });
+					 }
 			      });
 		card_from_checkbox3.selectedProperty().addListener(
 			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
@@ -210,7 +238,14 @@ public class NewTradeController implements Initializable{
 			         card_from3.setDisable(!card_from3.isDisabled());
 			         if(card_from3.isDisabled()) {
 			        	 card_from3.setText("");
-			         }
+			         }else{
+						 add_from3.setOnAction(new EventHandler<ActionEvent>() {
+							 @Override
+							 public void handle(ActionEvent actionEvent) {
+								 card_from3.setText(selected_card.getText());
+							 }
+						 });
+					 }
 			      });
 		
 		card_to_checkbox1.selectedProperty().addListener(
@@ -219,7 +254,14 @@ public class NewTradeController implements Initializable{
 			         card_to1.setDisable(!card_to1.isDisabled());
 			         if(card_to1.isDisabled()) {
 			        	 card_to1.setText("");
-			         }
+			         }else{
+						 add_to1.setOnAction(new EventHandler<ActionEvent>() {
+							 @Override
+							 public void handle(ActionEvent actionEvent) {
+								 card_to1.setText(selected_card.getText());
+							 }
+						 });
+					 }
 			      });
 		card_to_checkbox2.selectedProperty().addListener(
 			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
@@ -227,7 +269,14 @@ public class NewTradeController implements Initializable{
 			         card_to2.setDisable(!card_to2.isDisabled());
 			         if(card_to2.isDisabled()) {
 			        	 card_to2.setText("");
-			         }
+			         }else{
+						 add_to2.setOnAction(new EventHandler<ActionEvent>() {
+							 @Override
+							 public void handle(ActionEvent actionEvent) {
+								 card_to2.setText(selected_card.getText());
+							 }
+						 });
+					 }
 			      });
 		card_to_checkbox3.selectedProperty().addListener(
 			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
@@ -235,7 +284,14 @@ public class NewTradeController implements Initializable{
 			         card_to3.setDisable(!card_to3.isDisabled());
 			         if(card_to3.isDisabled()) {
 			        	 card_to3.setText("");
-			         }
+			         }else{
+						 add_to3.setOnAction(new EventHandler<ActionEvent>() {
+							 @Override
+							 public void handle(ActionEvent actionEvent) {
+								 card_to3.setText(selected_card.getText());
+							 }
+						 });
+					 }
 			      });
 		
 		credits_checkbox.selectedProperty().addListener(
@@ -262,5 +318,5 @@ public class NewTradeController implements Initializable{
 		card_to2.setDisable(true);
 		card_to3.setDisable(true);
 	}
-	
+
 }

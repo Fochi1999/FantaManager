@@ -208,7 +208,7 @@ public class TradeMongoDriver {
         }
     }
 
-    public static void create_new_trade(Trade new_trade){  //TODO finire Emmanuel
+    public static void create_new_trade(Trade new_trade){  //TODO finire
 
             openConnection();
 
