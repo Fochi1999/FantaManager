@@ -55,7 +55,7 @@ public class user {
                 this.formations= new HashMap<Integer, formation>(map);
                 System.out.println(this.formations.toString());
             } catch(Exception e){
-                e.printStackTrace();
+                //e.printStackTrace();
                 this.formations=new HashMap<>();
                 System.out.println("formazione non trovata");
             }
