@@ -1,5 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
@@ -10,18 +11,14 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.user.RankingMongoDriver;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.bson.Document;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.*;
-import com.mongodb.client.result.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.fxml.Initializable;
 
 import javafx.beans.value.ChangeListener;
@@ -29,20 +26,10 @@ import javafx.beans.value.ObservableValue;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 import javafx.collections.*;
 import javafx.stage.Stage;
-
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.json.simple.parser.ParseException;
-
-import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Indexes.descending;
 
 public class TradesController implements Initializable{
 
@@ -148,7 +135,18 @@ public class TradesController implements Initializable{
         util_controller.back_to_home(stage);
     }
     
-    
+    @FXML
+    protected void create_trade() throws IOException{
+    	System.out.println("Opening 'new trade' page...");
+        Stage stage = (Stage)root.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("new_trade.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("New trade");
+        stage.setScene(scene);
+        stage.show();
+    }
+	
+	
     @FXML
     protected void click_delete() {   //elimino solo una mia offerta di trade, questa funzione è cliccabile solo quando clicco su un trade mio
     	

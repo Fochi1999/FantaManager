@@ -37,7 +37,7 @@ public class TradeMongoDriver {
             mongoClient.close();
     }
 
-    public static void delete_my_trade(ObjectId trade_id){
+    public static boolean delete_my_trade(ObjectId trade_id){
         openConnection();
 
         //searching for the trades
@@ -46,18 +46,15 @@ public class TradeMongoDriver {
             System.out.println(result);
         } catch (Exception e) {
             System.out.println("An error has occured while deleting the trade!");
-            return;
+            return false;
         }
+        return true;
     }
     public static MongoCursor<Document> retrieve_most_present(String offered_wanted){
 
-        /*MongoClient mongoClient= MongoClients.create(global.MONGO_URI);
-        MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);*/
-
-        openConnection();
-
-        if(offered_wanted.equals("offered")){
+    	openConnection();
+    	
+    	if(offered_wanted.equals("offered")){
             //10 most frequent player offered in completed trades
             Bson match1=match(eq("status",1));
             Bson u=unwind("$player_from");
@@ -94,11 +91,6 @@ public class TradeMongoDriver {
 
         System.out.println("Searching trades made by: " + my_user);
 
-        //connecting to mongoDB
-
-        /*MongoClient myClient = MongoClients.create(global.MONGO_URI);
-        MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);*/
         openConnection();
         MongoCursor<Document> resultDoc;
 
@@ -114,21 +106,13 @@ public class TradeMongoDriver {
             return null;
         }
 
-        //myClient.close();
-        //print
         return resultDoc;
-        //show_trades(resultDoc);
-
     }
 
     public static MongoCursor<Document> search_trade(String from_input, String to_input) {
 
         System.out.println("Searching trades -> offered: "+ from_input + " // wanted: " + to_input);
 
-        //connecting to mongoDB
-        /*MongoClient myClient = MongoClients.create(global.MONGO_URI);
-        MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);*/
         openConnection();
         MongoCursor<Document> resultDoc;
 
@@ -161,32 +145,29 @@ public class TradeMongoDriver {
             return null;
         }
 
-        //print
-        //myClient.close();
         return resultDoc;
 
     }
 
+    
     public static MongoCursor<Document> trades_pending(){
-        /*MongoClient myClient = MongoClients.create(global.MONGO_URI);
-        MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);*/
+        
         openConnection();
         MongoCursor<Document> resultDoc;
 
         //searching for the trades
         Bson filter = Filters.eq("status",0);
         try {
-            resultDoc = collection.find(filter).iterator();
+            resultDoc = collection.find(filter).limit(500).iterator();	//limit(500) because the load will be too much otherwise   
         } catch (Exception e) {
             System.out.println("An error has occured while viewing trades!");
             return null;
         }
 
-        //myClient.close();
         return resultDoc;
     }
 
+    
     public static Trade search_trade_byId(String id_trade) {
 
         openConnection();

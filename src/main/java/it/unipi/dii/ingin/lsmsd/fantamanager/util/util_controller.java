@@ -32,4 +32,12 @@ public class util_controller {
         stage.setScene(scene);
         stage.show();
     }
+    
+    public static void go_to_trades(Stage stage) throws IOException {
+    	FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("trade_page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Trades page");
+        stage.setScene(scene);
+        stage.show();
+    }
 }
