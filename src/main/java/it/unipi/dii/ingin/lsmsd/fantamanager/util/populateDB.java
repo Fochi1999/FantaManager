@@ -309,9 +309,9 @@ public class populateDB {
 
 		//connecting to mongoDB
 		String uri = "mongodb://localhost:27017";
-		MongoClient myClient = MongoClients.create(uri);
-		MongoDatabase database = myClient.getDatabase("fantamongo");
-		MongoCollection<Document> collection = database.getCollection("player_after_unicode");
+		MongoClient myClient = MongoClients.create(global.MONGO_URI);
+		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME);
 		System.out.print("Connected to mongoDB...\n");
 
 		JSONParser jsonParser = new JSONParser();

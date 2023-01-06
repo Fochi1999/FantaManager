@@ -115,6 +115,9 @@ public class TradesController implements Initializable{
 		if(!myuser.equals(user_in) && control_owned_cards()){
 			accept_button.setDisable(false);
 		}
+		else{
+				accept_button.setDisable(true);
+		}
 	}
 
 	private boolean control_owned_cards() {
