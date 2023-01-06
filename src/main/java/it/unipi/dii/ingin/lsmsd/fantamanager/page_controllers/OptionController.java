@@ -117,7 +117,7 @@ public class OptionController implements Initializable {
     	username_field.setText(global.user.getUsername());
     	password_field.setText("***********************");
     	region_field.setText(global.user.getRegion());
-    	email_field.setText(global.user.getMail());
+    	email_field.setText(global.user.getEmail());
     	credits_field.setText(Integer.toString(global.user.getCredits()));
     	collection_field.setText(Integer.toString(global.user.getCollection())); 	
     	points_field.setText(Integer.toString(global.user.getPoints())); 
@@ -231,7 +231,7 @@ public class OptionController implements Initializable {
     			email_warning.setText("Invalid email input!");
     		}
     		else {
-    			global.user.changeMail(new_value);	//changing the global variable
+    			global.user.changeEmail(new_value);	//changing the global variable
     			email_warning.setText("Email address successfully changed!");
     		}
     		

@@ -17,7 +17,7 @@ public class user {
     String password;
     String region;
     String _id;
-    String mail;
+    String email;
     public HashMap<Integer,formation> formations;
     int credits;
     int collection;
@@ -25,24 +25,24 @@ public class user {
     int privilege;
 
     //constructor
-    public user(String nick, String hashPass,String region,String mail, int credits,int collection, int privilege, int points){
+    public user(String nick, String hashPass,String region,String email, int credits,int collection, int privilege, int points){
 
         username=nick;
         password=hashPass;
         this.region=region;
-        this.mail=mail;
+        this.email=email;
         this.points = points;
         this.credits=credits;
         this.collection=collection;
         this.privilege=privilege;
         formations=new HashMap<>();
     }
-    public user(String nick, String hashPass,String region,String mail, int credits,int collection, int privilege, int points,String formationJson){
+    public user(String nick, String hashPass,String region,String email, int credits,int collection, int privilege, int points,String formationJson){
 
         username=nick;
         password=hashPass;
         this.region=region;
-        this.mail=mail;
+        this.email=email;
         this.points = points;
         this.credits=credits;
         this.collection=collection;
@@ -78,8 +78,8 @@ public class user {
     public int getPoints() {
     	return points;
     }
-    public String getMail() {
-    	return mail;
+    public String getEmail() {
+    	return email;
     }
     public String getRegion() {
     	return region;
@@ -89,8 +89,8 @@ public class user {
     public void changePassword(String value) throws NoSuchAlgorithmException{
     	this.password = hash.MD5(value);
     }
-    public void changeMail(String value) {
-    	this.mail = value;
+    public void changeEmail(String value) {
+    	this.email = value;
     }
     public void changeUsername(String value) {
     	this.username = value;

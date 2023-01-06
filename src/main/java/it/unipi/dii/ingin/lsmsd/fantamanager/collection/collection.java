@@ -250,7 +250,7 @@ public class collection {
                     closePool();
             }*/
 
-
+/*
             //prossime due funzioni solo per creazione collection casuale per utente user_id:1
             static String generate_string()
             {
@@ -291,6 +291,6 @@ public class collection {
 
                     closePool();
                 }
-
+*/
 
 }

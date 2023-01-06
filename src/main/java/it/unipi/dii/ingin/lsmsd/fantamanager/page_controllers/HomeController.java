@@ -97,7 +97,6 @@ public class HomeController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        welcomeText.setText("Benvenuto "+ global.user.username);
-        collection.create_collection(); //TODO togliere
+        welcomeText.setText("Welcome "+ global.user.username + "!");
     }
 }

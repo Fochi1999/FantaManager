@@ -11,7 +11,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
 import java.util.regex.Pattern;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 
