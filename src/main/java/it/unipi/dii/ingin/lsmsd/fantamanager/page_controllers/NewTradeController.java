@@ -5,8 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import com.mongodb.client.MongoCursor;
+import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
@@ -15,7 +18,9 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -28,6 +33,7 @@ import javafx.scene.control.MultipleSelectionModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import org.bson.Document;
 
 public class NewTradeController implements Initializable{
 
@@ -62,11 +68,21 @@ public class NewTradeController implements Initializable{
 	@FXML private Button add_to1;
 	@FXML private Button add_to2;
 	@FXML private Button add_to3;
+
+	@FXML private Button offer;
+	@FXML private Button want;
 	
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
 		error_text.setText("");
+		//--------per gestire nuovo meccanismo offered-wanted
+		offer.setDisable(true);
+		want.setDisable(false);
+		card_to_checkbox1.setDisable(true);
+		card_to_checkbox2.setDisable(true);
+		card_to_checkbox3.setDisable(true);
+
 		
 		disable_fields();
 		add_checkbox_listeners();
@@ -101,35 +117,59 @@ public class NewTradeController implements Initializable{
         util_controller.go_to_trades(stage);
 	}
 
-
-	//TODO gestire inserimento giocatori player_to
 	
 	@FXML
-	private void create_trade(){
+	private void create_trade() throws IOException {
 		
 		if(!check_fields()) {
 			System.out.println("Error on input fields!");
 			return;
 		}
 		//create with mongoDB
-
+		ArrayList<String> player_from_collection=new ArrayList<>();
 		ArrayList<String> player_from=new ArrayList<>();
-		player_from.add(retrieve_playerName_from_string(card_from1.getText()));
-		player_from.add(retrieve_playerName_from_string(card_from2.getText()));
-		player_from.add(retrieve_playerName_from_string(card_from3.getText()));
+		if(card_from_checkbox1.isSelected() && !card_from1.getText().equals("")) {
+			player_from.add(retrieve_playerName_from_string(card_from1.getText()));
+			player_from_collection.add(card_from1.getText());
+		}
+		if(card_from_checkbox2.isSelected() && !card_from2.getText().equals("")) {
+			player_from.add(retrieve_playerName_from_string(card_from2.getText()));
+			player_from_collection.add(card_from2.getText());
+		}
+		if(card_from_checkbox3.isSelected() && !card_from3.getText().equals("")) {
+			player_from.add(retrieve_playerName_from_string(card_from3.getText()));
+			player_from_collection.add(card_from3.getText());
+		}
 		ArrayList<String> player_to=new ArrayList<>();
-		player_to.add(card_to1.getText());
-		player_to.add(card_to2.getText());
-		player_to.add(card_to3.getText());
-		Trade new_trade=new Trade("", global.id_user,"",Integer.parseInt(credits_from.getText()),player_from,player_to,0);
+		if(card_to_checkbox1.isSelected() && !card_to1.getText().equals(""))
+			player_to.add(retrieve_playerName_from_string(card_to1.getText()));
+		if(card_to_checkbox2.isSelected() && !card_to2.getText().equals(""))
+			player_to.add(retrieve_playerName_from_string(card_to2.getText()));
+		if(card_to_checkbox3.isSelected() && !card_to3.getText().equals(""))
+			player_to.add(retrieve_playerName_from_string(card_to3.getText()));
+		Trade new_trade=new Trade("", global.user.username,"",Integer.parseInt(credits_to.getText())-Integer.parseInt(credits_from.getText()),player_from,player_to,0);
 		TradeMongoDriver.create_new_trade(new_trade);
 
 		//delete dalla propria collection su redis
-		for(String player:player_from){
+		for(String player:player_from_collection){
 				player_collection playerCollection=retrieve_player_from_string(player);
 				collection.delete_player_from_collection(playerCollection);
 		}
 
+
+		//reload of the page
+
+		reload_page_trades();
+	}
+
+	private void reload_page_trades() throws IOException {
+		System.out.println("Opening 'new trade' page...");
+		Stage stage = (Stage)root.getScene().getWindow();
+		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("new_trade.fxml"));
+		Scene scene = new Scene(fxmlLoader.load());
+		stage.setTitle("New trade");
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	private player_collection retrieve_player_from_string(String player) {
@@ -151,12 +191,6 @@ public class NewTradeController implements Initializable{
 		}
 		return values.get(1);
 	}
-
-	/*private ArrayList<String> ricava_player_from() {
-			ArrayList<String> player_from=new ArrayList<>();
-
-			//if()
-	}*/
 
 
 	private void open_cards_collection() {
@@ -224,7 +258,7 @@ public class NewTradeController implements Initializable{
 		}
 		
 		//check if credit fields have numeric values
-		if((credits_to.getText().matches("[0-9]*") || credits_from.getText().matches("[0-9]*"))){
+		if(!(credits_to.getText().matches("[0-9]*") || !credits_from.getText().matches("[0-9]*"))){   //inserito !
 			error_text.setText("Credits value must be an integer!");
 			return false;
 		}	
@@ -352,5 +386,60 @@ public class NewTradeController implements Initializable{
 		card_to2.setDisable(true);
 		card_to3.setDisable(true);
 	}
+
+	public void set_player_offered(MouseEvent mouseEvent) {
+
+			card_from_checkbox1.setDisable(false);
+			card_from_checkbox2.setDisable(false);
+			card_from_checkbox3.setDisable(false);
+
+			card_to_checkbox1.setDisable(true);
+			card_to_checkbox2.setDisable(true);
+			card_to_checkbox3.setDisable(true);
+
+			offer.setDisable(true);
+			want.setDisable(false);
+
+			open_cards_collection();
+	}
+
+	public void set_player_wanted(MouseEvent mouseEvent) {
+
+			card_to_checkbox1.setDisable(false);
+			card_to_checkbox2.setDisable(false);
+			card_to_checkbox3.setDisable(false);
+
+			card_from_checkbox1.setDisable(true);
+			card_from_checkbox2.setDisable(true);
+			card_from_checkbox3.setDisable(true);
+
+			offer.setDisable(false);
+			want.setDisable(true);
+
+			show_all_cards();
+	}
+
+	private void show_all_cards() {
+		//showing off cards
+		ObservableList<String> list = FXCollections.observableArrayList();
+		list.removeAll(list);	//clearing the list
+
+		//TODO retrieve cards from mongo
+
+		MongoCursor<Document> players= CardMongoDriver.retrieve_player_for_trade();
+		for (MongoCursor<Document> it = players; it.hasNext(); ) {
+			Document player = it.next();
+			//da qui ogni player ha le sue quattro informazioni e poi usarle agile
+			String card_output = "id: " + player.get("player_id") + "//name: " + player.get("fullname")
+					+ "//role: " + player.get("position") +"//team: " + player.get("team");
+			list.add(card_output);
+			//System.out.println(player.toJson());
+		}
+		card_list.getItems().clear();
+		card_list.getItems().addAll(list);
+
+
+	}
+
 
 }
