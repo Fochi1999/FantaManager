@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import com.mongodb.client.MongoCursor;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
@@ -72,6 +71,9 @@ public class NewTradeController implements Initializable{
 	@FXML private Button offer;
 	@FXML private Button want;
 	
+	private ArrayList<Document> all_cards_list = null;
+	private ArrayList<card_collection> cards_owned = null;
+	
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
@@ -95,17 +97,19 @@ public class NewTradeController implements Initializable{
         card.selectedItemProperty().addListener(new ChangeListener<String>() {
         	public void changed(ObservableValue<? extends String> changed, String oldVal, String newVal) {
 
-        	   String selItems = "";
+        		String selItems = "";
               	ObservableList<String> selected = card_list.getSelectionModel().getSelectedItems();
 
                	for (int i = 0; i < selected.size(); i++) {
             	   selItems += "" + selected.get(i); 
                	}
                	
+               	//handling formatting problems on selecting strings
                	if(!selItems.equals("")) {
-               		selected_card.setText(selItems);
-               	}
-               	   
+               		//String full_text[] = selItems.split("<>");
+               		//String text = full_text[0] + " <> " + full_text[1] + " <> " + full_text[2]; 
+               		selected_card.setText(selItems); //the card will show up on the lower Area
+               	}	
         	}
         });
 	}
@@ -119,46 +123,59 @@ public class NewTradeController implements Initializable{
 
 	
 	@FXML
-	private void create_trade() throws IOException {
+	private void create_trade() throws IOException {	
 		
 		if(!check_fields()) {
 			System.out.println("Error on input fields!");
 			return;
 		}
+		
 		//create with mongoDB
 		ArrayList<String> card_from_collection=new ArrayList<>();
+		
 		ArrayList<String> card_from=new ArrayList<>();
 		if(card_from_checkbox1.isSelected() && !card_from1.getText().equals("")) {
-			card_from.add(retrieve_cardName_from_string(card_from1.getText()));
-			card_from_collection.add(card_from1.getText());
+			String words[] = card_from1.getText().toString().split(" ");
+			card_from_collection.add(words[words.length-1]);
+			String words2[] = card_from1.getText().toString().split(" <> ");
+			card_from.add(words2[0]);
 		}
 		if(card_from_checkbox2.isSelected() && !card_from2.getText().equals("")) {
-			card_from.add(retrieve_cardName_from_string(card_from2.getText()));
-			card_from_collection.add(card_from2.getText());
+			String words[] = card_from2.getText().toString().split(" ");
+			card_from_collection.add(words[words.length-1]);
+			String words2[] = card_from2.getText().toString().split(" <> ");
+			card_from.add(words2[0]);
 		}
 		if(card_from_checkbox3.isSelected() && !card_from3.getText().equals("")) {
-			card_from.add(retrieve_cardName_from_string(card_from3.getText()));
-			card_from_collection.add(card_from3.getText());
+			String words[] = card_from3.getText().toString().split(" ");
+			card_from_collection.add(words[words.length-1]);
+			String words2[] = card_from3.getText().toString().split(" <> ");
+			card_from.add(words2[0]);
 		}
 		ArrayList<String> card_to=new ArrayList<>();
-		if(card_to_checkbox1.isSelected() && !card_to1.getText().equals(""))
-			card_to.add(retrieve_cardName_from_string(card_to1.getText()));
-		if(card_to_checkbox2.isSelected() && !card_to2.getText().equals(""))
-			card_to.add(retrieve_cardName_from_string(card_to2.getText()));
-		if(card_to_checkbox3.isSelected() && !card_to3.getText().equals(""))
-			card_to.add(retrieve_cardName_from_string(card_to3.getText()));
+		if(card_to_checkbox1.isSelected() && !card_to1.getText().equals("")) {
+			String words2[] = card_to1.getText().toString().split("<>");
+			card_to.add(words2[0]);
+		}	
+		if(card_to_checkbox2.isSelected() && !card_to2.getText().equals("")) {
+			String words2[] = card_to2.getText().toString().split("<>");
+			card_to.add(words2[0]);
+		}
+		if(card_to_checkbox3.isSelected() && !card_to3.getText().equals("")) {
+			String words2[] = card_to3.getText().toString().split("<>");
+			card_to.add(words2[0]);
+		}
 		Trade new_trade=new Trade("", global.user.username,"",Integer.parseInt(credits_to.getText())-Integer.parseInt(credits_from.getText()),card_from,card_to,0);
 		TradeMongoDriver.create_new_trade(new_trade);
 
+		System.out.println(card_from +"   "+ card_to +"   "+ card_from_collection);
+		
 		//delete dalla propria collection su redis
 		for(String card:card_from_collection){
-				card_collection cardsCollection=retrieve_card_from_string(card);
-				collection.delete_card_from_collection(cardsCollection);
+			collection.delete_card_from_collection(card);
 		}
 
-
 		//reload of the page
-
 		reload_page_trades();
 	}
 
@@ -171,42 +188,47 @@ public class NewTradeController implements Initializable{
 		stage.setScene(scene);
 		stage.show();
 	}
-
-	private card_collection retrieve_card_from_string(String player) {
-						ArrayList<String> values=new ArrayList<>();
-						String[] words=player.split("//");
-						for(String word:words){
-								String[] elem=word.split(": ");
-								values.add(elem[1]);
-						}
-						return new card_collection(Integer.parseInt(values.get(0)),values.get(1),Integer.parseInt(values.get(4)),values.get(2),values.get(3));
+/*
+	private card_collection retrieve_card_from_id(String card) {
+		ArrayList<String> values=new ArrayList<>();
+		String[] words;
+		String words2[];
+		words = card.split("<>");
+		words2 = words[words.length-1].split(" ");
+		String card_name = words2[1];
+		words2 = words[words.length-1].split(" ");
+		String card_name = words2[1];
+		values.add(elem);
+		elem = elem.substring(0, elem.length() - 1);
+		System.out.println("retrieve_cardfromString: " + elem);	//remove space
+		return new card_collection(Integer.parseInt(values.get(0)),values.get(1),Integer.parseInt(values.get(4)),values.get(2),values.get(3));
 	}
 
 	private String retrieve_cardName_from_string(String player) {
-		ArrayList<String> values=new ArrayList<>();
-		String[] words=player.split("//");
-		for(String word:words){
-			String[] elem=word.split(": ");
-			values.add(elem[1]);
-		}
-		return values.get(1);
+		String[] words=player.split(" <> ");
+		String elem=words[0];
+		elem = elem.substring(0, elem.length() - 1);	//remove space
+		System.out.println("retrieve_cardName: " + elem);
+		return elem;
 	}
 
-
+*/
 	private void open_cards_collection() {
 
 		//showing off cards
 		ObservableList<String> list = FXCollections.observableArrayList();
 		list.removeAll(list);	//clearing the list
 		
-		//TODO retrieve cards from redis collection
-		collection.apertura_pool();
-		ArrayList<card_collection> collection_of_user= collection.load_collection(global.id_user);
-
-		for(card_collection card:collection_of_user){
+		if (cards_owned == null){	//retrieve cards only one time
+			collection.apertura_pool();
+			cards_owned = collection.load_collection(global.id_user);
+			System.out.println("Card owned list retrieved from DB");
+		}
+		
+		for(card_collection card:cards_owned){
 						//da qui ogni player ha le sue quattro informazioni e poi usarle agile
-			String card_output = "id: " + card.get_id() + "//name: " + card.get_name()
-					+ "//role: " + card.get_position() +"//team: " + card.get_team() + "//quantity: " + card.get_quantity();
+			String card_output = card.get_name() + " <> Position: " + card.get_position() +" <> Team: " 
+					+ card.get_team() + " <> Quantity: " + card.get_quantity() + " <> ID: " + card.get_id();
 			list.add(card_output);
 		}
 		card_list.getItems().clear();
@@ -366,6 +388,8 @@ public class NewTradeController implements Initializable{
 			      (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
 				         credits_to.setDisable(!credits_to.isDisabled());
 				         credits_from.setDisable(!credits_from.isDisabled());
+				         credits_from.setText("0");
+				         credits_to.setText("0");
 				      });
 		
 	}
@@ -392,13 +416,32 @@ public class NewTradeController implements Initializable{
 			card_from_checkbox1.setDisable(false);
 			card_from_checkbox2.setDisable(false);
 			card_from_checkbox3.setDisable(false);
+	
+			add_from1.setDisable(true);
+			add_from2.setDisable(true);
+			add_from3.setDisable(true);
+			
+			if(card_from_checkbox1.isSelected()) {
+				add_from1.setDisable(false);
+			}
+			if(card_from_checkbox2.isSelected()) {
+				add_from2.setDisable(false);
+			}
+			if(card_from_checkbox3.isSelected()) {
+				add_from3.setDisable(false);
+			}
 
+			add_to1.setDisable(true);
+			add_to2.setDisable(true);
+			add_to3.setDisable(true);
+			
 			card_to_checkbox1.setDisable(true);
 			card_to_checkbox2.setDisable(true);
 			card_to_checkbox3.setDisable(true);
 
 			offer.setDisable(true);
 			want.setDisable(false);
+			selected_card.setText("");
 
 			open_cards_collection();
 	}
@@ -409,13 +452,32 @@ public class NewTradeController implements Initializable{
 			card_to_checkbox2.setDisable(false);
 			card_to_checkbox3.setDisable(false);
 
+			add_to1.setDisable(true);
+			add_to2.setDisable(true);
+			add_to3.setDisable(true);
+			
+			if(card_to_checkbox1.isSelected()) {
+				add_to1.setDisable(false);
+			}
+			if(card_to_checkbox2.isSelected()) {
+				add_to2.setDisable(false);
+			}
+			if(card_to_checkbox3.isSelected()) {
+				add_to3.setDisable(false);
+			}
+
+			add_from1.setDisable(true);
+			add_from2.setDisable(true);
+			add_from3.setDisable(true);
+
 			card_from_checkbox1.setDisable(true);
 			card_from_checkbox2.setDisable(true);
 			card_from_checkbox3.setDisable(true);
 
 			offer.setDisable(false);
 			want.setDisable(true);
-
+			selected_card.setText("");
+			
 			show_all_cards();
 	}
 
@@ -424,16 +486,18 @@ public class NewTradeController implements Initializable{
 		ObservableList<String> list = FXCollections.observableArrayList();
 		list.removeAll(list);	//clearing the list
 
-		//TODO retrieve cards from mongo
-
-		MongoCursor<Document> cards= CardMongoDriver.retrieve_player_for_trade();
-		for (MongoCursor<Document> it = cards; it.hasNext(); ) {
-			Document card = it.next();
+		if(all_cards_list == null) {	//retrieve cards only one time
+			all_cards_list = CardMongoDriver.retrieve_cards("");
+			System.out.println("All cards list retrieved from DB");
+		}
+		int i=0;
+		while( i < all_cards_list.size()) {
+			Document card = all_cards_list.get(i);
 			//da qui ogni player ha le sue quattro informazioni e poi usarle agile
-			String card_output = "id: " + card.get("player_id") + "//name: " + card.get("fullname")
-					+ "//role: " + card.get("position") +"//team: " + card.get("team");
+			String card_output = card.get("fullname") + " <> Position: " + card.get("position") +" <> Team: " 
+					+ card.get("team") + " <> ID: " + card.get("player_id");
 			list.add(card_output);
-			//System.out.println(player.toJson());
+			i=i+1;
 		}
 		card_list.getItems().clear();
 		card_list.getItems().addAll(list);

@@ -128,6 +128,30 @@ public class collection {
                     closePool();
             }
 
+            
+            public static void delete_card_from_collection(String card_id){  //Emmanuel
+
+            	//if(presence_card(card,global.id_user)) {
+                apertura_pool();
+                //devo aumentare solo la quantity
+                String key = "user_id:" + global.id_user + ":card_id:" + card_id + ":quantity";
+                try (Jedis jedis = pool.getResource()) {
+                    String value = jedis.get(key);
+                    Integer quantity = Integer.parseInt(value);
+                    if (quantity > 1) {
+                        jedis.set("user_id:" + global.id_user + ":card_id:" + card_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
+                    }
+                    else{
+                        jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":name", 0);
+                        jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":quantity", 0);
+                        jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":team", 0);
+                        jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":position", 0);
+                    }
+                }
+          //  }
+                closePool();
+        }
+            
             public static void add_card_to_collection(card_collection card, String retrieve_user) {
                     System.out.println("Card added to "+retrieve_user+":"+card.name);
 
@@ -181,7 +205,7 @@ public class collection {
                         return result;
             }
 
-    public void change_team_of_card(int card_id){   //funzione che potrebbe servire all' admin per cambiare il team di un certo giocatore su tutto redis (tipo se va via a gennaio)
+            public void change_team_of_card(int card_id){   //funzione che potrebbe servire all' admin per cambiare il team di un certo giocatore su tutto redis (tipo se va via a gennaio)
 
                     apertura_pool();
                     System.out.println("Which team does he play for?");
@@ -223,67 +247,4 @@ public class collection {
                 }
                 closePool();
             }
-
-            /*public static void add_player_to_collection(player_collection player){   //add to my collection
-
-                    apertura_pool();
-
-                    int user_id=1; //dovrebbe essere la variabile globale dell' id dell' utente
-                    System.out.println("player accepted:"+player.name);
-                    try (Jedis jedis = pool.getResource()) {
-
-                        jedis.set("user_id:"+global.id_user+":player_id:"+player.player_id+":name",player.name);
-                        jedis.set("user_id:"+global.id_user+":player_id:"+player.player_id+":quantity", String.valueOf(player.quantity));
-                        jedis.set("user_id:"+global.id_user+":player_id:"+player.player_id+":team",player.team);
-                        jedis.set("user_id:"+global.id_user+":player_id:"+player.player_id+":position",player.position);
-
-
-                    }
-
-                    closePool();
-            }*/
-
-/*
-            //prossime due funzioni solo per creazione collection casuale per utente user_id:1
-            static String generate_string()
-            {
-
-                int leftLimit = 97; // letter 'a'
-                int rightLimit = 122; // letter 'z'
-                int targetStringLength = 10;
-                Random random = new Random();
-
-                String generatedString = random.ints(leftLimit, rightLimit + 1)
-                        .limit(targetStringLength)
-                        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                        .toString();
-
-                return generatedString;
-
-            }
-                public static void create_collection(){
-                    apertura_pool();
-                    //String key_cart=this.crea_chiave();
-                    JedisPool pool=new JedisPool("localhost",6379);
-                    Random random=new Random();
-
-                    String[] position={"P","D","M","A"};
-                    for(int i=0;i<25;i++){
-
-                        try(Jedis jedis=pool.getResource()){
-
-                            int player_id=random.nextInt(50);
-
-                            jedis.set("user_id:"+global.id_user+":player_id:"+player_id+":name",generate_string());
-                            jedis.set("user_id:"+global.id_user+":player_id:"+player_id+":quantity", String.valueOf(random.nextInt(10)));
-                            jedis.set("user_id:"+global.id_user+":player_id:"+player_id+":team",generate_string());
-                            jedis.set("user_id:"+global.id_user+":player_id:"+player_id+":position",position[random.nextInt(4)]);
-
-                        }
-                    }
-
-                    closePool();
-                }
-*/
-
 }

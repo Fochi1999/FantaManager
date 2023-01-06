@@ -171,11 +171,12 @@ public class TradesController implements Initializable{
 
 		//devo riaggiungere i giocatori alla mia collection, visto che quando li propongo mi vengono tolti temporaneamente dalla collection
 		Trade chosen_trade=retrieve_trade();
-		for(String card:chosen_trade.get_card_from()){
+		for(String card:chosen_trade.get_card_from()){	//TODO errore qui?? fa la elimina però ritorna un errore
 			card_collection card_from= CardMongoDriver.search_player_by_name(card);
 			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
 		}
-
+		
+		selected_trade.setText("");
     	my_requests_button_onclick(); //refreshing the available trade list
     }
     

@@ -36,10 +36,10 @@ public class CardMongoDriver {
         mongoClient.close();
     }
 
-    public static MongoCursor<Document> retrieve_cards(String cards_input){
+    public static ArrayList<Document> retrieve_cards(String cards_input){
         //connecting to mongoDB
         openConnection();
-
+        ArrayList<Document> resultList = new ArrayList<>();
         MongoCursor<Document> resultDoc;
 
         //blank search field
@@ -66,13 +66,21 @@ public class CardMongoDriver {
                 return null;
             }
         }
-        return resultDoc;
+        
+        //add to arraylist
+        while(resultDoc.hasNext()) {
+        	resultList.add(resultDoc.next());
+        }
+        
+        return resultList;
     }
 
-    public static MongoCursor<Document> search_card_by(String skill, String team, String role){
+    public static ArrayList<Document> search_card_by(String skill, String team, String role){
         //connecting to mongoDB
         openConnection();
-
+        ArrayList<Document> result = new ArrayList<>();
+        MongoCursor<Document> resultDoc = null;
+        
         if(skill==null && role==null && team==null) {
             //non faccio nulla
             System.out.println("Inserisci valori");
@@ -89,12 +97,12 @@ public class CardMongoDriver {
 
 
                 try{
-                    return collection.aggregate(Arrays.asList(order,groupMultiple,match)).iterator();
+                    resultDoc = collection.aggregate(Arrays.asList(order,groupMultiple,match)).iterator();
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    return null;
                 }
 
-
+                
 
         } else if (skill!=null && team!=null && role==null) {
 
@@ -106,9 +114,9 @@ public class CardMongoDriver {
             //Bson first_five=limit(5);
 
             try{
-                return collection.aggregate(Arrays.asList(order,groupMultiple,match)).iterator();
+            	resultDoc = collection.aggregate(Arrays.asList(order,groupMultiple,match)).iterator();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                return null;
             }
 
         } else if (skill!=null && team==null && role==null) {
@@ -125,9 +133,9 @@ public class CardMongoDriver {
             //Bson first_five=limit(5);
 
             try{
-                return collection.aggregate(Arrays.asList(order,groupMultiple)).iterator();
+            	resultDoc = collection.aggregate(Arrays.asList(order,groupMultiple)).iterator();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                return null;
             }
 
         } else if (skill!=null && team!=null && role!=null) {
@@ -140,9 +148,9 @@ public class CardMongoDriver {
 
 
                 try{
-                    return collection.aggregate(Arrays.asList(match1,match2,order,first_five)).iterator();
+                	resultDoc = collection.aggregate(Arrays.asList(match1,match2,order,first_five)).iterator();
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    return null;
                 }
 
         }
@@ -152,12 +160,16 @@ public class CardMongoDriver {
             Bson match2=match(eq("position",role));
 
             try{
-                return collection.aggregate(Arrays.asList(match1,match2)).iterator();
+            	resultDoc = collection.aggregate(Arrays.asList(match1,match2)).iterator();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                return null;
             }
         }
-        return null;
+        
+        while(resultDoc.hasNext()) {
+        	result.add(resultDoc.next());
+        }
+        return result;
     }
 
 

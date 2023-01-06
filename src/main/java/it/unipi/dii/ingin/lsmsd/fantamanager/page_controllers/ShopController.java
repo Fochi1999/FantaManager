@@ -38,6 +38,7 @@ import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.util.ArrayList;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Aggregates.limit;
@@ -159,13 +160,14 @@ public class ShopController implements Initializable {
 		System.out.println("Searching for: "+ cards_input);
 		
 
-    	MongoCursor<Document> resultDoc=CardMongoDriver.retrieve_cards(cards_input);
+    	ArrayList<Document> resultDoc = CardMongoDriver.retrieve_cards(cards_input);
+    	
 
+    	int i=0;
+    	while(i < resultDoc.size()) {
+    		Document card_doc = resultDoc.get(i);
 
-		Document card_doc = resultDoc.next();
-
-		//retrieve all general_statistics and put them on the choice box
-
+			//retrieve all general_statistics and put them on the choice box
 
 			String player=card_doc.toJson();
 			//System.out.println(player);
@@ -181,22 +183,22 @@ public class ShopController implements Initializable {
 				//System.out.println(generic_skill);
 				skill.getItems().add(generic_skill);
 			}
-
-
+			i=i+1;
+    	}
 		
     	show_cards(resultDoc);
     	CardMongoDriver.closeConnection();
     	
 	}
 	
-	public void show_cards(MongoCursor<Document> result) throws ParseException {
+	public void show_cards(ArrayList<Document> result) throws ParseException {
 		
 		//showing off trades
 		ObservableList<String> list = FXCollections.observableArrayList();
     	list.removeAll(list);	//clearing the list
-    	
-    	while(result.hasNext()) {	
-    		Document card_doc = result.next();
+    	int i = 0;
+    	while(i < result.size()) {	
+    		Document card_doc = result.get(i);
     		String card_id = card_doc.get("_id").toString();
     		String card_fullname = card_doc.get("fullname").toString();
     		String card_credits = card_doc.get("credits").toString();
@@ -205,6 +207,7 @@ public class ShopController implements Initializable {
     		String card_output = card_fullname + " - Cost: " + card_credits +
     				" - Role: " + card_role + " - Team: " + card_team + " - ID: " + card_id;
     		list.add(card_output);
+    		i=i+1;
     	}
     	card_list.getItems().clear();
 		card_list.getItems().addAll(list);
