@@ -29,8 +29,6 @@ public class login {
         }
 
         global.id_user=user_doc.get("_id").toString();
-        String jsonString=user_doc.toJson();
-        System.out.println(jsonString);
         global.user=new user(nick,password,user_doc.getString("region"),user_doc.getString("email"),user_doc.getInteger("credits"),0,user_doc.getInteger("_privilege"), user_doc.getInteger("points"),user_doc.get("formations").toString());
         global.saved_formation_server=global.user.formations.get(global.curr_matchday);
         global.saved_formation_local=global.saved_formation_server;

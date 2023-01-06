@@ -4,10 +4,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.user;
 import org.bson.Document;
 
 import com.mongodb.client.MongoClient;
@@ -189,7 +194,7 @@ public class populateDB {
     public static void create_users_collection_mongoDB() throws NoSuchAlgorithmException{
 		
 		System.out.println("Creating 'User' collection...");
-		ArrayList<Document> user_list = new ArrayList();
+		ArrayList<user> user_list = new ArrayList();
 		
 		//adding the admin first
 		String admin_username = "admin";
@@ -199,20 +204,11 @@ public class populateDB {
 		int admin_collection = 0;	
 		String admin_email = generate_random_email();
 		String admin_region = generate_random_region();
-		Document admin = new Document();
-		admin.append("username", admin_username);
-		admin.append("password", admin_password);
-		admin.append("credits", admin_credits);
-		admin.append("points", admin_points);
-		admin.append("collection", admin_collection);
-		admin.append("email", admin_email);
-		admin.append("region", admin_region);
-		admin.append("privilege", 2);
+		user admin=new user(admin_username,admin_password,admin_region,admin_email,admin_credits,admin_collection,2,admin_points);
 		user_list.add(admin);
-		
 		//insert user from a file of 500k randomly generated usernames
 		try {
-			File myObj = new File("C:\\Users\\emman\\Desktop\\username_list.txt"); 
+			File myObj = new File("C:/Users/edoar/Desktop/largeDB/user.txt");
 		    Scanner myReader = new Scanner(myObj);
 		    while (myReader.hasNextLine()) {
 		    
@@ -224,18 +220,10 @@ public class populateDB {
 				int user_collection = 0;	//TODO will be increased in another function
 				String user_email = generate_random_email();
 				String user_region = generate_random_region();
-		    	
+
 				//creating document
-				Document new_user = new Document();
-				new_user.append("username", user_username);
-				new_user.append("password", user_password);
-				new_user.append("credits", user_credits);
-				new_user.append("points", user_points);
-				new_user.append("collection", user_collection);
-				new_user.append("email", user_email);
-				new_user.append("region", user_region);
-				new_user.append("privilege", 1);
-				
+
+				user new_user=new user(user_username,user_password,user_region,user_email,user_credits,user_collection,1,user_points);
 				//add
 				user_list.add(new_user);
 		    	//System.out.println(user_username);
@@ -245,8 +233,19 @@ public class populateDB {
 			MongoClient myClient = MongoClients.create(global.MONGO_URI);
 			MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
 			MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-							
-			collection.insertMany(user_list);
+			ArrayList<Document> user_list_doc=new ArrayList<>();
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String json = null;
+			for(int i=0;i<user_list.size();i++) {
+				try {
+					json = ow.writeValueAsString(user_list.get(i));
+					user_list_doc.add(Document.parse( json ));
+				} catch (JsonProcessingException e) {
+					throw new RuntimeException(e);
+				}
+			}
+
+			collection.insertMany(user_list_doc);
 			
 			myClient.close();
 		    myReader.close();
