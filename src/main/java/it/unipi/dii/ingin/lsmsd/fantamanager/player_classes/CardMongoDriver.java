@@ -18,6 +18,7 @@ import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Aggregates.match;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Indexes.descending;
+import static com.mongodb.client.model.Projections.*;
 
 public class CardMongoDriver {
 
@@ -52,7 +53,6 @@ public class CardMongoDriver {
                 return null;
             }
         }
-
         else {
             //filter
             Pattern pattern = Pattern.compile(cards_input, Pattern.CASE_INSENSITIVE);
@@ -186,4 +186,24 @@ public class CardMongoDriver {
         }
         return player;
     }
+
+    public static MongoCursor<Document> retrieve_player_for_trade(){
+        openConnection();
+
+        MongoCursor<Document> resultDoc;
+
+        //blank search field
+
+
+            try {
+                resultDoc = collection.find().projection(fields(include("player_id","fullname","team","position"))).iterator();
+            }
+            catch(Exception e) {
+                System.out.println("Error on search.");
+                return null;
+            }
+
+            return resultDoc;
+    }
+
 }
