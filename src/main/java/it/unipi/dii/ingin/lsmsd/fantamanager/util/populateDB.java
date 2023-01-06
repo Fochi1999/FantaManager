@@ -2,6 +2,8 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -10,6 +12,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.Gson;
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class;
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.user;
 import org.bson.Document;
 
@@ -21,6 +27,9 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
@@ -295,5 +304,250 @@ public class populateDB {
 		}
 		return emailAddress;
 	}
-	
+
+	public static void create_cards_collection_mongoDB(){
+
+		//connecting to mongoDB
+		String uri = "mongodb://localhost:27017";
+		MongoClient myClient = MongoClients.create(uri);
+		MongoDatabase database = myClient.getDatabase("fantamongo");
+		MongoCollection<Document> collection = database.getCollection("player_after_unicode");
+		System.out.print("Connected to mongoDB...\n");
+
+		JSONParser jsonParser = new JSONParser();
+
+		try (FileReader reader = new FileReader("json_stats/matchday_stats/kickest_stats.json")) {    //C:\Users\matte\DataMiningJupyter\fantacalcio_LSKickest_completo_portiere.json
+			//Read JSON file
+			Object obj = jsonParser.parse(reader);
+
+			JSONArray playerList = (JSONArray) obj;
+			//System.out.println(playerList);
+
+			//Iterate over player array
+			playerList.forEach(player -> findPlayerAPI((JSONObject) player,collection));
+
+		} //catch (FileNotFoundException e) {
+		//e.printStackTrace();
+		//}
+		catch (IOException e) {
+			e.printStackTrace();
+		} catch (org.json.simple.parser.ParseException e) {
+			e.printStackTrace();
+		}
+
+		myClient.close();
+		System.out.print("'Player' DB created...\n");
+
+	}
+
+	private static void findPlayerAPI(JSONObject player_kickest, MongoCollection<Document> collection) {
+		JSONParser jsonParser = new JSONParser();
+
+		try (FileReader reader = new FileReader("json_stats/APIFootball.json")) {   //C:\Users\matte\OneDrive\Desktop\LargeScale\jsonEdo\json_finali\APIFootball.json
+			//Read JSON file
+			Object obj = jsonParser.parse(reader);
+
+			JSONArray playerList = (JSONArray) obj;
+			//System.out.println(playerList);
+
+			for(int i=0; i<playerList.size(); i++) {
+
+				JSONObject player_API = (JSONObject) playerList.get(i);             //get the player json
+				JSONObject player_info = (JSONObject) player_API.get("player");    //getting the player info object 'player'
+
+				//getting player's information
+				String player_API_name = (String) player_info.get("name");  //ricezione name from API
+				//unicode for strange characters
+				//player_API_name=StringEscapeUtils.unescapeJava(player_API_name);
+
+
+				String player_kickest_name=(String)player_kickest.get("Player");  //ricezione from kickest
+
+				JSONArray player_info_stats=(JSONArray) player_API.get("statistics");
+				JSONObject player_info_statistica=(JSONObject) player_info_stats.get(0);
+				String player_API_team=(String) player_info_statistica.get("team");
+				String player_kickest_team=(String)player_kickest.get("Team");
+
+				if(player_API_name.equals(player_kickest_name) && player_API_team.equals(convert_team(player_kickest_team))){  //per risolvere problema G.Pezzella
+					System.out.println(player_API_name);
+					createPlayerDocuments(player_kickest,player_API,i,collection);
+				}
+				else{
+					//potrebbe non esserci o avere quelle stringhe strane
+					//player_API_name=StringEscapeUtils.unescapeJava(player_API_name);
+					player_API_name=trasformation(player_API_name);
+
+					if(player_API_name.equals(player_kickest_name) && player_API_team.equals(convert_team(player_kickest_team))){  //per risolvere problema G.Pezzella
+						System.out.println(player_API_name);
+						createPlayerDocuments(player_kickest,player_API,i,collection);
+					}
+				}
+
+
+			}
+
+		} //catch (FileNotFoundException e) {
+		//e.printStackTrace();
+		//}
+		catch (IOException e) {
+			e.printStackTrace();
+		} catch (org.json.simple.parser.ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void createPlayerDocuments(JSONObject player_kickest, JSONObject player_API, int id, MongoCollection<Document> collection){
+
+
+		//JSONObject player = (JSONObject) playerList.get(i);			 //get the player json
+		JSONObject player_info = (JSONObject) player_API.get("player"); 	//getting the player info object 'player'
+
+		//getting player's information
+		String playerFullname = (String)player_kickest.get("Player");  //sostituito ricezione name from APIFootball con ricezione name from kickest (matteo)
+		//System.out.println(playerFullname);
+		String playerFirstname = (String)player_info.get("firstname");
+		String playerLastname = (String)player_info.get("lastname");
+		Long playerAge = (Long) player_info.get("age");
+		if(playerAge==null){
+			//continue; //cosi ci leviamo i giocatori senza eta (in quanto probabilmente non hanno informazioni adeguate e non saranno presenti su kickest)
+		}
+		String playerNationality = (String)player_info.get("nationality");
+		String playerHeight = (String)player_info.get("height");
+		String playerWeight = (String)player_info.get("weight");
+
+		JSONObject player_birth = (JSONObject) player_info.get("birth");
+		String playerBirthDate = (String)player_birth.get("date");
+		String playerBirthPlace = (String)player_birth.get("place");
+		String playerBirthCountry =(String)player_birth.get("country");
+
+		JSONArray statistics = (JSONArray)player_API.get("statistics"); 	//getting the player's statistics array 'statistics'
+		JSONObject stats = (JSONObject)statistics.get(0); 			//retrieving the only element in the array
+
+		//JSONObject team = (JSONObject)stats.get("team");
+		String playerTeam = (String)stats.get("team");
+
+		JSONObject games = (JSONObject)stats.get("games");
+		String playerPosition =(String)games.get("position");
+
+		//retrieve career if exists
+		String player_career;
+		try{
+			//player.get("carrier").equals(null);
+			player_career = (String) player_API.get("carrier");
+		}
+		catch(Exception e){
+			player_career = "missing";
+		}
+
+		//creating the new player json file with only the needed information
+		player_class new_player = new player_class(playerFullname, playerFirstname, playerLastname, id, Math.toIntExact(playerAge), playerBirthDate, playerBirthPlace, playerBirthCountry, playerNationality,
+				playerHeight, playerWeight, playerPosition, playerTeam, player_career, 30);
+		general_statistics_class new_gen_stats = new general_statistics_class();
+		statistics_class new_stats = new statistics_class();
+		new_player.general_statistics = new_gen_stats;
+		new_player.statistics = new_stats;
+
+
+		//turning the new created player class into a json file
+		Gson gson = new Gson();
+		String json = gson.toJson(new_player);
+		Document doc = Document.parse(json); //converting the json to document
+
+		//passing the json into mongoDB
+		try {
+			collection.insertOne(doc);
+		}
+		catch(Exception e) {
+			System.out.print("MongoDB error, player " + playerFullname + " not inserted \n");
+		}
+
+
+	}
+
+	private static String trasformation(String player) {
+
+		String[] words = player.split(" ");
+		//System.out.println(words[0]);
+		if (words.length > 1) {
+			if(words.length==2)
+				player = words[0].charAt(0) + ". " + words[1];
+			else
+				player=words[0].charAt(0) + ". " + words[1]+" "+words[2];
+		} else {
+			player = words[0];
+		}
+		//System.out.println("PLAYER TRASFORM:" + player);
+		return player;
+	}
+
+
+	private static String convert_team(String team) {
+
+		switch(team){
+			case "ATA":
+				team="Atalanta";
+				break;
+			case "BOL":
+				team="Bologna";
+				break;
+			case "CAG":
+				team="Cagliari";
+				break;
+			case "EMP":
+				team="Empoli";
+				break;
+			case "FIO":
+				team="Fiorentina";
+				break;
+			case "GEN":
+				team="Genoa";
+				break;
+			case "INT":
+				team="Inter";
+				break;
+			case "JUV":
+				team="Juventus";
+				break;
+			case "LAZ":
+				team="Lazio";
+				break;
+			case "MIL":
+				team="AC Milan";
+				break;
+			case "NAP":
+				team="Napoli";
+				break;
+			case "ROM":
+				team="AS Roma";
+				break;
+			case "SAL":
+				team="Salernitana";
+				break;
+			case "SAM":
+				team="Sampdoria";
+				break;
+			case "SAS":
+				team="Sassuolo";
+				break;
+			case "SPE":
+				team="Spezia";
+				break;
+			case "TOR":
+				team="Torino";
+				break;
+			case "UDI":
+				team="Udinese";
+				break;
+			case "VEN":
+				team="Venezia";
+				break;
+			case "VER":
+				team="Verona";
+				break;
+
+
+		}
+		return team;
+	}
+
 }
