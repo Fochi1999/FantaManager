@@ -1,6 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.formation;
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import javafx.beans.property.Property;
 
 public class player_formation {
@@ -8,7 +8,7 @@ public class player_formation {
     public int id;
     public String team;
     public float vote;
-    public player_formation(player_collection p){
+    public player_formation(card_collection p){
         this.name=p.get_name();
         this.id=p.get_id();
         this.team=p.get_team().substring(0,3);

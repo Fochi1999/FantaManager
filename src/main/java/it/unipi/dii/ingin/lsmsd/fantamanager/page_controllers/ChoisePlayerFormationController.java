@@ -1,7 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ChoisePlayerFormationController implements Initializable {
-    public static ArrayList<player_collection> p;
+    public static ArrayList<card_collection> p;
 
     public static String role;
     @FXML

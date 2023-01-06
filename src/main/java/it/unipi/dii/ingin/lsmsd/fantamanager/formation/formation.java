@@ -1,7 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.formation;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
@@ -42,7 +42,7 @@ public class formation {
         modulo=new int[4];
         tot=0;
     }
-    public static void choose_player(Stage stage, ArrayList<player_collection> p, String roles) throws IOException {
+    public static void choose_player(Stage stage, ArrayList<card_collection> p, String roles) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("choise_player_formation.fxml"));
         ChoisePlayerFormationController.p=p;

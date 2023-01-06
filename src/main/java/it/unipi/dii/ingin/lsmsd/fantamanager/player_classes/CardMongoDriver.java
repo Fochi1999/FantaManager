@@ -2,7 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.player_classes;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
@@ -161,11 +161,11 @@ public class CardMongoDriver {
     }
 
 
-    public static player_collection search_player_by_name(String name) {
+    public static card_collection search_player_by_name(String name) {
 
         openConnection();
         MongoCursor<Document> resultDoc;
-        player_collection player=null;
+        card_collection player=null;
 
         Bson filter = Filters.eq("fullname",name);
         try {
@@ -180,7 +180,7 @@ public class CardMongoDriver {
             String fullname=(String) player_doc.get("fullname");
             String team = player_doc.getString("team");
             String position = player_doc.getString("position");
-            player=new player_collection(player_id,fullname,1,team,position);
+            player=new card_collection(player_id,fullname,1,team,position);
             //update_status_trade();  //TODO
 
         }

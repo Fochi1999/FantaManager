@@ -27,7 +27,7 @@ public class app extends Application {
     	try {
     		//populateDB.create_users_collection_mongoDB(5000);		//trades collection - mongo
     		//populateDB.create_trade_collection_mongoDB(10000);		//user collection - mongo
-    		//populateDB.create_user_card_collection_redis();			//user's card collection - redis
+    		populateDB.create_user_card_collection_redis();			//user's card collection - redis
     	} catch(Exception e){
     		e.printStackTrace();
     	}

@@ -10,12 +10,12 @@ public class collection {
 
             int id_user;
 
-            public ArrayList<player_collection> player_card_collection;
+            public ArrayList<card_collection> player_card_collection;
 
 
             static JedisPool pool;
 
-            public collection(int id_user,ArrayList<player_collection> player_card_collection){
+            public collection(int id_user,ArrayList<card_collection> player_card_collection){
                     this.id_user=id_user;
                     this.player_card_collection=player_card_collection;
             }
@@ -30,14 +30,10 @@ public class collection {
             }
 
 
-            public static ArrayList<player_collection> load_collection(String user_id) {
+            public static ArrayList<card_collection> load_collection(String user_id) {
 
-                //List<Map<String, String>> values = new ArrayList<>();
-                //JSONArray players = new JSONArray();
-                ArrayList<player_collection> players=new ArrayList<>();
+                ArrayList<card_collection> cards=new ArrayList<>();
 
-                //Gson gson=new Gson();
-                //ShoppingCart cart=null;
                 String key_load = crea_chiave_load(user_id);  //qui dovremmo inserire this.user_id, oppure togliere il parametro e farlo come commentato sopra
                 //System.out.println(key_load);
                 JedisPool pool=new JedisPool("localhost",6379);
@@ -54,52 +50,49 @@ public class collection {
 
                         //System.out.println(key + " " + value);
 
-                        int id = retrieve_id_player(key);
+                        int id = retrieve_id_card(key);
 
                         //JSONObject player=new JSONObject();
                         int present = 0;
-                        for (int i = 0; i < players.size(); i++) {
+                        for (int i = 0; i < cards.size(); i++) {
                             //JSONObject player = (JSONObject) players.get(i);
-                            player_collection player= players.get(i);
+                            card_collection card= cards.get(i);
 
-                            if (player.get_id() == id) {
+                            if (card.get_id() == id) {
                                 present = 1;
                                 //player.put(retrieve_key_info(key), value);
-                                retrieve_key_info(key,player,value);
+                                retrieve_key_info(key,card,value);
                                 break;
                             }
                         }
                         if (present == 0) {
-                            /*JSONObject player1 = new JSONObject();
-                            player1.put("id", id);
-                            player1.put(retrieve_key_info(key), value);
-                            players.add(player1);*/
-                            player_collection player=new player_collection(id,"",0,"","");
-                            retrieve_key_info(key,player,value);
-                            players.add(player);
+                           
+                        	card_collection card=new card_collection(id,"",0,"","");
+                            retrieve_key_info(key,card,value);
+                            cards.add(card);
                         }
 
 
                     }
                 }
                 //System.out.println(players);
-                return players;
+                return cards;
             }
 
-            private static void retrieve_key_info(String key, player_collection player,String value) {
+            private static void retrieve_key_info(String key, card_collection card,String value) {
 
                 String[] words=key.split(":");
                 String attribute=words[4];
 
                 //System.out.println(player);
 
-                player.set_key_info(attribute,value);
+                card.set_key_info(attribute,value);
 
                 //System.out.println(player);
 
             }
 
-            private static int retrieve_id_player(String key) {
+            private static int retrieve_id_card(String key) {
 
                 String[] words=key.split(":");
                 return Integer.parseInt(words[3]);
@@ -109,44 +102,44 @@ public class collection {
                 pool.close();
             }
 
-            public static void delete_player_from_collection(player_collection player){  //dalla  mia, viene sempre eliminato dall apropria, quindi non l' ho generalizzata
+            public static void delete_card_from_collection(card_collection card){  //dalla  mia, viene sempre eliminato dall apropria, quindi non l' ho generalizzata
 
 
-                    System.out.println("player deleted:"+ player);
+                    System.out.println("Card deleted: "+ card);
 
-                if(presence_player(player,global.id_user)) {
+                if(presence_card(card,global.id_user)) {
                     apertura_pool();
                     //devo aumentare solo la quantity
-                    String key = "user_id:" + global.id_user + ":player_id:" + player.player_id + ":quantity";
+                    String key = "user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity";
                     try (Jedis jedis = pool.getResource()) {
                         String value = jedis.get(key);
                         Integer quantity = Integer.parseInt(value);
                         if (quantity > 1) {
-                            jedis.set("user_id:" + global.id_user + ":player_id:" + player.player_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
+                            jedis.set("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
                         }
                         else{
-                            jedis.expire("user_id:" + global.id_user + ":player_id:" + player.player_id + ":name", 0);
-                            jedis.expire("user_id:" + global.id_user + ":player_id:" + player.player_id + ":quantity", 0);
-                            jedis.expire("user_id:" + global.id_user + ":player_id:" + player.player_id + ":team", 0);
-                            jedis.expire("user_id:" + global.id_user + ":player_id:" + player.player_id + ":position", 0);
+                            jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":name", 0);
+                            jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity", 0);
+                            jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":team", 0);
+                            jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":position", 0);
                         }
                     }
                 }
                     closePool();
             }
 
-            public static void add_player_to_collection(player_collection player, String retrieve_user) {
-                    System.out.println("player added to"+retrieve_user+":"+player.name);
+            public static void add_card_to_collection(card_collection card, String retrieve_user) {
+                    System.out.println("Card added to "+retrieve_user+":"+card.name);
 
 
-                    if(presence_player(player,retrieve_user)){
+                    if(presence_card(card,retrieve_user)){
                         apertura_pool();
                         //devo aumentare solo la quantity
-                        String key="user_id:"+retrieve_user+":player_id:"+player.player_id+":quantity";
+                        String key="user_id:"+retrieve_user+":card_id:"+card.card_id+":quantity";
                         try (Jedis jedis = pool.getResource()) {
                             String value=jedis.get(key);
                             Integer quantity=Integer.parseInt(value);
-                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":quantity", String.valueOf(quantity+1));  //TODO provare funzionamento
+                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity+1));  //TODO provare funzionamento
                         }
                     }
                     else {
@@ -154,10 +147,10 @@ public class collection {
                         //devo aggiungerlo per intero
                         try (Jedis jedis = pool.getResource()) {
 
-                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":name", player.name);
-                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":quantity", String.valueOf(player.quantity));
-                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":team", player.team);
-                            jedis.set("user_id:" + retrieve_user + ":player_id:" + player.player_id + ":position", player.position);
+                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":name", card.name);
+                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(card.quantity));
+                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":team", card.team);
+                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":position", card.position);
 
 
                         }
@@ -165,18 +158,18 @@ public class collection {
                     closePool();
             }
 
-            public static boolean presence_player(player_collection player, String retrieve_user) {
+            public static boolean presence_card(card_collection card, String retrieve_user) {
 
                         boolean result;
                         apertura_pool();
 
-                        String key="user_id:"+retrieve_user+":player_id:"+player.player_id+":name";
+                        String key="user_id:"+retrieve_user+":card_id:"+card.card_id+":name";
                         try (Jedis jedis = pool.getResource()) {
                             String value=jedis.get(key);
                             if(value==null){
                                     result=false;
                             }
-                            else if(value.equals(player.name)){  //se non è nullo qui dovrebbe entrarci, quindi forse bastava un else
+                            else if(value.equals(card.name)){  //se non è nullo qui dovrebbe entrarci, quindi forse bastava un else
                                 result=true;
                             }
                             else{
@@ -188,7 +181,7 @@ public class collection {
                         return result;
             }
 
-    public void change_team_of_player(int player_id){   //funzione che potrebbe servire all' admin per cambiare il team di un certo giocatore su tutto redis (tipo se va via a gennaio)
+    public void change_team_of_card(int card_id){   //funzione che potrebbe servire all' admin per cambiare il team di un certo giocatore su tutto redis (tipo se va via a gennaio)
 
                     apertura_pool();
                     System.out.println("Which team does he play for?");
@@ -196,7 +189,7 @@ public class collection {
 
                     String team=scanner.toString();
 
-                    String key_team="user_id:*:player_id:"+player_id+":team";
+                    String key_team="user_id:*:card_id:"+card_id+":team";
                     try (Jedis jedis = pool.getResource()) {
                         Set<String> set_keys = jedis.keys(key_team);
                         Iterator<String> it = set_keys.iterator();
@@ -209,7 +202,7 @@ public class collection {
                     closePool();
             }
 
-            public void change_position_of_player(int player_id){ //funzione che potrebbe servire all' admin per cambiare il ruolo di un certo giocatore su tutto redis
+            public void change_position_of_card(int card_id){ //funzione che potrebbe servire all' admin per cambiare il ruolo di un certo giocatore su tutto redis
 
                 apertura_pool();
 
@@ -218,7 +211,7 @@ public class collection {
 
                 String position=scanner.toString();
 
-                String key_pos="user_id:*:player_id:"+player_id+":position";
+                String key_pos="user_id:*:card_id:"+card_id+":position";
                 try (Jedis jedis = pool.getResource()) {
                     Set<String> set_keys = jedis.keys(key_pos);
                     Iterator<String> it = set_keys.iterator();

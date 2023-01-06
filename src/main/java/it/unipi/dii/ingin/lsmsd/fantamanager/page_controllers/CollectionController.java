@@ -57,12 +57,12 @@ public class CollectionController implements Initializable {
 
         String name_player=player_selected.getText();
 
-        ArrayList<player_collection> coll=collection.load_collection(global.id_user);
+        ArrayList<card_collection> coll=collection.load_collection(global.id_user);
 
         for(int i=0; i<coll.size();i++){
                 if(coll.get(i).get_name().equals(name_player)){
                         System.out.println(name_player);
-                        collection.delete_player_from_collection(coll.get(i));
+                        collection.delete_card_from_collection(coll.get(i));
                 }
         }
 
@@ -102,7 +102,7 @@ public class CollectionController implements Initializable {
 
 
 
-    public void create_table(ArrayList<player_collection> databaseObject)
+    public void create_table(ArrayList<card_collection> databaseObject)
     {
 
         //TableView<LineTable> table = new TableView<>();
@@ -135,7 +135,7 @@ public class CollectionController implements Initializable {
 
         for(int i=0; i<databaseObject.size();i++){
             //JSONObject player=(JSONObject) databaseObject.get(i);
-            player_collection player=databaseObject.get(i);
+            card_collection player=databaseObject.get(i);
 
             //System.out.println(player);
 

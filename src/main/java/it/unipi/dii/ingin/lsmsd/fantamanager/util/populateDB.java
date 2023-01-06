@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.user;
-import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import org.bson.Document;
 
 import com.mongodb.client.MongoClient;
@@ -120,10 +117,10 @@ public class populateDB {
         			String card_position = cards_list.get(random_card).getString("position");		//card position
         			String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
         			String card_team = cards_list.get(random_card).getString("team");			//card team
-        			pipe.set("user_id:"+user_id+":player_id:"+random_card+":name",card_name);
-        			pipe.set("user_id:"+user_id+":player_id:"+random_card+":quantity", random_quantity);
-        			pipe.set("user_id:"+user_id+":player_id:"+random_card+":team",card_team);
-        			pipe.set("user_id:"+user_id+":player_id:"+random_card+":position",card_position);
+        			pipe.set("user_id:"+user_id+":card_id:"+random_card+":name",card_name);
+        			pipe.set("user_id:"+user_id+":card_id:"+random_card+":quantity", random_quantity);
+        			pipe.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
+        			pipe.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
         		}
         		System.out.println(pipe.syncAndReturnAll());
         		
@@ -171,24 +168,24 @@ public class populateDB {
 			int random_array_lenght1 =  ThreadLocalRandom.current().nextInt(1, 3 + 1);
 			int random_array_lenght2 =  ThreadLocalRandom.current().nextInt(0, 3 + 1); //even 0 cards could be received
 			
-			ArrayList<String> player_from_input = new ArrayList<>();
+			ArrayList<String> card_from_input = new ArrayList<>();
 			for(int j = 0; j < random_array_lenght1; j++) {
 				int random = ThreadLocalRandom.current().nextInt(0, card_list.size()-1);
-				player_from_input.add(card_list.get(random).getString("fullname"));
+				card_from_input.add(card_list.get(random).getString("fullname"));
 			}
 			
-			ArrayList<String> player_to_input = new ArrayList<>();
+			ArrayList<String> card_to_input = new ArrayList<>();
 			for(int j = 0; j < random_array_lenght2; j++) {
 				int random = ThreadLocalRandom.current().nextInt(0, card_list.size()-1);
-				player_to_input.add(card_list.get(random).getString("fullname"));
+				card_to_input.add(card_list.get(random).getString("fullname"));
 			}
 			
 			//creating the document
 			Document doc = new Document();
 			doc.append("user_from", user_from_input);
 			doc.append("user_to", user_to_input);
-			doc.append("player_from", player_from_input);
-			doc.append("player_to", player_to_input);
+			doc.append("card_from", card_from_input);
+			doc.append("card_to", card_to_input);
 			doc.append("credits", credits_input);
 			doc.append("status", status_input);
 			

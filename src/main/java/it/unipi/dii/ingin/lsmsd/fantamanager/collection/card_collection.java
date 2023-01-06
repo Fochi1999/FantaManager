@@ -1,8 +1,8 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.collection;
 
-public class player_collection {
+public class card_collection {
 
-            int player_id;
+            int card_id;
 
             String name;
 
@@ -12,8 +12,8 @@ public class player_collection {
 
             String position;
 
-            public player_collection(int player_id, String name,int quantity, String team, String position){
-                    this.player_id=player_id;
+            public card_collection(int card_id, String name,int quantity, String team, String position){
+                    this.card_id=card_id;
                     this.name=name;
                     this.quantity=quantity;
                     this.team=team;
@@ -25,11 +25,11 @@ public class player_collection {
             //}
 
             public int get_id() {
-        return player_id;
+        return card_id;
     }
 
             public void set_id(int id) {
-        this.player_id = id;
+        this.card_id = id;
     }
 
             public String get_name(){return name;}

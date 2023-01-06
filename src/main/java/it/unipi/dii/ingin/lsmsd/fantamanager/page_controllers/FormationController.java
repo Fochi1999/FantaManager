@@ -2,7 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 public class FormationController implements Initializable {
 	
 	//Stage stage = new Stage();
-    ArrayList<player_collection> players;
+    ArrayList<card_collection> players;
 
     ArrayList<HBox> formationBoxes;
     @FXML
@@ -196,7 +196,7 @@ public class FormationController implements Initializable {
             r=roles[1];
         }
 
-        ArrayList<player_collection> selectables=new ArrayList<>();
+        ArrayList<card_collection> selectables=new ArrayList<>();
         for(int i=0;i<players.size();i++){
             if(players.get(i).get_position().equals(r)) {
                 selectables.add(players.get(i));

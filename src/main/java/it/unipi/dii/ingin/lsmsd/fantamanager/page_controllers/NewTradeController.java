@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 import com.mongodb.client.MongoCursor;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.player_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
@@ -126,34 +126,34 @@ public class NewTradeController implements Initializable{
 			return;
 		}
 		//create with mongoDB
-		ArrayList<String> player_from_collection=new ArrayList<>();
-		ArrayList<String> player_from=new ArrayList<>();
+		ArrayList<String> card_from_collection=new ArrayList<>();
+		ArrayList<String> card_from=new ArrayList<>();
 		if(card_from_checkbox1.isSelected() && !card_from1.getText().equals("")) {
-			player_from.add(retrieve_playerName_from_string(card_from1.getText()));
-			player_from_collection.add(card_from1.getText());
+			card_from.add(retrieve_cardName_from_string(card_from1.getText()));
+			card_from_collection.add(card_from1.getText());
 		}
 		if(card_from_checkbox2.isSelected() && !card_from2.getText().equals("")) {
-			player_from.add(retrieve_playerName_from_string(card_from2.getText()));
-			player_from_collection.add(card_from2.getText());
+			card_from.add(retrieve_cardName_from_string(card_from2.getText()));
+			card_from_collection.add(card_from2.getText());
 		}
 		if(card_from_checkbox3.isSelected() && !card_from3.getText().equals("")) {
-			player_from.add(retrieve_playerName_from_string(card_from3.getText()));
-			player_from_collection.add(card_from3.getText());
+			card_from.add(retrieve_cardName_from_string(card_from3.getText()));
+			card_from_collection.add(card_from3.getText());
 		}
-		ArrayList<String> player_to=new ArrayList<>();
+		ArrayList<String> card_to=new ArrayList<>();
 		if(card_to_checkbox1.isSelected() && !card_to1.getText().equals(""))
-			player_to.add(retrieve_playerName_from_string(card_to1.getText()));
+			card_to.add(retrieve_cardName_from_string(card_to1.getText()));
 		if(card_to_checkbox2.isSelected() && !card_to2.getText().equals(""))
-			player_to.add(retrieve_playerName_from_string(card_to2.getText()));
+			card_to.add(retrieve_cardName_from_string(card_to2.getText()));
 		if(card_to_checkbox3.isSelected() && !card_to3.getText().equals(""))
-			player_to.add(retrieve_playerName_from_string(card_to3.getText()));
-		Trade new_trade=new Trade("", global.user.username,"",Integer.parseInt(credits_to.getText())-Integer.parseInt(credits_from.getText()),player_from,player_to,0);
+			card_to.add(retrieve_cardName_from_string(card_to3.getText()));
+		Trade new_trade=new Trade("", global.user.username,"",Integer.parseInt(credits_to.getText())-Integer.parseInt(credits_from.getText()),card_from,card_to,0);
 		TradeMongoDriver.create_new_trade(new_trade);
 
 		//delete dalla propria collection su redis
-		for(String player:player_from_collection){
-				player_collection playerCollection=retrieve_player_from_string(player);
-				collection.delete_player_from_collection(playerCollection);
+		for(String card:card_from_collection){
+				card_collection cardsCollection=retrieve_card_from_string(card);
+				collection.delete_card_from_collection(cardsCollection);
 		}
 
 
@@ -172,17 +172,17 @@ public class NewTradeController implements Initializable{
 		stage.show();
 	}
 
-	private player_collection retrieve_player_from_string(String player) {
+	private card_collection retrieve_card_from_string(String player) {
 						ArrayList<String> values=new ArrayList<>();
 						String[] words=player.split("//");
 						for(String word:words){
 								String[] elem=word.split(": ");
 								values.add(elem[1]);
 						}
-						return new player_collection(Integer.parseInt(values.get(0)),values.get(1),Integer.parseInt(values.get(4)),values.get(2),values.get(3));
+						return new card_collection(Integer.parseInt(values.get(0)),values.get(1),Integer.parseInt(values.get(4)),values.get(2),values.get(3));
 	}
 
-	private String retrieve_playerName_from_string(String player) {
+	private String retrieve_cardName_from_string(String player) {
 		ArrayList<String> values=new ArrayList<>();
 		String[] words=player.split("//");
 		for(String word:words){
@@ -201,12 +201,12 @@ public class NewTradeController implements Initializable{
 		
 		//TODO retrieve cards from redis collection
 		collection.apertura_pool();
-		ArrayList<player_collection> collection_of_user= collection.load_collection(global.id_user);
+		ArrayList<card_collection> collection_of_user= collection.load_collection(global.id_user);
 
-		for(player_collection player:collection_of_user){
+		for(card_collection card:collection_of_user){
 						//da qui ogni player ha le sue quattro informazioni e poi usarle agile
-			String card_output = "id: " + player.get_id() + "//name: " + player.get_name()
-					+ "//role: " + player.get_position() +"//team: " + player.get_team() + "//quantity: " + player.get_quantity();
+			String card_output = "id: " + card.get_id() + "//name: " + card.get_name()
+					+ "//role: " + card.get_position() +"//team: " + card.get_team() + "//quantity: " + card.get_quantity();
 			list.add(card_output);
 		}
 		card_list.getItems().clear();
@@ -258,7 +258,7 @@ public class NewTradeController implements Initializable{
 		}
 		
 		//check if credit fields have numeric values
-		if(!(credits_to.getText().matches("[0-9]*") || !credits_from.getText().matches("[0-9]*"))){   //inserito !
+		if( (!credits_to.getText().matches("[0-9]*")) || (!credits_from.getText().matches("[0-9]*")) ){   //inserito !
 			error_text.setText("Credits value must be an integer!");
 			return false;
 		}	
@@ -387,7 +387,7 @@ public class NewTradeController implements Initializable{
 		card_to3.setDisable(true);
 	}
 
-	public void set_player_offered(MouseEvent mouseEvent) {
+	public void set_card_offered(MouseEvent mouseEvent) {
 
 			card_from_checkbox1.setDisable(false);
 			card_from_checkbox2.setDisable(false);
@@ -403,7 +403,7 @@ public class NewTradeController implements Initializable{
 			open_cards_collection();
 	}
 
-	public void set_player_wanted(MouseEvent mouseEvent) {
+	public void set_card_wanted(MouseEvent mouseEvent) {
 
 			card_to_checkbox1.setDisable(false);
 			card_to_checkbox2.setDisable(false);
@@ -426,12 +426,12 @@ public class NewTradeController implements Initializable{
 
 		//TODO retrieve cards from mongo
 
-		MongoCursor<Document> players= CardMongoDriver.retrieve_player_for_trade();
-		for (MongoCursor<Document> it = players; it.hasNext(); ) {
-			Document player = it.next();
+		MongoCursor<Document> cards= CardMongoDriver.retrieve_player_for_trade();
+		for (MongoCursor<Document> it = cards; it.hasNext(); ) {
+			Document card = it.next();
 			//da qui ogni player ha le sue quattro informazioni e poi usarle agile
-			String card_output = "id: " + player.get("player_id") + "//name: " + player.get("fullname")
-					+ "//role: " + player.get("position") +"//team: " + player.get("team");
+			String card_output = "id: " + card.get("player_id") + "//name: " + card.get("fullname")
+					+ "//role: " + card.get("position") +"//team: " + card.get("team");
 			list.add(card_output);
 			//System.out.println(player.toJson());
 		}

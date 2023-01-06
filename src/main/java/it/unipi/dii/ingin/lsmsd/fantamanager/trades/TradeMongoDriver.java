@@ -57,8 +57,8 @@ public class TradeMongoDriver {
     	if(offered_wanted.equals("offered")){
             //10 most frequent player offered in completed trades
             Bson match1=match(eq("status",1));
-            Bson u=unwind("$player_from");
-            Bson group=group("$player_from", Accumulators.sum("count",1));
+            Bson u=unwind("$card_from");
+            Bson group=group("$card_from", Accumulators.sum("count",1));
             Bson order=sort(descending("count"));
             Bson limit=limit(20);
 
@@ -72,8 +72,8 @@ public class TradeMongoDriver {
 
             //10 most frequent player wanted in completed trades
             Bson match1=match(eq("status",1));
-            Bson u=unwind("$player_to");
-            Bson group=group("$player_to",Accumulators.sum("count",1));
+            Bson u=unwind("$card_to");
+            Bson group=group("$card_to",Accumulators.sum("count",1));
             Bson order=sort(descending("count"));
             Bson limit=limit(20);
 
@@ -118,10 +118,10 @@ public class TradeMongoDriver {
 
         //preparing bsons
         Pattern pattern0 = Pattern.compile(from_input, Pattern.CASE_INSENSITIVE);
-        Bson card_from_equal = Filters.regex("player_from", pattern0);
+        Bson card_from_equal = Filters.regex("card_from", pattern0);
 
         Pattern pattern1 = Pattern.compile(to_input, Pattern.CASE_INSENSITIVE);
-        Bson card_to_equal = Filters.regex("player_to", pattern1);
+        Bson card_to_equal = Filters.regex("card_to", pattern1);
 
 
         //searching for the trades
@@ -184,11 +184,11 @@ public class TradeMongoDriver {
         while(resultDoc.hasNext()){
             Document trade_doc = resultDoc.next();
             String trade_id = trade_doc.get("_id").toString();
-            ArrayList<String> player_from = (ArrayList<String>) trade_doc.get("player_from");
-            ArrayList<String> player_to = (ArrayList<String>) trade_doc.get("player_to");
+            ArrayList<String> card_from = (ArrayList<String>) trade_doc.get("card_from");
+            ArrayList<String> card_to = (ArrayList<String>) trade_doc.get("card_to");
             Integer credits = (Integer) trade_doc.get("credits");
             String user_from = trade_doc.getString("user_from");
-            trade=new Trade(trade_id,user_from,global.id_user,credits,player_from,player_to,1);
+            trade=new Trade(trade_id,user_from,global.id_user,credits,card_from,card_to,1);
             //update_status_trade();  //TODO
 
         }
@@ -215,8 +215,8 @@ public class TradeMongoDriver {
             Document doc = new Document();
             doc.append("user_from", new_trade.user_from);
             doc.append("user_to", new_trade.user_to);
-            doc.append("player_from", new_trade.player_from);
-            doc.append("player_to", new_trade.player_to);
+            doc.append("card_from", new_trade.card_from);
+            doc.append("card_to", new_trade.card_to);
             doc.append("credits", new_trade.credits);
             doc.append("status", 0);
 
