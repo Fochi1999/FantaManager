@@ -25,7 +25,7 @@ public class OptionsMongoDriver {
 	
 	
 	
-	public static boolean edit_attribute(String attribute_name, String new_value) throws NoSuchAlgorithmException{
+	public static boolean edit_attribute(String username, String attribute_name, String new_value) throws NoSuchAlgorithmException{
 		
 		//validating inputs
 		if(attribute_name.equals("email")) {	//email
@@ -41,7 +41,7 @@ public class OptionsMongoDriver {
     	MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
     	
     	//updating attribute
-    	Bson user = Filters.eq("username", global.user.username);
+    	Bson user = Filters.eq("username", username);
     	if(attribute_name.equals("password")) {	//case of password attribute: hashing the password
     		new_value = hash.MD5(new_value);
     	}

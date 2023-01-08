@@ -176,7 +176,7 @@ public class OptionController implements Initializable {
     			return;
     		}
     		
-    		Boolean res = OptionsMongoDriver.edit_attribute("username", new_value);
+    		Boolean res = OptionsMongoDriver.edit_attribute(global.user.username,"username", new_value);
     		if(res) {
     			System.out.println("Username successfully changed to: " + new_value);
     			global.user.changeUsername(new_value);	//changing the global variable
@@ -207,7 +207,7 @@ public class OptionController implements Initializable {
     	}
     	
     	try {
-    		Boolean res = OptionsMongoDriver.edit_attribute("password", password_field.getText().toString());
+    		Boolean res = OptionsMongoDriver.edit_attribute(global.user.username,"password", password_field.getText().toString());
     		if(res) {
         		System.out.println("Password successfully changed to: " + new_value);
         		global.user.changePassword(new_value);	//changing the global variable
@@ -235,7 +235,7 @@ public class OptionController implements Initializable {
     			return;
     		}
     		
-    		Boolean res = OptionsMongoDriver.edit_attribute("email", new_value);
+    		Boolean res = OptionsMongoDriver.edit_attribute(global.user.username,"email", new_value);
     		if(!res) {
     			email_warning.setText("Invalid email input!");
     		}

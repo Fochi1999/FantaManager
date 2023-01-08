@@ -10,7 +10,7 @@ import com.mongodb.client.model.Filters;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 
-public class see_user {
+public class SeeUserMongoDriver {
 
 	public static Document search_user(String username) {
 		
@@ -55,6 +55,5 @@ public class see_user {
 		System.out.println("User '"+ username + "' successfully deleted.");
 		return;
 	}
-	
 	
 }

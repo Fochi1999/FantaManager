@@ -7,7 +7,8 @@ import org.bson.Document;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.see_user;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.SeeUserMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.scene.layout.AnchorPane;
 
 public class SeeUserController implements Initializable{
 
@@ -27,11 +29,11 @@ public class SeeUserController implements Initializable{
 	@FXML private TextFlow text_flow;
 	@FXML private Text username_field;
 	
-	@FXML
-	private Button delete_user;
+	@FXML private AnchorPane admin_area;
+	@FXML private Text admin_edit_warning;
+	@FXML private TextField admin_edit_field;
 	
-	@FXML
-	private Parent root;
+	@FXML private Parent root;
 	
 	private String username = RankingController.user_input;
 	private Document user_doc;
@@ -45,7 +47,8 @@ public class SeeUserController implements Initializable{
 		//hiding delete button from normal users
 		int priv = global.user.get_privilege();
     	if(priv < 2){
-    		delete_user.setVisible(false);
+    		admin_area.setVisible(false);
+    		admin_edit_warning.setText("");
     	}
     	
     	search_user();
@@ -69,7 +72,7 @@ public class SeeUserController implements Initializable{
 	
 	protected void search_user() {
 		
-		user_doc = see_user.search_user(username);
+		user_doc = SeeUserMongoDriver.search_user(username);
 		if(user_doc == null) { //handling user not found error
 			Text t1 = new Text("An error has occurred while searching for the user. Please, exit the page and try again later.");
 			t1.setStyle("-fx-font: 30 system;");
@@ -90,8 +93,44 @@ public class SeeUserController implements Initializable{
 	
 	public void click_delete() throws IOException{
 		
-		see_user.delete_user(username);
+		SeeUserMongoDriver.delete_user(username);
 		click_back();	//automatically go back to the ranking page
+	}
+	
+	public void edit_username() {
+		
+		String new_value = admin_edit_field.getText();
+		if(new_value.equals("")) {
+			admin_edit_warning.setText("Empty username field");
+			System.out.println("Empty field!");
+			return;
+		}
+		admin_edit_field.setText("");
+		
+		try {
+    		Boolean find = OptionsMongoDriver.find_duplicate("username",new_value);	
+    		if(find) {
+    			admin_edit_warning.setText("Username already in use!");
+    			System.out.println("Username already in use!");
+    			return;
+    		}
+    		
+    		Boolean res = OptionsMongoDriver.edit_attribute(username, "username", new_value);
+    		if(res) {
+    			System.out.println("Username successfully changed to: " + new_value);
+    			global.user.changeUsername(new_value);	//changing the global variable
+    			admin_edit_warning.setText("Username successfully changed. An email has been sent to the user for more information about.");
+    			username = new_value;
+    			username_field.setText(username+"'s");
+    		}
+    		else {
+    			admin_edit_warning.setText("Error! Try again later");
+    		}
+    		
+    	}
+    	catch(Exception e) {
+    		System.out.println(e);
+    	}
 	}
 	
 }

@@ -83,15 +83,29 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <Button fx:id="delete_user" layoutX="67.0" layoutY="247.0" mnemonicParsing="false" onMouseClicked="#click_delete" prefHeight="38.0" prefWidth="128.0" style="-fx-background-color: RED;" text="Delete user">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Button>
       <Button fx:id="back1" layoutX="150.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#click_home" prefHeight="38.0" prefWidth="90.0" text="Home">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
+      <AnchorPane fx:id="admin_area" layoutX="32.0" layoutY="256.0" prefHeight="258.0" prefWidth="198.0" style="-fx-border-color: RED; -fx-border-width: 3; -fx-border-radius: 8;">
+         <children>
+            <Button fx:id="admin_delete" layoutX="40.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#click_delete" prefHeight="38.0" prefWidth="118.0" style="-fx-background-color: RED;" text="Delete user">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="admin_edit_button" layoutX="39.0" layoutY="158.0" mnemonicParsing="false" onMouseClicked="#edit_username" prefHeight="38.0" prefWidth="118.0" style="-fx-background-color: RED;" text="Edit username">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <TextField fx:id="admin_edit_field" layoutX="16.0" layoutY="210.0" prefHeight="26.0" prefWidth="166.0" promptText="Insert new username here..." />
+            <Text fx:id="admin_edit_warning" fill="RED" layoutX="26.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="145.63238525390625">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
