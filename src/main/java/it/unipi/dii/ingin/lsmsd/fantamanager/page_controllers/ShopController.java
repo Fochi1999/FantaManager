@@ -164,7 +164,7 @@ public class ShopController implements Initializable {
     	
 
     	int i=0;
-    	while(i < resultDoc.size()) {
+    	//while(i < resultDoc.size()) {  //questa cosa va fatta una volta sola
     		Document card_doc = resultDoc.get(i);
 
 			//retrieve all general_statistics and put them on the choice box
@@ -183,8 +183,8 @@ public class ShopController implements Initializable {
 				//System.out.println(generic_skill);
 				skill.getItems().add(generic_skill);
 			}
-			i=i+1;
-    	}
+			//i=i+1;
+    	//}
 		
     	show_cards(resultDoc);
     	CardMongoDriver.closeConnection();
