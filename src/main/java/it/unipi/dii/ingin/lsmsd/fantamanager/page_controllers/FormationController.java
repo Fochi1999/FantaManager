@@ -198,8 +198,11 @@ public class FormationController implements Initializable {
 
         ArrayList<card_collection> selectables=new ArrayList<>();
         for(int i=0;i<players.size();i++){
-            if(players.get(i).get_position().equals(r)) {
+
+            if(players.get(i).get_position().substring(0,1).equals(r)) {
+
                 selectables.add(players.get(i));
+
             }
         }
 
