@@ -4,7 +4,6 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -15,7 +14,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +37,7 @@ public class calculate_matchday {
         // Access a Collection
         MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
 
-        try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){  //TODO prova a migliorare la query per prendere direttamente la partita in questione
+        try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){
             while(cursor.hasNext()) {
                 String doc = cursor.next().toJson();
                 System.out.println(doc);
@@ -48,20 +46,50 @@ public class calculate_matchday {
 
                 JSONObject formation= (JSONObject) json_formation.get("formations");
                 JSONObject match = (JSONObject) formation.get(String.valueOf(matchday));
+                JSONArray modulo=(JSONArray) match.get("modulo");
 
                 JSONObject cards = (JSONObject) match.get("players");
                 System.out.println(cards);
 
                 String username= (String) json_formation.get("username");
 
+                riazzera_vote_card_of_team(cards);
+
                 for (int i = 0; i < 11; i++) { //TODO farla a modo, qui prende solo i primi 11
                     JSONObject card=(JSONObject) cards.get(String.valueOf(i));
                     float score=player_score.get(card.get("name"));
                     //inserisce il voto di ogni giocatore in formation   //TODO ragionare se sia corretto o meno avere questa ridondanza di avere il voto sia qui che sulle cards
-                    Bson filter = Filters.and(eq("username", username));
-                    Bson update1 = Updates.set("formations." + matchday + ".players."+i+".vote",score);
-                    UpdateOptions options = new UpdateOptions().upsert(true);
-                    System.out.println(coll.updateOne(filter, update1, options));
+                    if(score==-5000){
+                        //se invece non gioca, l' inserimento viene fatto in take_card_from_bench
+                        score=take_card_from_bench(i,player_score,cards,modulo,username,matchday);
+
+                        //e in quello che non ha giocato ma era schierato titolare metto null
+                        if(score!=0) {
+                            System.out.println("titolare sostituito:" + card.get("name"));
+                            Bson filter = Filters.and(eq("username", username));
+                            Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", null);
+                            UpdateOptions options = new UpdateOptions().upsert(true);
+                            System.out.println(coll.updateOne(filter, update1, options));
+
+                            //setto voto anche nella variabile cards
+                            card.put("vote", null);
+                        }
+                        else{
+                            //altrimenti significa che nemmeno quelli della panchina erano validi o erano gia presi in altre posizioni, quindi il voto resta zero per quello che era titolare e non ha avuto rimpiazzo dalla panchina
+                            System.out.println(card.get("name")+" non sara rimpiazzato");
+                        }
+                    }
+                    else {
+
+                        System.out.println("titolare"+card.get("name"));
+                        Bson filter = Filters.and(eq("username", username));
+                        Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", score);
+                        UpdateOptions options = new UpdateOptions().upsert(true);
+                        System.out.println(coll.updateOne(filter, update1, options));
+
+                        //setto voto anche nella variabile cards
+                        card.put("vote",score);
+                    }
                     total_score+=score;
                 }
 
@@ -75,6 +103,113 @@ public class calculate_matchday {
             throw new RuntimeException(e);
         }
 
+
+    }
+
+    private static float take_card_from_bench(int i, Map<String, Float> player_score, JSONObject cards, JSONArray modulo, String username, int matchday) {
+
+        MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
+
+        // Access a Database
+        MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
+
+        // Access a Collection
+        MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
+
+        float score = 0;
+        int place_of_bench=0;
+
+                Long num_dif= (Long) modulo.get(1);
+                Long num_mid= (Long) modulo.get(2);
+                Long num_att= (Long) modulo.get(3);
+
+                if(i==0){
+                    //portiere
+                    JSONObject card=(JSONObject) cards.get(String.valueOf(11)); //primo in panchina
+                    score=player_score.get(card.get("name"));
+                    if(score==-5000 || (Double)card.get("vote")!=0){
+                        card=(JSONObject) cards.get(String.valueOf(12));  //secondo in panchina
+                        score=player_score.get(card.get("name"));
+                        if(score==-5000 || (Double)card.get("vote")!=0){
+                            return 0; //non avra rimpiazzo dalla panchina
+                        }
+                        place_of_bench=12;
+                    }
+                    else{
+                        place_of_bench=11;
+                    }
+                }
+                else if(i<=num_dif){
+                        //difensore
+                    JSONObject card=(JSONObject) cards.get(String.valueOf(13)); //primo in panchina
+                    score=player_score.get(card.get("name"));
+                    if(score==-5000 || (Float)card.get("vote")!=0){
+                        card=(JSONObject) cards.get(String.valueOf(14));  //secondo in panchina
+                        score=player_score.get(card.get("name"));
+                        if(score==-5000 || (Float)card.get("vote")!=0){
+                            return 0;//non avra rimpiazzo dalla panchina
+                        }
+                        place_of_bench=14;
+                    }
+                    else{
+                        place_of_bench=13;
+                    }
+
+                } else if (i<=num_dif+num_mid) {
+                    //centrocampista
+                    JSONObject card=(JSONObject) cards.get(String.valueOf(15)); //primo in panchina
+                    score=player_score.get(card.get("name"));
+                    if(score==-5000 || (Float)card.get("vote")!=0){
+                        card=(JSONObject) cards.get(String.valueOf(16));  //secondo in panchina
+                        score=player_score.get(card.get("name"));
+                        if(score==-5000 || (Float)card.get("vote")!=0){
+                            return 0;//non avra rimpiazzo dalla panchina
+                        }
+                        place_of_bench=16;
+                    }
+                    else{
+                        place_of_bench=15;
+                    }
+                }
+                else{
+                    //attaccante
+                    JSONObject card=(JSONObject) cards.get(String.valueOf(17)); //primo in panchina
+                    score=player_score.get(card.get("name"));
+                    if(score==-5000 || (Double)card.get("vote")!=0){
+                        card=(JSONObject) cards.get(String.valueOf(18));  //secondo in panchina
+                        score=player_score.get(card.get("name"));
+                        if(score==-5000 || (Double)card.get("vote")!=0){
+                            return 0;//non avra rimpiazzo dalla panchina
+                        }
+                        place_of_bench=18;
+                    }
+                    else{
+                        place_of_bench=17;
+                    }
+                }
+
+        JSONObject card=(JSONObject) cards.get(String.valueOf(place_of_bench));
+        System.out.println("dalla panchina:"+card.get("name"));
+        System.out.println("score dalla panchina:"+player_score.get(card.get("name")));
+
+        Bson filter = Filters.and(eq("username", username));
+        Bson update1 = Updates.set("formations." + matchday + ".players."+place_of_bench+".vote",score);
+        UpdateOptions options = new UpdateOptions().upsert(true);
+        System.out.println(coll.updateOne(filter, update1, options));
+
+        //setto voto anche nella variabile cards
+        card.put("vote",score);
+
+
+        return score;
+    }
+
+    private static void riazzera_vote_card_of_team(JSONObject cards) {
+
+       for(int i=0;i<18;i++){
+           JSONObject card=(JSONObject) cards.get(String.valueOf(i));
+           card.put("vote", Float.valueOf(0));
+       }
 
     }
 
@@ -173,7 +308,7 @@ public class calculate_matchday {
                             - Float.parseFloat(pen_goals_conceded)/2;
                 }
                 else{
-                    score=0;
+                    score=-5000;  //per riconoscere che non ha giocato
                 }
 
                 //System.out.println(score);
