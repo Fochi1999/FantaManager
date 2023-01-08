@@ -7,13 +7,18 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ChoiceBox;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.json.simple.parser.ParseException;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.see_card;
@@ -24,13 +29,17 @@ public class SeeCardController implements Initializable{
 	@FXML private Text fullname_field;
 	@FXML private TextField team_field;
 	@FXML private TextField position_field;
-	@FXML private TextFlow text_flow;
+	@FXML private TextArea text_area;
 	
 	@FXML private Text buy_card_text;
 	@FXML private Button buy_card;
 	
-	@FXML
-	private Parent root;
+	@FXML private ChoiceBox matchday_list;
+	@FXML private Text matchday_error;
+	
+	@FXML private Parent root;
+	
+	private int last_updated_matchday;
 	
 	private Document card_doc; //saving the card's document 
 	
@@ -39,8 +48,16 @@ public class SeeCardController implements Initializable{
 		
 		buy_card.setDisable(true);	//disabling the buy button
 		buy_card_text.setText(""); 	//setting to empty the error message string
+		matchday_error.setText("");
+		text_area.setWrapText(true);
+		
 		search_card();
 		get_general_info();
+		
+		last_updated_matchday = 1;	//TODO implementare 
+		for(int i=1; i<=last_updated_matchday; i++) {
+			matchday_list.getItems().add(i);
+		}
 	}
 	
 	
@@ -68,9 +85,8 @@ public class SeeCardController implements Initializable{
 		card_doc = see_card.search_card(card_id);
     	
 		if(card_doc == null) {	//handling error
-			Text t1 = new Text("An error has occurred while searching for the card. Please, exit the page and try again later.");
-			t1.setStyle("-fx-font: 30 system;");
-			text_flow.getChildren().add(t1);
+			String t = ("An error has occurred while searching for the card. Please, exit the page and try again later.");
+			text_area.setText(t);;
 			return;
 		}
 		
@@ -84,14 +100,34 @@ public class SeeCardController implements Initializable{
 	
 	public void get_general_info() {
 		
-		//cleaning the field
-		text_flow.getChildren().clear();
+		matchday_error.setText("");
+		matchday_list.setValue(null);
 		
-		//showing up the text
 		String text = see_card.get_general_info(card_doc);
-		Text t1 = new Text(text);
-		t1.setStyle("-fx-font: 16 system;");
-		text_flow.getChildren().add(t1);
+		text_area.setText(text);
+	}
+	
+	public void get_general_stats() throws ParseException{
+		
+		matchday_error.setText("");
+		matchday_list.setValue(null);
+		
+		String text = see_card.get_general_stats(card_doc);
+		text_area.setText(text);
+	}
+	
+	public void get_matchday_info() {
+		
+		matchday_error.setText("");
+		if(matchday_list.getValue() == null) {	//error handling
+			System.out.println("Insert a matchday value.");
+			matchday_error.setText("Insert a matchday value");
+			return;
+		}
+		
+		int matchday = Integer.parseInt(matchday_list.getValue().toString());
+		String text = see_card.get_matchday_info(card_doc,matchday);
+		text_area.setText(text);
 	}
 	
 }

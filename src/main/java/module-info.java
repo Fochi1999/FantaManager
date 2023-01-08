@@ -9,7 +9,7 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
-    
+    requires org.json;
     requires org.mongodb.driver.core;
     requires org.mongodb.bson;
     requires org.mongodb.driver.sync.client;
