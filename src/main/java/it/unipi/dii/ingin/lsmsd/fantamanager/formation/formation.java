@@ -67,7 +67,7 @@ public class formation {
     public static int get_index( String role,int[] mod){
         int index;
         String[] numbers=role.split("-");
-        String[] positions= {"P","D","M","A"};
+        String[] positions= {"G","D","M","A"};
         if(numbers.length==2){
             //TITOLARE
             index=0;

@@ -24,6 +24,8 @@ import static com.mongodb.client.model.Projections.*;
 
 public class calculate_matchday {
 
+
+
     public static void calulate_user_team_score(int matchday,Map<String,Float> player_score){
 
         Float total_score = Float.valueOf(0);
@@ -37,27 +39,38 @@ public class calculate_matchday {
         // Access a Collection
         MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
 
-        try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formation"), include("username"))).iterator()){  //TODO prova a migliorare la query per prendere direttamente la partita in questione
-                while(cursor.hasNext()) {
-                    String formation = cursor.next().toJson();
-                    //System.out.println(player);
-                    JSONParser parser = new JSONParser();
-                    JSONObject json_formation = (JSONObject) parser.parse(formation);
+        try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){  //TODO prova a migliorare la query per prendere direttamente la partita in questione
+            while(cursor.hasNext()) {
+                String doc = cursor.next().toJson();
+                System.out.println(doc);
+                JSONParser parser = new JSONParser();
+                JSONObject json_formation = (JSONObject) parser.parse(doc);
 
-                    JSONObject match = (JSONObject) json_formation.get("'" + matchday + "'");
+                JSONObject formation= (JSONObject) json_formation.get("formations");
+                JSONObject match = (JSONObject) formation.get(String.valueOf(matchday));
 
-                    ArrayList<String> cards = (ArrayList<String>) match.get("players");
+                JSONObject cards = (JSONObject) match.get("players");
+                System.out.println(cards);
 
-                    for (int i = 0; i < 11; i++) { //TODO farla a modo, qui prende solo i primi 11
-                        total_score += player_score.get(cards.get(i));
-                    }
-                    String username= (String) json_formation.get("username");
-                    //TODO controllo di questa query
+                String username= (String) json_formation.get("username");
+
+                for (int i = 0; i < 11; i++) { //TODO farla a modo, qui prende solo i primi 11
+                    JSONObject card=(JSONObject) cards.get(String.valueOf(i));
+                    float score=player_score.get(card.get("name"));
+                    //inserisce il voto di ogni giocatore in formation   //TODO ragionare se sia corretto o meno avere questa ridondanza di avere il voto sia qui che sulle cards
                     Bson filter = Filters.and(eq("username", username));
-                    Bson update1 = Updates.set("formation." + matchday + ".tot",total_score);
+                    Bson update1 = Updates.set("formations." + matchday + ".players."+i+".vote",score);
                     UpdateOptions options = new UpdateOptions().upsert(true);
                     System.out.println(coll.updateOne(filter, update1, options));
+                    total_score+=score;
                 }
+
+                //TODO controllo di questa query su tutti gli users
+                Bson filter = Filters.and(eq("username", username));
+                Bson update1 = Updates.set("formations." + matchday + ".tot",total_score);
+                UpdateOptions options = new UpdateOptions().upsert(true);
+                System.out.println(coll.updateOne(filter, update1, options));
+            }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -65,7 +78,7 @@ public class calculate_matchday {
 
     }
 
-    public static void calculate_player_score(int matchday) {
+    public static void calculate_card_score(int matchday) {
 
         Map<String,Float> player_score=new HashMap<String,Float>();  //per calcolo score di un team di un player
 

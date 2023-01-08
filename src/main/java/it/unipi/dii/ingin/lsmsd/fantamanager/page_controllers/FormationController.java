@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.json.simple.parser.ParseException;
 
 public class FormationController implements Initializable {
 	
@@ -79,16 +80,16 @@ public class FormationController implements Initializable {
             HBox act= formationBoxes.get(i);
             String role;
             if(i==0){
-                role="P";
+                role="G";    //Goalkeeper
             }
             else if(i==1){
-                role="D";
+                role="D";    //Defender
             }
             else if(i==2){
-                role="M";
+                role="M";    //Midfielder
             }
             else{
-                role="A";
+                role="A";   //Attacker
             }
             role+="-";
             for(int j = 0; j<Integer.parseInt(modulo[i]);j++){
@@ -129,12 +130,13 @@ public class FormationController implements Initializable {
 
 
     @FXML
-    protected void click_save_formation() throws IOException {
+    protected void click_save_formation() throws IOException, ParseException {
 
         if(global.saved_formation_local.isValid()){
             click_home();
             global.user.formations.put(global.curr_matchday,global.saved_formation_local);
-            formationMongoDriver.change_formation();
+            //formationMongoDriver.change_formation();
+            formationMongoDriver.insert_formation();
 
         }
         else {

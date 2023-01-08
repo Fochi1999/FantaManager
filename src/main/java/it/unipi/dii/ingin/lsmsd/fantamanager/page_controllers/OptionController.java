@@ -1,5 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday;
+import it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday.*;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.event.ActionEvent;
@@ -20,6 +22,7 @@ import java.util.ResourceBundle;
 
 import javafx.scene.control.TextField;
 
+import static it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday.*;
 import static it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class.*;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 
@@ -86,8 +89,14 @@ public class OptionController implements Initializable {
             calculate_button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
                     //System.out.println("QUI INSERIRE COME CALCOLARE LA GIORNATA");
-                    retrieve_info_matchday((Integer) matchday_list.getValue());
-                    calculate_matchday((Integer) matchday_list.getValue());
+					//qui da player_class
+                    //retrieve_matchday((Integer) matchday_list.getValue());
+                    //calculate_matchday((Integer) matchday_list.getValue());
+					//calculate_player_score((Integer) matchday_list.getValue());
+
+					//qui da admin/calculate_matchday
+					retrieve_info_matchday((Integer) matchday_list.getValue());
+					calculate_card_score((Integer) matchday_list.getValue());
                 }
             });
         }
