@@ -171,27 +171,25 @@ public class TradeMongoDriver {
     public static Trade search_trade_byId(String id_trade) {
 
         openConnection();
-        MongoCursor<Document> resultDoc;
+        Document trade_doc;
         Trade trade = null;
 
         Bson filter = Filters.eq("_id",new ObjectId(id_trade));
         try {
-            resultDoc = collection.find(filter).iterator();
+            trade_doc = collection.find(filter).first();
         } catch (Exception e) {
             System.out.println("An error has occured while viewing trades!");
             return null;
         }
-        while(resultDoc.hasNext()){
-            Document trade_doc = resultDoc.next();
-            String trade_id = trade_doc.get("_id").toString();
-            ArrayList<String> card_from = (ArrayList<String>) trade_doc.get("card_from");
-            ArrayList<String> card_to = (ArrayList<String>) trade_doc.get("card_to");
-            Integer credits = (Integer) trade_doc.get("credits");
-            String user_from = trade_doc.getString("user_from");
-            trade=new Trade(trade_id,user_from,global.id_user,credits,card_from,card_to,1);
-            //update_status_trade();  //TODO
+        
+        String trade_id = trade_doc.get("_id").toString();
+        ArrayList<String> card_from = (ArrayList<String>) trade_doc.get("card_from");
+        ArrayList<String> card_to = (ArrayList<String>) trade_doc.get("card_to");
+        int credits = Integer.valueOf(trade_doc.get("credits").toString());
+        String user_from = trade_doc.getString("user_from");
+        trade=new Trade(trade_id,user_from,global.id_user,credits,card_from,card_to,1);
+        //update_status_trade();  //TODO
 
-        }
         return trade;
     }
 

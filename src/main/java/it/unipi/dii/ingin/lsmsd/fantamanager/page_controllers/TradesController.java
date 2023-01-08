@@ -94,7 +94,6 @@ public class TradesController implements Initializable{
                
                //calling the function only if a trade is selected
                if(!selected_trade.getText().isEmpty()) {
-				   //chosen_trade=retrieve_trade(selected_trade.getText());
 				   activate_buttons(selected_trade.getText());
 			   }
            }
@@ -108,7 +107,9 @@ public class TradesController implements Initializable{
 		
 		String words_arr[] = trade_text.split(" ");
 		String user_in = words_arr[words_arr.length-4]; //is the position where the user is saved in the string
-		if(myuser.equals(user_in)){
+		String status = words_arr[2];
+		
+		if(myuser.equals(user_in) && status.equals("PENDING")){
 			delete_button.setDisable(false);
 		}
 
@@ -159,22 +160,22 @@ public class TradesController implements Initializable{
     		return;
     	}
     	
+		//devo riaggiungere i giocatori alla mia collection, visto che quando li propongo mi vengono tolti temporaneamente dalla collection
+		Trade chosen_trade=retrieve_trade();
+		System.out.println(chosen_trade);
+		for(String card:chosen_trade.get_card_from()){
+			card_collection card_from= CardMongoDriver.search_player_by_name(card);
+			System.out.println(card);
+			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
+		}
+		
+		//delete
     	String words_arr[] = trade_text.split(" ");
 		ObjectId trade_id = new ObjectId(words_arr[words_arr.length-1]);
 		System.out.println("Deleting trade with object id: " + trade_id);
-		
-
 		TradeMongoDriver.delete_my_trade(trade_id);
     	
-    	//myClient.close();
-		TradeMongoDriver.closeConnection();
-
-		//devo riaggiungere i giocatori alla mia collection, visto che quando li propongo mi vengono tolti temporaneamente dalla collection
-		Trade chosen_trade=retrieve_trade();
-		for(String card:chosen_trade.get_card_from()){	//TODO errore qui?? fa la elimina però ritorna un errore
-			card_collection card_from= CardMongoDriver.search_player_by_name(card);
-			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
-		}
+    	TradeMongoDriver.closeConnection();
 		
 		selected_trade.setText("");
     	my_requests_button_onclick(); //refreshing the available trade list
@@ -184,7 +185,7 @@ public class TradesController implements Initializable{
 	public void show_all_button_onclick() {
 
     	
-    	show_trades(TradeMongoDriver.trades_pending());
+    	show_trades(TradeMongoDriver.trades_pending(),false);
 		TradeMongoDriver.closeConnection();
 
 	}
@@ -192,7 +193,7 @@ public class TradesController implements Initializable{
 	public void my_requests_button_onclick() {
 		
 		String my_user = global.user.username;
-		show_trades(TradeMongoDriver.search_user(my_user));
+		show_trades(TradeMongoDriver.search_user(my_user),true);
 		TradeMongoDriver.closeConnection();
 	}
 	
@@ -201,12 +202,12 @@ public class TradesController implements Initializable{
 		String user_input = search_card_from.getText();
 		String card_input = search_card_to.getText();
 		if(!user_input.isEmpty() || !card_input.isEmpty()) { //not searching if the 'search' button is clicked when the text fields are empty
-    		show_trades(TradeMongoDriver.search_trade(user_input, card_input));
+    		show_trades(TradeMongoDriver.search_trade(user_input, card_input),false);
 		}
 		TradeMongoDriver.closeConnection();
 	}
 	
-	public void show_trades(MongoCursor<Document> result) {
+	public void show_trades(MongoCursor<Document> result, Boolean status) {
 		
 		//showing off trades
 		ObservableList<String> list = FXCollections.observableArrayList();
@@ -215,13 +216,27 @@ public class TradesController implements Initializable{
     	
     	while(result.hasNext()) {	
     		Document trade_doc = result.next();
+    		String trade_output="";
+    		
+    		if(status) {
+    			String trade_status = trade_doc.get("status").toString();
+    			trade_output = trade_output + "??? Status: ";
+    			if(trade_status.equals("1")) {
+    				trade_output = trade_output + "COMPLETED \n";
+    			}
+    			else {
+    				trade_output = trade_output + "PENDING \n";
+    			}
+    		}
+    		
     		String trade_id = trade_doc.get("_id").toString();
     		String card_from = trade_doc.get("card_from").toString();
     		String card_to = trade_doc.get("card_to").toString();
     		String credits = trade_doc.get("credits").toString();
     		String user_from = trade_doc.getString("user_from");
-    		String trade_output = ">> Players offered: " + card_from + " \n<< Players wanted: " + card_to 
+    		trade_output = trade_output + ">> Players offered: " + card_from + " \n<< Players wanted: " + card_to 
     				+ " \n$$$ Credits: " + credits +" \n--- Trade request made by: " + user_from + " \n%% trade_id: " + trade_id;
+    		
     		list.add(trade_output);
     	}
     	trade_list.getItems().clear();
@@ -249,15 +264,10 @@ public class TradesController implements Initializable{
 
 
 	public Trade retrieve_trade() {
-				String words_arr[] = selected_trade.getText().split("\n");
-
-				String elem = null;
-
-				for(int i=0;i< words_arr.length;i++){
-						elem=words_arr[i].split(": ")[1];
-
-				}
-				return TradeMongoDriver.search_trade_byId(elem);  //elem ora contiene l' id del trade
+				String words_arr[] = selected_trade.getText().split(" ");
+				String elem = words_arr[words_arr.length-1];
+				Trade trade = TradeMongoDriver.search_trade_byId(elem);
+				return trade;  //elem ora contiene l' id del trade
 	}
 	public void accept_trade(MouseEvent mouseEvent) {
 
@@ -279,6 +289,8 @@ public class TradesController implements Initializable{
 
 				//update status trade
 				TradeMongoDriver.update_trade(chosen_trade,"status");
+				accept_button.setDisable(true);
+				delete_button.setDisable(true);
 				show_all_button_onclick();
 	}
 }
