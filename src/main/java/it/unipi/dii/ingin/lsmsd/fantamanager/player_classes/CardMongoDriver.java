@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import static com.mongodb.client.model.Accumulators.first;
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Aggregates.match;
 import static com.mongodb.client.model.Filters.eq;
@@ -86,18 +87,26 @@ public class CardMongoDriver {
             System.out.println("Inserisci valori");
         } else if(skill!=null && role!=null && team==null){
 
+            System.out.println("skill and role");
 
+            //primo per ogni squadra per quel ruolo per quella skill
 
-            Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append("fullname",new Document("$first","$fullname"))
-                    .append("credits",new Document("$first","$credits")).append("id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")));
-            Bson match=match(eq("_id.position",role));
+            //Bson group= new Document("$group",new Document("team","$team").append("fullname",new Document("$first","$fullname"))
+              //      .append("credits",new Document("$first","$credits")).append("_id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")));
+            Bson group=group("$team", first("fullname","$fullname"), first("credits","$credits"), first("position","$position"),
+                    first("team","$team"), first("id","$_id"));
+            Bson match=match(eq("position",role));
             Bson order=sort(descending((String) skill));
+            Bson p1=project(fields(excludeId(),include("fullname"),include("credits"),computed("_id","$id"),include("team"),include("position")));
             //Bson first_five=limit(5);
 
 
 
                 try{
-                    resultDoc = collection.aggregate(Arrays.asList(order,groupMultiple,match)).iterator();
+                    resultDoc = collection.aggregate(Arrays.asList(match,order,group,p1)).iterator();
+                    //while (resultDoc.hasNext()) {
+                      //  System.out.println(resultDoc.next().toJson());
+                    //}
                 } catch (Exception e) {
                     return null;
                 }
@@ -106,15 +115,19 @@ public class CardMongoDriver {
 
         } else if (skill!=null && team!=null && role==null) {
 
+            //primo per ogni ruolo di una determinata squadra con un determinato skill
 
-            Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append("fullname",new Document("$first","$fullname"))
-                    .append("credits",new Document("$first","$credits")).append("id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")));
-            Bson match=match(eq("_id.team",team));
+            //Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append("fullname",new Document("$first","$fullname"))
+                    //.append("credits",new Document("$first","$credits")).append("id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")));
+            Bson group=group("$position", first("fullname","$fullname"), first("credits","$credits"), first("position","$position"),
+                    first("team","$team"), first("id","$_id"));
+            Bson match=match(eq("team",team));
             Bson order=sort(descending((String) skill));
+            Bson p1=project(fields(excludeId(),include("fullname"),include("credits"),computed("_id","$id"),include("team"),include("position")));
             //Bson first_five=limit(5);
 
             try{
-            	resultDoc = collection.aggregate(Arrays.asList(order,groupMultiple,match)).iterator();
+            	resultDoc = collection.aggregate(Arrays.asList(match,order,group,p1)).iterator();
             } catch (Exception e) {
                 return null;
             }
@@ -126,21 +139,23 @@ public class CardMongoDriver {
 
 
             //miglior giocatore per quella skill, per ogni team, per ogni ruolo
+
             Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append("fullname",new Document("$first","$fullname"))
                     .append("credits",new Document("$first","$credits")).append("id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")));
             //Bson match=match(eq("_id.position",role));
             Bson order=sort(descending((String) skill));
+            Bson p1=project(fields(excludeId(),include("fullname"),include("credits"),computed("_id","$id"),include("team"),include("position")));
             //Bson first_five=limit(5);
 
             try{
-            	resultDoc = collection.aggregate(Arrays.asList(order,groupMultiple)).iterator();
+            	resultDoc = collection.aggregate(Arrays.asList(order,groupMultiple,p1)).iterator();
             } catch (Exception e) {
                 return null;
             }
 
         } else if (skill!=null && team!=null && role!=null) {
 
-            //prende primi 5 di una stessa squadra e position in base ad una certa skill
+            //prende primi 2 di una stessa squadra e position in base ad una certa skill
             Bson match1=match(eq("team",team));
             Bson match2=match(eq("position",role));
             Bson order=sort(descending((String) skill));
