@@ -45,7 +45,7 @@
             <Font size="15.0" />
          </font>
       </Button>
-      <Button fx:id="buy_packet" layoutX="14.0" layoutY="229.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="114.0" text="Buy packet" textAlignment="CENTER">
+      <Button fx:id="buy_packet" layoutX="14.0" layoutY="229.0" mnemonicParsing="false" onMouseClicked="#buy_packet" prefHeight="42.0" prefWidth="181.0" text="Buy packet - 100 credits" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>
@@ -79,7 +79,7 @@
       <ChoiceBox fx:id="team" layoutX="177.0" layoutY="648.0" />
       <ChoiceBox fx:id="role" layoutX="334.0" layoutY="648.0" />
       <ChoiceBox fx:id="skill" layoutX="176.0" layoutY="614.0" prefWidth="150.0" />
-      <Button layoutX="177.0" layoutY="229.0" mnemonicParsing="false" prefHeight="42.0" onMouseClicked="#reload_page" prefWidth="99.0" text="Reset">
+      <Button layoutX="213.0" layoutY="229.0" mnemonicParsing="false" onMouseClicked="#reload_page" prefHeight="42.0" prefWidth="99.0" text="Reset">
          <font>
             <Font size="15.0" />
          </font>

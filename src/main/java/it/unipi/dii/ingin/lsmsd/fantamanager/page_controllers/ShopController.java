@@ -2,13 +2,14 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 import java.util.regex.Pattern;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.bson.Document;
@@ -38,7 +39,6 @@ import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.util.ArrayList;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Aggregates.limit;
@@ -256,5 +256,32 @@ public class ShopController implements Initializable {
 		stage.setTitle("Shop page");
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	public void buy_packet(MouseEvent mouseEvent) throws NoSuchAlgorithmException, ParseException {
+
+		ArrayList<Document> card_extracted_list=new ArrayList<>();
+
+		if(global.user.getCredits()>=100){
+			OptionsMongoDriver.update_user_credits(false,global.user.username,100);
+			OptionsMongoDriver.update_user_collection(true,global.user.username,5);
+			ArrayList<Document> resultDoc = CardMongoDriver.retrieve_cards("");
+			for(int i=0; i<5;i++) {
+				Random random=new Random();
+				//String card=card_list.getItems().get(random.nextInt(533));
+				Document card_doc=resultDoc.get(random.nextInt(533));
+				System.out.println(card_doc);
+				card_collection card_extracted=new card_collection(card_doc.getInteger("player_id"), card_doc.getString("fullname"), 1, card_doc.getString("team"), card_doc.getString("position"));
+
+				collection.add_card_to_collection(card_extracted, global.id_user);
+				card_extracted_list.add(card_doc);
+			}
+			show_cards(card_extracted_list);
+		}
+		else{
+			selected_card.setText("Credito insufficiente per acquistare il packet");
+		}
+
+
 	}
 }
