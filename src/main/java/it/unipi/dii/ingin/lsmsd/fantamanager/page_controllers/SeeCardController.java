@@ -139,8 +139,9 @@ public class SeeCardController implements Initializable{
 
     public void buy_card(MouseEvent mouseEvent) throws NoSuchAlgorithmException {
 
-		Integer credits=card_doc.getInteger("credits");
-		OptionsMongoDriver.update_user_credits(false,global.user.username,credits);
+		String credits=card_doc.get("credits").toString();
+		String[] number_int=credits.split("\\.");    //TODO risolvere passaggio da double a int
+		OptionsMongoDriver.update_user_credits(false,global.user.username,Integer.parseInt(number_int[0]));
 		OptionsMongoDriver.update_user_collection(true,global.user.username,1);
 
 		card_collection bought_card=new card_collection(card_doc.getInteger("player_id"),card_doc.getString("fullname"),1,card_doc.getString("team"),card_doc.getString("position"));
