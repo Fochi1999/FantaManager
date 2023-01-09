@@ -241,6 +241,11 @@ public class ShopController implements Initializable {
 			System.out.println(team.getValue());
 			System.out.println(skill.getValue());
 
+			if(skill.getValue() == null && team.getValue() == null && role.getValue() == null) { //TODO caso di nessun inserimento
+				System.out.println("No values inserted!");
+				return;
+			}
+			
 			show_cards(CardMongoDriver.search_card_by((String) skill.getValue(), (String) team.getValue(), (String) role.getValue()));
 
 			CardMongoDriver.closeConnection();
