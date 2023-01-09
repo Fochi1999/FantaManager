@@ -154,8 +154,8 @@ public class CardMongoDriver {
                 }
 
         }
-        else{
-            //dovrebbe essere il caso con skill non selezionata e gli altri due si
+        else if(skill==null && team!=null && role!=null){
+
             Bson match1=match(eq("team",team));
             Bson match2=match(eq("position",role));
 
@@ -164,8 +164,27 @@ public class CardMongoDriver {
             } catch (Exception e) {
                 return null;
             }
+        } else if (skill==null && team==null && role!=null) {
+
+            Bson match2=match(eq("position",role));
+
+            try{
+                resultDoc = collection.aggregate(Arrays.asList(match2)).iterator();
+            } catch (Exception e) {
+                return null;
+            }
         }
-        
+        else{
+                //dovrebbe essere caso in cui ho selezionato solo team
+            Bson match2=match(eq("team",team));
+
+            try{
+                resultDoc = collection.aggregate(Arrays.asList(match2)).iterator();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
         while(resultDoc.hasNext()) {
         	result.add(resultDoc.next());
         }
