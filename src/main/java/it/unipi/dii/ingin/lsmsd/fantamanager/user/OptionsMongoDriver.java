@@ -127,13 +127,13 @@ public class OptionsMongoDriver {
 			if(global.user.getUsername().equals(username)) {
 				global.user.setCollection(user_collection + new_cards);
 			}
-			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_collection + new_cards));
+			OptionsMongoDriver.edit_attribute(username, "collection", Integer.toString(user_collection + new_cards));
 		}
 		else {
 			if(global.user.getUsername().equals(username)) {
 				global.user.setCollection(user_collection - new_cards);
 			}
-			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_collection - new_cards));
+			OptionsMongoDriver.edit_attribute(username, "collection", Integer.toString(user_collection - new_cards));
 		}
 		System.out.println("Collection updated for: " + username);
 	}
