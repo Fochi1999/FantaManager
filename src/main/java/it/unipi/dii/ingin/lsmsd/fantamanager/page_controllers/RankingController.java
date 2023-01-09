@@ -29,9 +29,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ChoiceBox;
 import java.util.ArrayList;
 
-
-//TODO Emmanuel - discutere caso in cui gli utenti hanno stesso punteggio in classifica (rimozione momentanea del numero di posizione)
-
 public class RankingController implements Initializable{
 
 	@FXML

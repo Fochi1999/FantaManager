@@ -117,19 +117,21 @@ public class ShopController implements Initializable {
         			selItems += "" + selected.get(i); 
         		}
         		
-               	String full_text[] = selItems.split(" ");
-               	int text_size = full_text.length;
-               	String team = full_text[text_size-4];
-               	String text;
-               	if(team.equals("Roma") || team.equals("Milan")) {	//handling formatting error caused by 2 words team name
-               		text = full_text[text_size-14] + " - " + full_text[text_size-8] + " - " + full_text[text_size-4]; 
-               	}
-               	else {
-               		text = full_text[text_size-13] + " - " + full_text[text_size-7] + " - " + full_text[text_size-4]; 
-               	}
-               	card_id_input = full_text[text_size-1];
-       			selected_card.setText(text); //the card will show up on the lower Area
-               
+        		if(!selItems.equals("")) {	//handling indexing error
+        			String full_text[] = selItems.split(" ");
+        			int text_size = full_text.length;
+        			String team = full_text[text_size-4];
+        			String text;
+        			if(team.equals("Roma") || team.equals("Milan")) {	//handling formatting error caused by 2 words team name
+        				text = full_text[text_size-14] + " - " + full_text[text_size-8] + " - " + full_text[text_size-4]; 
+        			}
+        			else {
+        				text = full_text[text_size-13] + " - " + full_text[text_size-7] + " - " + full_text[text_size-4]; 
+        			}
+        			card_id_input = full_text[text_size-1];
+        			selected_card.setText(text); //the card will show up on the lower Area
+        		}
+        		
        			if(!selected_card.getText().isEmpty()) {
        				see_card.setDisable(false);
        			}
