@@ -9,15 +9,23 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
-    
+    requires org.json;
     requires org.mongodb.driver.core;
     requires org.mongodb.bson;
     requires org.mongodb.driver.sync.client;
     requires com.google.gson;
-    
+    requires redis.clients.jedis;
+    requires json.simple;
+    requires org.apache.commons.pool2;
+    requires com.fasterxml.jackson.databind;
+
     opens it.unipi.dii.ingin.lsmsd.fantamanager to javafx.fxml;
     exports it.unipi.dii.ingin.lsmsd.fantamanager;
     exports it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
     opens it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers to javafx.fxml;
+    exports it.unipi.dii.ingin.lsmsd.fantamanager.formation;
+    opens it.unipi.dii.ingin.lsmsd.fantamanager.formation to javafx.fxml,com.fasterxml.jackson.databind;
+    exports it.unipi.dii.ingin.lsmsd.fantamanager.user to com.fasterxml.jackson.databind;
+
 
 }
