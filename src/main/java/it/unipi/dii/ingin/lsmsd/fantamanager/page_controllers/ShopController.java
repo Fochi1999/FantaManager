@@ -241,7 +241,7 @@ public class ShopController implements Initializable {
 			System.out.println(team.getValue());
 			System.out.println(skill.getValue());
 
-			if(skill.getValue() == null && team.getValue() == null && role.getValue() == null) { //TODO caso di nessun inserimento
+			if(skill.getValue() == null && team.getValue() == null && role.getValue() == null) {
 				System.out.println("No values inserted!");
 				return;
 			}
