@@ -26,7 +26,7 @@ public class collection {
 
             public static String crea_chiave_load(String user_id) {  //solo per fare il retrieve delle info dell-user in questione
                 //return "user:"+this.userId+"*";   //dovrebbe essere cosi dopo la creazione di user
-                return "user_id:"+global.id_user+"*";
+                return "user_id:"+user_id+"*";
             }
 
 

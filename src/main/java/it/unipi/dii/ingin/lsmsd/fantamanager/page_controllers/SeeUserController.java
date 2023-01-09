@@ -2,7 +2,14 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import org.bson.Document;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
@@ -26,7 +33,9 @@ public class SeeUserController implements Initializable{
 	@FXML private TextField region_field;
 	@FXML private TextField collection_field;
 	@FXML private TextField points_field;
-	@FXML private TextFlow text_flow;
+	//@FXML private TextFlow text_flow;
+	@FXML
+	private ListView<String> collection_list;
 	@FXML private Text username_field;
 	
 	@FXML private AnchorPane admin_area;
@@ -76,7 +85,8 @@ public class SeeUserController implements Initializable{
 		if(user_doc == null) { //handling user not found error
 			Text t1 = new Text("An error has occurred while searching for the user. Please, exit the page and try again later.");
 			t1.setStyle("-fx-font: 30 system;");
-			text_flow.getChildren().add(t1);
+			//text_flow.getChildren().add(t1);
+			collection_list.getItems().add(String.valueOf(t1));
 			return;
 		}
 		
@@ -85,12 +95,35 @@ public class SeeUserController implements Initializable{
     	collection_field.setText(user_doc.get("collection").toString());
     	points_field.setText(user_doc.get("points").toString());
     	
-    	//TODO adding user profile info (?)
-    	Text t1 = new Text("Analytics will be added here (?)");
-    	text_flow.getChildren().add(t1);
+    	//TODO adding user profile info (?) ---> io ci metterei la collection qui
+    	//Text t1 = new Text("Analytics will be added here (?)");
+    	//text_flow.getChildren().add(t1);
+		System.out.println(user_doc.get("_id").toString());
+		ArrayList<card_collection> collection_user_selected= collection.load_collection(user_doc.get("_id").toString());
+		show_collection(collection_user_selected);
 	}
-	
-	
+
+	private void show_collection(ArrayList<card_collection> collection_user_selected) {
+		//showing off trades
+		ObservableList<String> list = FXCollections.observableArrayList();
+		list.removeAll(list);	//clearing the list
+
+
+		for(card_collection card: collection_user_selected){
+
+			String card_output="";
+
+			card_output = card_output + ">>id: " + card.get_id() + "//name: " + card.get_name()
+					+ "//team: "+card.get_team()+ "//role: "+card.get_position()+"//quantity: "+card.get_quantity();
+
+			list.add(card_output);
+		}
+		collection_list.getItems().clear();
+		collection_list.getItems().addAll(list);
+
+	}
+
+
 	public void click_delete() throws IOException{
 		
 		SeeUserMongoDriver.delete_user(username);
