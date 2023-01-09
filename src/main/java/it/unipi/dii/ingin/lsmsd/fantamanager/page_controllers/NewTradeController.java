@@ -12,6 +12,7 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.collections.FXCollections;
@@ -188,12 +189,12 @@ public class NewTradeController implements Initializable{
 		
 		//update user's collection info
 		if(card_from.size() > 0) {	//if one or more cards are offered, the user's collection value will be affected
-			TradeMongoDriver.update_user_collection(false,global.user.getUsername(),card_from.size());
+			OptionsMongoDriver.update_user_collection(false,global.user.getUsername(),card_from.size());
 		}
 		
 		//update user's credits info
 		if(new_trade_total_credits < 0) {	//if a user offered credits(negative credits value), they will be temporary removed from his account
-			TradeMongoDriver.update_user_credits(true,global.user.getUsername(),new_trade_total_credits);
+			OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),new_trade_total_credits);
 		}
 		
 		//reload of the page

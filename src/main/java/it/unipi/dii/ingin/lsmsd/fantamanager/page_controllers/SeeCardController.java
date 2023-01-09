@@ -2,12 +2,19 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.SeeUserMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
@@ -46,7 +53,7 @@ public class SeeCardController implements Initializable{
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 		
-		buy_card.setDisable(true);	//disabling the buy button
+		//buy_card.setDisable(true);	//disabling the buy button
 		buy_card_text.setText(""); 	//setting to empty the error message string
 		matchday_error.setText("");
 		text_area.setWrapText(true);
@@ -129,5 +136,16 @@ public class SeeCardController implements Initializable{
 		String text = see_card.get_matchday_info(card_doc,matchday);
 		text_area.setText(text);
 	}
-	
+
+    public void buy_card(MouseEvent mouseEvent) throws NoSuchAlgorithmException {
+
+		Integer credits=card_doc.getInteger("credits");
+		OptionsMongoDriver.update_user_credits(false,global.user.username,credits);
+		//OptionsMongoDriver.update_user_collection();
+
+		card_collection bought_card=new card_collection(card_doc.getInteger("player_id"),card_doc.getString("fullname"),1,card_doc.getString("team"),card_doc.getString("position"));
+
+		collection.add_card_to_collection(bought_card,global.id_user);
+
+    }
 }

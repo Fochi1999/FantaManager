@@ -227,7 +227,7 @@ public class TradeMongoDriver {
     }
     
     
-    public static void update_user_credits(Boolean add, String username, int new_credits) throws NoSuchAlgorithmException{
+    /*public static void update_user_credits(Boolean add, String username, int new_credits) throws NoSuchAlgorithmException{
 		
     	int user_credits = global.user.getCredits();
 		if(add){ 
@@ -261,5 +261,5 @@ public class TradeMongoDriver {
 			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_collection - new_cards));
 		}
 		System.out.println("Collection updated for: " + username);
-	}
+	}*/
 }

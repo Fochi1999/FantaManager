@@ -101,5 +101,41 @@ public class OptionsMongoDriver {
     	System.out.println("Duplicate found!");
     	return true; //attribute already in use  	
 	}
+
+	public static void update_user_credits(Boolean add, String username, int new_credits) throws NoSuchAlgorithmException{
+
+		int user_credits = global.user.getCredits();
+		if(add){
+			if(global.user.getUsername().equals(username)) {
+				global.user.setCredits(user_credits + new_credits);
+			}
+			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits+new_credits));
+		}
+		else {
+			if(global.user.getUsername().equals(username)) {
+				global.user.setCredits(user_credits - new_credits);
+			}
+			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits-new_credits));
+		}
+		System.out.println("Credits updated for: " + username);
+	}
+
+	public static void update_user_collection(Boolean add, String username, int new_cards) throws NoSuchAlgorithmException{
+
+		int user_collection = global.user.getCollection();
+		if(add){
+			if(global.user.getUsername().equals(username)) {
+				global.user.setCollection(user_collection + new_cards);
+			}
+			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_collection + new_cards));
+		}
+		else {
+			if(global.user.getUsername().equals(username)) {
+				global.user.setCollection(user_collection - new_cards);
+			}
+			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_collection - new_cards));
+		}
+		System.out.println("Collection updated for: " + username);
+	}
 	
 }

@@ -6,6 +6,7 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.RankingMongoDriver;
 
 import javafx.scene.control.*;
@@ -189,12 +190,12 @@ public class TradesController implements Initializable{
 		
     	//updating user's informations
     	if(chosen_trade.get_card_from().size() > 0) {	//if one or more cards has been offered, the user's collection value will be affected
-    		TradeMongoDriver.update_user_collection(true,global.user.getUsername(),chosen_trade.get_card_from().size());
+    		OptionsMongoDriver.update_user_collection(true,global.user.getUsername(),chosen_trade.get_card_from().size());
     	}
     			
     	//update user's credits info
     	if(chosen_trade.get_credits() < 0) {	//if a user offered credits, they will be refunded
-    		TradeMongoDriver.update_user_credits(true,global.user.getUsername(),(0-chosen_trade.get_credits()));
+    		OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),(0-chosen_trade.get_credits()));
     	}
     			
     	
@@ -313,20 +314,20 @@ public class TradesController implements Initializable{
 				int total_credits = chosen_trade.get_credits();
 				if(total_credits < 0) {	//negative credits value means: credits wanted from the trade owner 
 					total_credits = 0-total_credits;
-					TradeMongoDriver.update_user_credits(true, chosen_trade.get_user_from(), total_credits);
-					TradeMongoDriver.update_user_credits(false, global.user.username, total_credits);
+					OptionsMongoDriver.update_user_credits(true, chosen_trade.get_user_from(), total_credits);
+					OptionsMongoDriver.update_user_credits(false, global.user.username, total_credits);
 				}
 				else {	//positive credits value means: credits offered by the trade owner (credits already removed when trade was created)
-					TradeMongoDriver.update_user_credits(true, global.user.username, total_credits);
+					OptionsMongoDriver.update_user_credits(true, global.user.username, total_credits);
 				}
 				
 				//update user's collection informations
 				if(chosen_trade.get_card_from().size() > 0) { //cards offered > 0: adding cards only to the user that accepted the trade, the removal of cards for the user that has created the trade request has been done after the trade creation
-					TradeMongoDriver.update_user_collection(true,global.user.username, chosen_trade.get_card_from().size());
+					OptionsMongoDriver.update_user_collection(true,global.user.username, chosen_trade.get_card_from().size());
 				}
 				if(chosen_trade.get_card_to().size() > 0) { //cards wanted > 0: updating both sides of the user's informations
-					TradeMongoDriver.update_user_collection(true, chosen_trade.get_user_from(), chosen_trade.get_card_to().size());
-					TradeMongoDriver.update_user_collection(false, global.user.username, chosen_trade.get_card_to().size());
+					OptionsMongoDriver.update_user_collection(true, chosen_trade.get_user_from(), chosen_trade.get_card_to().size());
+					OptionsMongoDriver.update_user_collection(false, global.user.username, chosen_trade.get_card_to().size());
 				}
 				
 				//update status trade
