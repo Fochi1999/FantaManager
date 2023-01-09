@@ -69,12 +69,21 @@ public class user {
         return username;
     }
     public String getPassword(){return password;};
+    
+    public void setCredits(int new_value) {
+    	this.credits = new_value;
+    }
     public int getCredits() {
     	return credits;
     }
+    
     public int getCollection() {
     	return collection;
     }
+    public void setCollection(int new_value) {
+    	this.collection = new_value;
+    }
+    
     public int getPoints() {
     	return points;
     }

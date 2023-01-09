@@ -237,7 +237,7 @@ public class calculate_matchday {
                 String player_name= (String) json_player.get("fullname");
                 //System.out.println(player_name);
 
-                Double credits= (Double) json_player.get("credits");  //prende credits player per poi modificarlo
+                Long credits= (Long) json_player.get("credits");  //prende credits player per poi modificarlo
 
                 String team= (String) json_player.get("team");
 

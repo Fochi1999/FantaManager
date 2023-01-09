@@ -45,8 +45,15 @@ public class OptionsMongoDriver {
     	if(attribute_name.equals("password")) {	//case of password attribute: hashing the password
     		new_value = hash.MD5(new_value);
     	}
-    	Bson update = Updates.set(attribute_name, new_value);
     	
+    	//changing value to integer for some attributes
+    	Bson update;
+    	if(attribute_name.equals("credits") || attribute_name.equals("collection") || attribute_name.equals("points")) {
+    		update = Updates.set(attribute_name, Integer.parseInt(new_value));
+    	}
+    	else {
+    		update = Updates.set(attribute_name, new_value);
+    	}
     	
     	try {
     		collection.updateOne(user, update);

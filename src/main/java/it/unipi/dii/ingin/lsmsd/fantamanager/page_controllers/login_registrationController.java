@@ -142,13 +142,14 @@ public class login_registrationController implements Initializable{
             Stage stage = (Stage) root.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("home_page.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
-            stage.setTitle("Homepage");
+            stage.setResizable(false);
+            stage.setTitle("Welcome to Fantamanager!");
             stage.setScene(scene);
             stage.show();
         }
         else{
             System.out.println("Registration failed!");
-            loginWarningTextReg.setText("Registration failed!");
+            loginWarningTextReg.setText("Registration failed! Username already in use or network error!");
         }
     }
 

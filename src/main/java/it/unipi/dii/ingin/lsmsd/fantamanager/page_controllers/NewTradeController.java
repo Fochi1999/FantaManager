@@ -2,6 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -123,10 +124,19 @@ public class NewTradeController implements Initializable{
 
 	
 	@FXML
-	private void create_trade() throws IOException {	
+	private void create_trade() throws IOException, NoSuchAlgorithmException {	
 		
 		if(!check_fields()) {
 			System.out.println("Error on input fields!");
+			return;
+		}
+		
+		
+		//check on credits input
+		int user_credits = global.user.getCredits();
+		if(Integer.parseInt(credits_from.getText()) > user_credits){
+			System.out.println("Credit input value exceeded! Sorry, you don't have that much credits :/");
+			error_text.setText("Credit input value exceeded! Sorry, you don't have that much credits :/");
 			return;
 		}
 		
@@ -165,7 +175,8 @@ public class NewTradeController implements Initializable{
 			String words2[] = card_to3.getText().toString().split("<>");
 			card_to.add(words2[0]);
 		}
-		Trade new_trade=new Trade("", global.user.username,"",Integer.parseInt(credits_to.getText())-Integer.parseInt(credits_from.getText()),card_from,card_to,0);
+		int new_trade_total_credits = Integer.parseInt(credits_to.getText())-Integer.parseInt(credits_from.getText());
+		Trade new_trade=new Trade("", global.user.username,"",new_trade_total_credits,card_from,card_to,0);
 		TradeMongoDriver.create_new_trade(new_trade);
 
 		System.out.println(card_from +"   "+ card_to +"   "+ card_from_collection);
@@ -174,7 +185,17 @@ public class NewTradeController implements Initializable{
 		for(String card:card_from_collection){
 			collection.delete_card_from_collection(card);
 		}
-
+		
+		//update user's collection info
+		if(card_from.size() > 0) {	//if one or more cards are offered, the user's collection value will be affected
+			TradeMongoDriver.update_user_collection(false,global.user.getUsername(),card_from.size());
+		}
+		
+		//update user's credits info
+		if(new_trade_total_credits < 0) {	//if a user offered credits(negative credits value), they will be temporary removed from his account
+			TradeMongoDriver.update_user_credits(true,global.user.getUsername(),new_trade_total_credits);
+		}
+		
 		//reload of the page
 		reload_page_trades();
 	}
@@ -188,31 +209,7 @@ public class NewTradeController implements Initializable{
 		stage.setScene(scene);
 		stage.show();
 	}
-/*
-	private card_collection retrieve_card_from_id(String card) {
-		ArrayList<String> values=new ArrayList<>();
-		String[] words;
-		String words2[];
-		words = card.split("<>");
-		words2 = words[words.length-1].split(" ");
-		String card_name = words2[1];
-		words2 = words[words.length-1].split(" ");
-		String card_name = words2[1];
-		values.add(elem);
-		elem = elem.substring(0, elem.length() - 1);
-		System.out.println("retrieve_cardfromString: " + elem);	//remove space
-		return new card_collection(Integer.parseInt(values.get(0)),values.get(1),Integer.parseInt(values.get(4)),values.get(2),values.get(3));
-	}
 
-	private String retrieve_cardName_from_string(String player) {
-		String[] words=player.split(" <> ");
-		String elem=words[0];
-		elem = elem.substring(0, elem.length() - 1);	//remove space
-		System.out.println("retrieve_cardName: " + elem);
-		return elem;
-	}
-
-*/
 	private void open_cards_collection() {
 
 		//showing off cards

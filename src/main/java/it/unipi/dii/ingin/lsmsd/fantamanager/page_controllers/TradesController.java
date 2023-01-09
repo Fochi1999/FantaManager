@@ -26,6 +26,7 @@ import javafx.beans.value.ObservableValue;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 import javafx.collections.*;
 import javafx.stage.Stage;
@@ -108,20 +109,21 @@ public class TradesController implements Initializable{
 		String words_arr[] = trade_text.split(" ");
 		String user_in = words_arr[words_arr.length-4]; //is the position where the user is saved in the string
 		String status = words_arr[2];
+		int credits = Integer.parseInt(words_arr[words_arr.length-10]);
 		
 		if(myuser.equals(user_in) && status.equals("PENDING")){
 			delete_button.setDisable(false);
 		}
 
-		if(!myuser.equals(user_in) && control_owned_cards()){
+		if(!myuser.equals(user_in) && control_owned_cards() && check_credits(credits)){
 			accept_button.setDisable(false);
 		}
 		else{
-				accept_button.setDisable(true);
+			accept_button.setDisable(true);
 		}
 	}
 
-	private boolean control_owned_cards() {
+	private boolean control_owned_cards() {		//checks if the user owns the correct cards in order to accept the trade
 			Trade chosen_trade=retrieve_trade();
 			for(String card:chosen_trade.get_card_to()){
 				card_collection card_to= CardMongoDriver.search_player_by_name(card);
@@ -129,6 +131,14 @@ public class TradesController implements Initializable{
 						return false;
 			}
 			return true;
+	}
+	
+	private boolean check_credits(int value) {	//checks if the user owns a correct value of credits in order to accept the trade
+		value = 0 - value;
+		if(global.user.getCredits() > value) {
+			return true;
+		}
+		return false;
 	}
 
 	@FXML
@@ -152,7 +162,7 @@ public class TradesController implements Initializable{
 	
 	
     @FXML
-    protected void click_delete() {   //elimino solo una mia offerta di trade, questa funzione è cliccabile solo quando clicco su un trade mio
+    protected void click_delete() throws NoSuchAlgorithmException {   //elimino solo una mia offerta di trade, questa funzione è cliccabile solo quando clicco su un trade mio
     	
     	String trade_text = selected_trade.getText();
     	if(trade_text.equals("")) {
@@ -177,6 +187,17 @@ public class TradesController implements Initializable{
     	
     	TradeMongoDriver.closeConnection();
 		
+    	//updating user's informations
+    	if(chosen_trade.get_card_from().size() > 0) {	//if one or more cards has been offered, the user's collection value will be affected
+    		TradeMongoDriver.update_user_collection(true,global.user.getUsername(),chosen_trade.get_card_from().size());
+    	}
+    			
+    	//update user's credits info
+    	if(chosen_trade.get_credits() < 0) {	//if a user offered credits, they will be refunded
+    		TradeMongoDriver.update_user_credits(true,global.user.getUsername(),(0-chosen_trade.get_credits()));
+    	}
+    			
+    	
 		selected_trade.setText("");
     	my_requests_button_onclick(); //refreshing the available trade list
     }
@@ -269,28 +290,51 @@ public class TradesController implements Initializable{
 				Trade trade = TradeMongoDriver.search_trade_byId(elem);
 				return trade;  //elem ora contiene l' id del trade
 	}
-	public void accept_trade(MouseEvent mouseEvent) {
+	
+	public void accept_trade(MouseEvent mouseEvent) throws NoSuchAlgorithmException{
 
 
 				Trade chosen_trade=retrieve_trade();
 
 				for(String card:chosen_trade.get_card_from()){
-						card_collection card_from= CardMongoDriver.search_player_by_name(card);
-						collection.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
+					card_collection card_from= CardMongoDriver.search_player_by_name(card);
+					collection.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
 						//dalla collection dell' altro tizio non vanno tolti in quanto si sono tolti al momento in cui lui li ha offerti
 				}
 
 				for(String card:chosen_trade.get_card_to()){
-						card_collection card_to= CardMongoDriver.search_player_by_name(card);
-						collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, i giocatori richiesti da chi ha generato il trade
-
-						collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
+					card_collection card_to= CardMongoDriver.search_player_by_name(card);
+					collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, i giocatori richiesti da chi ha generato il trade
+					collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
 				}
 
+				
+				//update user's credits informations
+				int total_credits = chosen_trade.get_credits();
+				if(total_credits < 0) {	//negative credits value means: credits wanted from the trade owner 
+					total_credits = 0-total_credits;
+					TradeMongoDriver.update_user_credits(true, chosen_trade.get_user_from(), total_credits);
+					TradeMongoDriver.update_user_credits(false, global.user.username, total_credits);
+				}
+				else {	//positive credits value means: credits offered by the trade owner (credits already removed when trade was created)
+					TradeMongoDriver.update_user_credits(true, global.user.username, total_credits);
+				}
+				
+				//update user's collection informations
+				if(chosen_trade.get_card_from().size() > 0) { //cards offered > 0: adding cards only to the user that accepted the trade, the removal of cards for the user that has created the trade request has been done after the trade creation
+					TradeMongoDriver.update_user_collection(true,global.user.username, chosen_trade.get_card_from().size());
+				}
+				if(chosen_trade.get_card_to().size() > 0) { //cards wanted > 0: updating both sides of the user's informations
+					TradeMongoDriver.update_user_collection(true, chosen_trade.get_user_from(), chosen_trade.get_card_to().size());
+					TradeMongoDriver.update_user_collection(false, global.user.username, chosen_trade.get_card_to().size());
+				}
+				
 				//update status trade
 				TradeMongoDriver.update_trade(chosen_trade,"status");
 				accept_button.setDisable(true);
 				delete_button.setDisable(true);
 				show_all_button_onclick();
+				
 	}
+	
 }
