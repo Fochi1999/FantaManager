@@ -28,8 +28,13 @@ public class login {
         	return false;
         }
 
+        System.out.println(user_doc.get("formations"));
+        Document formation= (Document) user_doc.get("formations");
+        System.out.println(formation.toJson());
+
+
         global.id_user=user_doc.get("_id").toString();
-        global.user=new user(nick,password,user_doc.getString("region"),user_doc.getString("email"),user_doc.getInteger("credits"),0,user_doc.getInteger("_privilege"), user_doc.getInteger("points"),user_doc.get("formations").toString());
+        global.user=new user(nick,password,user_doc.getString("region"),user_doc.getString("email"),user_doc.getInteger("credits"),0,user_doc.getInteger("_privilege"), user_doc.getInteger("points"),formation.toJson());
         global.saved_formation_server=global.user.formations.get(global.curr_matchday);
         global.saved_formation_local=global.saved_formation_server;
         System.out.println("User logged in. ID: " + global.id_user);
