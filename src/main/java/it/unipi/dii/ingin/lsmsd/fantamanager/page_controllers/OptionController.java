@@ -28,7 +28,7 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 
 public class OptionController implements Initializable {
 	
-
+//TODO remove collection field
 
     @FXML
     private Parent root;
@@ -128,7 +128,6 @@ public class OptionController implements Initializable {
     	region_field.setText(global.user.getRegion());
     	email_field.setText(global.user.getEmail());
     	credits_field.setText(Integer.toString(global.user.getCredits()));
-    	collection_field.setText(Integer.toString(global.user.getCollection())); 	
     	points_field.setText(Integer.toString(global.user.getPoints())); 
     }
     

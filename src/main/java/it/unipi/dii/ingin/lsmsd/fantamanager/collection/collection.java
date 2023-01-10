@@ -3,8 +3,11 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.*;
+
+import org.controlsfx.control.spreadsheet.SpreadsheetCellType.IntegerType;
 
 public class collection {
 
@@ -26,7 +29,7 @@ public class collection {
 
             public static String crea_chiave_load(String user_id) {  //solo per fare il retrieve delle info dell-user in questione
                 //return "user:"+this.userId+"*";   //dovrebbe essere cosi dopo la creazione di user
-                return "user_id:"+user_id+"*";
+                return "user_id:"+user_id+":card_id:";
             }
 
 
@@ -35,47 +38,34 @@ public class collection {
                 ArrayList<card_collection> cards=new ArrayList<>();
 
                 String key_load = crea_chiave_load(user_id);  //qui dovremmo inserire this.user_id, oppure togliere il parametro e farlo come commentato sopra
-                //System.out.println(key_load);
-                JedisPool pool=new JedisPool("localhost",6379);
+                
+                JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+            	JedisPool pool = new JedisPool(jedisPoolConfig, "localhost", 6379);
                 try (Jedis jedis = pool.getResource()) {
-
-                    Set<String> set_keys = jedis.keys(key_load);
-
-                    System.out.println(set_keys);
-
-                    Iterator<String> it = set_keys.iterator();
-                    while (it.hasNext()) {
-                        String key = it.next();
-                        String value = jedis.get(key);
-
-                        //System.out.println(key + " " + value);
-
-                        int id = retrieve_id_card(key);
-
-                        //JSONObject player=new JSONObject();
-                        int present = 0;
-                        for (int i = 0; i < cards.size(); i++) {
-                            //JSONObject player = (JSONObject) players.get(i);
-                            card_collection card= cards.get(i);
-
-                            if (card.get_id() == id) {
-                                present = 1;
-                                //player.put(retrieve_key_info(key), value);
-                                retrieve_key_info(key,card,value);
-                                break;
-                            }
-                        }
-                        if (present == 0) {
-                           
-                        	card_collection card=new card_collection(id,"",0,"","");
-                            retrieve_key_info(key,card,value);
+                	
+                    int i = 0;
+                	while (i<=600) {
+                        String key_name = key_load+i+":name";
+                        String value_name = jedis.get(key_name);
+                        System.out.println(key_name +" - "+value_name);
+                        
+                        if (value_name != null) {
+                        	String key_pos = key_load+i+":position";
+                            String value_pos = jedis.get(key_pos);
+                            
+                            
+                            String key_qnt = key_load+i+":quantity";
+                            String value_qnt = jedis.get(key_qnt);
+                            
+                            String key_team = key_load+i+":team";
+                            String value_team = jedis.get(key_team);
+                            
+                        	card_collection card=new card_collection(i,value_name,Integer.parseInt(value_qnt),value_team,value_pos);
                             cards.add(card);
                         }
-
-
+                        i++;
                     }
                 }
-                //System.out.println(players);
                 return cards;
             }
 

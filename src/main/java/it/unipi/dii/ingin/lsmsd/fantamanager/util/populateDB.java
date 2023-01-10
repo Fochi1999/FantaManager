@@ -32,7 +32,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.Transaction;
 
 
 public class populateDB {
@@ -99,46 +101,127 @@ public class populateDB {
     	ArrayList<Document> user_list = get_users_collection_mongoDB();
     	ArrayList<Document> cards_list = get_cards_collection_mongoDB();
     	
-    	//connecting to mongoDB 
-    	MongoClient myClient = MongoClients.create(global.MONGO_URI);
-    	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-    	MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+    	//connecting to redis
+    	JedisPool pool = new JedisPool("localhost", 6379);
     	
-        //connecting to redis
-        JedisPool pool=new JedisPool("localhost",6379);
         //insert
         try(Jedis jedis=pool.getResource()){
         	
-        	for(int i=0;i<user_list.size()-1;i++){
-        		Pipeline pipe = jedis.pipelined();
-        		int total_cards=0;
+        	for(int i=0;i<user_list.size();i++){
+        	
+        		Transaction transaction = jedis.multi();
         		if(user_list.get(i).getString("username").equals("admin")) {	//admin doesn't play
-        			continue;
+        			i++;
         		}
         		String user_id = user_list.get(i).get("_id").toString();
-        		int random_total_cards = ThreadLocalRandom.current().nextInt(0, cards_list.size());	//user's cards collection size
+        		int random_total_cards = ThreadLocalRandom.current().nextInt(30, 45);	//user's cards collection size
+        		
+        		for(int j=0; j<3; j++) {	//at least 3 attacker
+        			
+        			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+        			String card_position = cards_list.get(random_card).getString("position");
+        			if(!card_position.equals("Attacker")){
+        				j--;
+        				continue;
+        			}		
+        			
+        			int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);	
+        			String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+        			
+        			String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+        			String card_team = cards_list.get(random_card).getString("team");			//card team
+        			
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":name",card_name);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":quantity", random_quantity);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
+        		}
+        		random_total_cards -= 3;
+        		
+        		for(int j=0; j<4; j++) {	//at least 4 goalkeepers
+        			
+        			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+        			String card_position = cards_list.get(random_card).getString("position");
+        			if(!card_position.equals("Goalkeeper")){
+        				j--;
+        				continue;
+        			}		
+        			
+        			int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);	
+        			String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+        			
+        			String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+        			String card_team = cards_list.get(random_card).getString("team");			//card team
+        			
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":name",card_name);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":quantity", random_quantity);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
+        		}
+        		random_total_cards -= 4;
+        		
+        		for(int j=0; j<5; j++) {	//at least 5 midfielders
+        			
+        			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+        			String card_position = cards_list.get(random_card).getString("position");
+        			if(!card_position.equals("Midfielder")){
+        				j--;
+        				continue;
+        			}		
+        			
+        			int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);	
+        			String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+        			
+        			String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+        			String card_team = cards_list.get(random_card).getString("team");			//card team
+        			
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":name",card_name);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":quantity", random_quantity);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
+        		}
+        		random_total_cards -= 5;
+        		
+        		for(int j=0; j<5; j++) {	//at least 5 defenders
+        			
+        			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+        			String card_position = cards_list.get(random_card).getString("position");
+        			if(!card_position.equals("Defender")){
+        				j--;
+        				continue;
+        			}		
+        			
+        			int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);	
+        			String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+        			
+        			String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+        			String card_team = cards_list.get(random_card).getString("team");			//card team
+        			
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":name",card_name);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":quantity", random_quantity);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
+        		}
+        		random_total_cards -= 5;
+        		
         		for(int j=0; j<random_total_cards; j++) {
                 	
-        			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size());	//card id
-        			int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);
-        			total_cards+=rndm_quantity;
+        			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+        			int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);	
         			String random_quantity = Integer.toString(rndm_quantity);	//card quantity
         			String card_position = cards_list.get(random_card).getString("position");		//card position
         			String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
         			String card_team = cards_list.get(random_card).getString("team");			//card team
-        			pipe.set("user_id:"+user_id+":card_id:"+random_card+":name",card_name);
-        			pipe.set("user_id:"+user_id+":card_id:"+random_card+":quantity", random_quantity);
-        			pipe.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
-        			pipe.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
+        			
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":name",card_name);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":quantity", random_quantity);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
+        			transaction.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
         		}
-        		System.out.println(pipe.syncAndReturnAll());
-        		
-        		//updating user collection attribute on mongo
-        		collection.updateOne(Filters.eq("_id",user_id), Updates.set("collection", total_cards));
-        	}
+        		System.out.println(i+"/"+user_list.size()+ " " + transaction.exec());
+        	}	
         }
         pool.close();
-        myClient.close();
         System.out.println("Users' card collection created on redis");
     }
 	
@@ -230,12 +313,11 @@ public class populateDB {
     	String admin_password = hash.MD5(admin_username);	//the password is the same as the username
 		int admin_credits = 0;
 		int admin_points = 0;
-		int admin_collection = 0;	
 		String admin_email = generate_random_email();
 		int random0 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
 		String admin_region = utilities.regionList[random0];
 
-		user admin=new user(admin_username,admin_password,admin_region,admin_email,admin_credits,admin_collection,2,admin_points);
+		user admin=new user(admin_username,admin_password,admin_region,admin_email,admin_credits,2,admin_points);
 		user_list.add(admin);
 		//insert user from a file of 500k randomly generated usernames
 		try {
@@ -249,13 +331,12 @@ public class populateDB {
 		    	String user_password = hash.MD5(user_username);	//the password is the same as the username
 				int user_credits = ThreadLocalRandom.current().nextInt(0, 501);
 				int user_points = ThreadLocalRandom.current().nextInt(0, 351);
-				int user_collection = 0;	//TODO will be increased in another function
 				String user_email = generate_random_email();
 				int random1 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
 				String user_region = utilities.regionList[random1];
 
 				//creating document
-				user new_user=new user(user_username,user_password,user_region,user_email,user_credits,user_collection,1,user_points);
+				user new_user=new user(user_username,user_password,user_region,user_email,user_credits,1,user_points);
 				//add
 				user_list.add(new_user);
 		    	//System.out.println(user_username);

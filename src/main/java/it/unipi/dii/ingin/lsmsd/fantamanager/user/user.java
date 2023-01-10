@@ -20,12 +20,11 @@ public class user {
     String email;
     public HashMap<Integer,formation> formations;
     int credits;
-    int collection;
     int points;
     int privilege;
 
     //constructor
-    public user(String nick, String hashPass,String region,String email, int credits,int collection, int privilege, int points){
+    public user(String nick, String hashPass,String region,String email, int credits, int privilege, int points){
 
         username=nick;
         password=hashPass;
@@ -33,11 +32,10 @@ public class user {
         this.email=email;
         this.points = points;
         this.credits=credits;
-        this.collection=collection;
         this.privilege=privilege;
         formations=new HashMap<>();
     }
-    public user(String nick, String hashPass,String region,String email, int credits,int collection, int privilege, int points,String formationJson){
+    public user(String nick, String hashPass,String region,String email, int credits, int privilege, int points,String formationJson){
 
         username=nick;
         password=hashPass;
@@ -45,7 +43,6 @@ public class user {
         this.email=email;
         this.points = points;
         this.credits=credits;
-        this.collection=collection;
         this.privilege=privilege;
         if(formationJson!=null){
             try {
@@ -76,14 +73,7 @@ public class user {
     public int getCredits() {
     	return credits;
     }
-    
-    public int getCollection() {
-    	return collection;
-    }
-    public void setCollection(int new_value) {
-    	this.collection = new_value;
-    }
-    
+        
     public int getPoints() {
     	return points;
     }

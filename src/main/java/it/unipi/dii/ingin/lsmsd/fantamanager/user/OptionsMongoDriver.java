@@ -120,22 +120,4 @@ public class OptionsMongoDriver {
 		System.out.println("Credits updated for: " + username);
 	}
 
-	public static void update_user_collection(Boolean add, String username, int new_cards) throws NoSuchAlgorithmException{
-
-		int user_collection = global.user.getCollection();
-		if(add){
-			if(global.user.getUsername().equals(username)) {
-				global.user.setCollection(user_collection + new_cards);
-			}
-			OptionsMongoDriver.edit_attribute(username, "collection", Integer.toString(user_collection + new_cards));
-		}
-		else {
-			if(global.user.getUsername().equals(username)) {
-				global.user.setCollection(user_collection - new_cards);
-			}
-			OptionsMongoDriver.edit_attribute(username, "collection", Integer.toString(user_collection - new_cards));
-		}
-		System.out.println("Collection updated for: " + username);
-	}
-	
 }

@@ -27,6 +27,8 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.scene.layout.AnchorPane;
 
+//TODO remove collection field
+
 public class SeeUserController implements Initializable{
 
 	

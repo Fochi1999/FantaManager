@@ -187,12 +187,7 @@ public class TradesController implements Initializable{
 		TradeMongoDriver.delete_my_trade(trade_id);
     	
     	TradeMongoDriver.closeConnection();
-		
-    	//updating user's informations
-    	if(chosen_trade.get_card_from().size() > 0) {	//if one or more cards has been offered, the user's collection value will be affected
-    		OptionsMongoDriver.update_user_collection(true,global.user.getUsername(),chosen_trade.get_card_from().size());
-    	}
-    			
+				
     	//update user's credits info
     	if(chosen_trade.get_credits() < 0) {	//if a user offered credits, they will be refunded
     		OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),(0-chosen_trade.get_credits()));
@@ -319,15 +314,6 @@ public class TradesController implements Initializable{
 				}
 				else {	//positive credits value means: credits offered by the trade owner (credits already removed when trade was created)
 					OptionsMongoDriver.update_user_credits(true, global.user.username, total_credits);
-				}
-				
-				//update user's collection informations
-				if(chosen_trade.get_card_from().size() > 0) { //cards offered > 0: adding cards only to the user that accepted the trade, the removal of cards for the user that has created the trade request has been done after the trade creation
-					OptionsMongoDriver.update_user_collection(true,global.user.username, chosen_trade.get_card_from().size());
-				}
-				if(chosen_trade.get_card_to().size() > 0) { //cards wanted > 0: updating both sides of the user's informations
-					OptionsMongoDriver.update_user_collection(true, chosen_trade.get_user_from(), chosen_trade.get_card_to().size());
-					OptionsMongoDriver.update_user_collection(false, global.user.username, chosen_trade.get_card_to().size());
 				}
 				
 				//update status trade
