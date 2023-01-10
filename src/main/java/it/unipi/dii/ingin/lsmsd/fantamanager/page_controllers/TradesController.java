@@ -6,8 +6,8 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.RankingMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.RankingMongoDriver;
 
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;

@@ -14,8 +14,8 @@ import org.bson.Document;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.SeeUserMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.SeeUserMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,7 +31,7 @@ public class SeeUserController implements Initializable{
 
 	
 	@FXML private TextField region_field;
-	@FXML private TextField collection_field;
+	//@FXML private TextField collection_field;
 	@FXML private TextField points_field;
 	//@FXML private TextFlow text_flow;
 	@FXML
@@ -92,7 +92,7 @@ public class SeeUserController implements Initializable{
 		
     	//showing up the info
     	region_field.setText(user_doc.getString("region"));
-    	collection_field.setText(user_doc.get("collection").toString());
+    	//collection_field.setText(user_doc.get("collection").toString());
     	points_field.setText(user_doc.get("points").toString());
     	
     	//TODO adding user profile info (?) ---> io ci metterei la collection qui
