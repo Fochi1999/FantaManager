@@ -10,13 +10,19 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.bson.Document;
@@ -33,7 +39,9 @@ public class ShotsStatsController implements Initializable{
 	
 
 	
-	@FXML private Parent root;
+	@FXML public Parent root;
+	@FXML private ImageView field_image;
+	@FXML private Pane pane_field;
 
 	private int last_updated_matchday;
 
@@ -45,11 +53,33 @@ public class ShotsStatsController implements Initializable{
 		//buy_card.setDisable(true);	//disabling the buy button
 		
 		search_card();
-		last_updated_matchday = 1;	//TODO implementare
+		last_updated_matchday = 2;	//TODO implementare
+		System.out.println(card_doc.toString());
+		Document stats=(Document)card_doc.get("statistics");
+		System.out.println(stats.toString());
+		Document matchdays=(Document)stats.get("matchday");
+		System.out.println(matchdays.toString());
+		for(int i=1;i<=last_updated_matchday;i++){
+			Document matchday=(Document)matchdays.get("matchday"+i);
+			Object shotsInfo=matchday.get("shotsinfo");
+			System.out.println(shotsInfo.toString()+shotsInfo.getClass());
+		}
+		//TODO retrieve shot info
+		for (int i=0;i<100;i++){
+			create_points_shots(i,i,0);
+		}
+
 
 	}
 	
-	
+	public void create_points_shots(double x,double y, int type){
+		double Xlen=field_image.getImage().getWidth();
+		double Ylen=field_image.getImage().getHeight();
+		Circle point=new Circle(x,y,5);
+		point.setFill(Color.DARKRED);
+		pane_field.getChildren().add(point);
+
+	}
 	@FXML
     protected void click_back() throws IOException {
 		System.out.println("Returning back to the shop page...");
