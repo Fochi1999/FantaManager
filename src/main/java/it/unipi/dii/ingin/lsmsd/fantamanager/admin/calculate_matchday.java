@@ -127,10 +127,10 @@ public class calculate_matchday {
                     //portiere
                     JSONObject card=(JSONObject) cards.get(String.valueOf(11)); //primo in panchina
                     score=player_score.get(card.get("name"));
-                    if(score==-5000 || (Double)card.get("vote")!=0){
+                    if(score==-5000 || (Float)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(12));  //secondo in panchina
                         score=player_score.get(card.get("name"));
-                        if(score==-5000 || (Double)card.get("vote")!=0){
+                        if(score==-5000 || (Float)card.get("vote")!=0){
                             return 0; //non avra rimpiazzo dalla panchina
                         }
                         place_of_bench=12;
@@ -175,10 +175,10 @@ public class calculate_matchday {
                     //attaccante
                     JSONObject card=(JSONObject) cards.get(String.valueOf(17)); //primo in panchina
                     score=player_score.get(card.get("name"));
-                    if(score==-5000 || (Double)card.get("vote")!=0){
+                    if(score==-5000 || (Float)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(18));  //secondo in panchina
                         score=player_score.get(card.get("name"));
-                        if(score==-5000 || (Double)card.get("vote")!=0){
+                        if(score==-5000 || (Float)card.get("vote")!=0){
                             return 0;//non avra rimpiazzo dalla panchina
                         }
                         place_of_bench=18;
@@ -237,7 +237,7 @@ public class calculate_matchday {
                 String player_name= (String) json_player.get("fullname");
                 //System.out.println(player_name);
 
-                Long credits= (Long) json_player.get("credits");  //prende credits player per poi modificarlo
+                int credits= ((Long) json_player.get("credits")).intValue();  //prende credits player per poi modificarlo
 
                 String team= (String) json_player.get("team");
 
@@ -312,7 +312,7 @@ public class calculate_matchday {
                 }
 
                 //System.out.println(score);
-                float mod_value=calculate_mod_value(score);
+                int mod_value=calculate_mod_value(score);
                 //matchday_stat.put("score",score);  //inserisce score nel matchday
                 //System.out.println(matchday_stat.get("score"));
 
@@ -322,11 +322,11 @@ public class calculate_matchday {
 
                 //Bson filter = Filters.eq("fullname", player_name);   //change 1045
                 Bson filter= Filters.and(eq("fullname", player_name),eq("team", team));  //AND per risolvere problema L.Pellegrini
-                Bson update1 = Updates.set("statistics.matchday.matchday" + matchday+".score-value", score_value);
+                //Bson update1 = Updates.set("statistics.matchday.matchday" + matchday+".score-value", score_value);
                 Bson update2= Updates.set("credits", credits+mod_value);
-                Bson update=Updates.combine(update1,update2);
+                //Bson update=Updates.combine(update1,update2);
                 UpdateOptions options = new UpdateOptions().upsert(true);
-                System.out.println(coll.updateOne(filter, update, options));
+                System.out.println(coll.updateOne(filter, update2, options));
 
                 player_score.put(player_name,score);
 
@@ -336,12 +336,12 @@ public class calculate_matchday {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
+        System.out.println("calculate matchday completed");
         //formation.calculate_team_score(player_score);  //TODO per calcolo score di un team di un player
         calulate_user_team_score(matchday,player_score);
     }
 
-    private static float calculate_mod_value(float score) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore
+    private static int calculate_mod_value(float score) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore
 
         if(score<=0){
             return -1;
