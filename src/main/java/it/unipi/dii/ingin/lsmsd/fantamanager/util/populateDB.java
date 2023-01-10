@@ -124,7 +124,7 @@ public class populateDB {
         		String user_id = user_list.get(i).get("_id").toString();
         		int random_total_cards = ThreadLocalRandom.current().nextInt(30, 40);	//user's cards collection size
         		
-        		for(int j=0; j<3; j++) {	//at least 3 attacker
+        		for(int j=0; j<5; j++) {	//at least 5 attacker
         			
         			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
         			String card_position = cards_list.get(random_card).getString("position");
@@ -144,7 +144,7 @@ public class populateDB {
         			transaction.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
         			transaction.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
         		}
-        		random_total_cards -= 3;
+        		random_total_cards -= 5;
         		
         		for(int j=0; j<4; j++) {	//at least 4 goalkeepers
         			
@@ -168,7 +168,7 @@ public class populateDB {
         		}
         		random_total_cards -= 4;
         		
-        		for(int j=0; j<5; j++) {	//at least 5 midfielders
+        		for(int j=0; j<7; j++) {	//at least 7 midfielders
         			
         			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
         			String card_position = cards_list.get(random_card).getString("position");
@@ -188,9 +188,9 @@ public class populateDB {
         			transaction.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
         			transaction.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
         		}
-        		random_total_cards -= 5;
+        		random_total_cards -= 7;
         		
-        		for(int j=0; j<5; j++) {	//at least 5 defenders
+        		for(int j=0; j<7; j++) {	//at least 7 defenders
         			
         			int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
         			String card_position = cards_list.get(random_card).getString("position");
@@ -210,7 +210,7 @@ public class populateDB {
         			transaction.set("user_id:"+user_id+":card_id:"+random_card+":team",card_team);
         			transaction.set("user_id:"+user_id+":card_id:"+random_card+":position",card_position);
         		}
-        		random_total_cards -= 5;
+        		random_total_cards -= 7;
         		
         		for(int j=0; j<random_total_cards; j++) {
                 	

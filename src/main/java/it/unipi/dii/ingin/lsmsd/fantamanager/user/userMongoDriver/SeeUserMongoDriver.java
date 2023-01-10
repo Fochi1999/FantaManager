@@ -1,14 +1,11 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver;
 
 import org.bson.Document;
-
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 
 public class SeeUserMongoDriver {
 
@@ -42,19 +39,23 @@ public class SeeUserMongoDriver {
 		//TODO remove all trades from db and all keyvalues on redis
 		UserMongoDriver.openConnection();
 			
+		//deleting all trades
+		TradeMongoDriver.delete_all_trades(username);
+		
+		//deleting all keys on redis
+		collection.delete_user_card_collection(global.id_user);
+		
 		//delete user
 		try {
-			UserMongoDriver.collection.deleteOne(Filters.eq("username", username));
+			System.out.println(UserMongoDriver.collection.deleteOne(Filters.eq("username", username)));
 		}
 		catch(Exception e) {
 			System.out.println("Error! Cannot delete this user now. Try later");
-			//myClient.close();
 			UserMongoDriver.closeConnection();
 			return;
 		}
-		
-		//myClient.close();
 		UserMongoDriver.closeConnection();
+		
 		System.out.println("User '"+ username + "' successfully deleted.");
 		return;
 	}

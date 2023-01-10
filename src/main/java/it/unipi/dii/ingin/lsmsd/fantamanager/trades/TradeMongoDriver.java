@@ -8,6 +8,7 @@ import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.UserMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -225,40 +226,19 @@ public class TradeMongoDriver {
             closeConnection();
     }
     
-    
-    /*public static void update_user_credits(Boolean add, String username, int new_credits) throws NoSuchAlgorithmException{
-		
-    	int user_credits = global.user.getCredits();
-		if(add){ 
-			if(global.user.getUsername().equals(username)) {
-				global.user.setCredits(user_credits + new_credits);
-			}
-			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits+new_credits));
-		}
-		else { 
-			if(global.user.getUsername().equals(username)) {
-				global.user.setCredits(user_credits - new_credits);
-			}
-			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits-new_credits));
-		}
-		System.out.println("Credits updated for: " + username);
-	}
-    
-    public static void update_user_collection(Boolean add, String username, int new_cards) throws NoSuchAlgorithmException{
-		
-		int user_collection = global.user.getCollection();
-		if(add){ 
-			if(global.user.getUsername().equals(username)) {
-				global.user.setCollection(user_collection + new_cards);
-			}
-			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_collection + new_cards));
-		}
-		else { 
-			if(global.user.getUsername().equals(username)) {
-				global.user.setCollection(user_collection - new_cards);
-			}
-			OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_collection - new_cards));
-		}
-		System.out.println("Collection updated for: " + username);
-	}*/
+    //deleting all trades involving that user
+	public static void delete_all_trades(String username) { //used when deleting an user
+    	TradeMongoDriver.openConnection();
+    	try {
+    		TradeMongoDriver.collection.deleteMany(Filters.eq("user_from", username));
+    		TradeMongoDriver.collection.deleteMany(Filters.eq("user_to", username));
+    	}
+    	catch(Exception e) {
+    		System.out.println("Error! Cannot delete this user's trades now. Try later");
+    		TradeMongoDriver.closeConnection();
+    		return;
+    	}
+    	TradeMongoDriver.closeConnection();
+    }
+   
 }

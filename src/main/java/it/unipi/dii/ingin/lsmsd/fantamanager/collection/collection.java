@@ -107,10 +107,10 @@ public class collection {
                             jedis.set("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
                         }
                         else{
-                            jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":name", 0);
-                            jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity", 0);
-                            jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":team", 0);
-                            jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":position", 0);
+                            jedis.del("user_id:" + global.id_user + ":card_id:" + card.card_id + ":name");
+                            jedis.del("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity");
+                            jedis.del("user_id:" + global.id_user + ":card_id:" + card.card_id + ":team");
+                            jedis.del("user_id:" + global.id_user + ":card_id:" + card.card_id + ":position");
                         }
                     }
                 }
@@ -131,10 +131,10 @@ public class collection {
                         jedis.set("user_id:" + global.id_user + ":card_id:" + card_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
                     }
                     else{
-                        jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":name", 0);
-                        jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":quantity", 0);
-                        jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":team", 0);
-                        jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":position", 0);
+                        jedis.del("user_id:" + global.id_user + ":card_id:" + card_id + ":name");
+                        jedis.del("user_id:" + global.id_user + ":card_id:" + card_id + ":quantity");
+                        jedis.del("user_id:" + global.id_user + ":card_id:" + card_id + ":team");
+                        jedis.del("user_id:" + global.id_user + ":card_id:" + card_id + ":position");
                     }
                 }
           //  }
@@ -236,4 +236,32 @@ public class collection {
                 }
                 closePool();
             }
+            
+        public static void delete_user_card_collection(String user_id) {
+        	
+        	String key_load = crea_chiave_load(user_id);  //qui dovremmo inserire this.user_id, oppure togliere il parametro e farlo come commentato sopra
+            
+            JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        	JedisPool pool = new JedisPool(jedisPoolConfig, "localhost", 6379);
+            try (Jedis jedis = pool.getResource()) {
+            	
+                int i = 0;
+            	while (i<=600) {	//TODO inserire lunghezza effettiva di max card_id 
+                    String key_name = key_load+i+":name";
+                    System.out.println(key_name);
+                    jedis.del(key_name);
+                    
+                    String key_pos = key_load+i+":position";
+                    jedis.del(key_pos);
+                        
+                    String key_qnt = key_load+i+":quantity";
+                    jedis.del(key_qnt);
+                        
+                    String key_team = key_load+i+":team";
+                    jedis.del(key_team);
+              
+                    i++;
+                }
+            }
+        }
 }

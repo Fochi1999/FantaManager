@@ -62,6 +62,9 @@ public class user {
     public int get_privilege() {
         return privilege;
     }
+    public String get_id() {
+        return _id;
+    }
     public String getUsername(){
         return username;
     }
