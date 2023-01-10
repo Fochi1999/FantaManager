@@ -152,7 +152,7 @@ public class collection {
                         try (Jedis jedis = pool.getResource()) {
                             String value=jedis.get(key);
                             Integer quantity=Integer.parseInt(value);
-                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity+1));  //TODO provare funzionamento
+                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity+1));
                         }
                     }
                     else {
