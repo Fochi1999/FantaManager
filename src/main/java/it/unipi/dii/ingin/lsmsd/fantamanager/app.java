@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Arrays;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.*;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.*;
@@ -30,6 +31,8 @@ public class app extends Application {
             //populateDB.create_cards_collection_mongoDB();  -->prendi file cardsDUMP.json da chat gruppo
     		//populateDB.create_trade_collection_mongoDB(1000000);		//trades collection - mongo
     		//populateDB.create_user_card_collection_redis();			//user's card collection - redis
+    		
+    		global.updated_matchdays = utilities.get_updated_matchdays();
     	} catch(Exception e){
     		e.printStackTrace();
     	}
