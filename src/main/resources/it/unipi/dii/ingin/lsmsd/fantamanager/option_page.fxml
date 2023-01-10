@@ -90,7 +90,7 @@
                   </Text>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="250.0" prefHeight="88.0" prefWidth="228.0">
+            <AnchorPane layoutX="385.0" layoutY="96.0" prefHeight="88.0" prefWidth="228.0">
                <children>
                   <TextField fx:id="credits_field" editable="false" layoutX="14.0" layoutY="39.0" prefHeight="34.0" prefWidth="171.0">
                      <font>
@@ -162,18 +162,32 @@
                   <Text fx:id="email_warning" fill="RED" layoutX="14.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="216.5367431640625" />
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="385.0" layoutY="250.0" prefHeight="88.0" prefWidth="228.0">
+            <AnchorPane layoutX="14.0" layoutY="260.0" prefHeight="88.0" prefWidth="498.0">
                <children>
-                  <TextField fx:id="collection_field" editable="false" layoutX="14.0" layoutY="39.0" prefHeight="34.0" prefWidth="171.0">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </TextField>
-                  <Text fill="WHITE" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Collection" wrappingWidth="171.20000000000005">
+                  <Button fx:id="delete_account" layoutX="24.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#show_delete_buttons" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: RED;" text="Delete account">
                      <font>
                         <Font size="15.0" />
                      </font>
-                  </Text>
+                  </Button>
+                  <Text fx:id="delete_warning" fill="RED" layoutX="25.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete your account? If you accept you will be logged out." wrappingWidth="448.53680419921875" />
+                  <Pane fx:id="delete_confirm" layoutX="159.0" layoutY="24.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox">
+                     <children>
+                        <ImageView fitHeight="34.0" fitWidth="27.0" layoutX="6.0" layoutY="6.0" onMouseClicked="#confirm_delete" pickOnBounds="true" preserveRatio="true" styleClass="img">
+                           <image>
+                              <Image url="@../../../../../../imm/check_icon.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="delete_cancel" layoutX="207.0" layoutY="24.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox">
+                     <children>
+                        <ImageView fitHeight="27.0" fitWidth="27.0" layoutX="6.0" layoutY="6.0" onMouseClicked="#cancel_delete" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../imm/x_icon.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
                </children>
             </AnchorPane>
             <AnchorPane layoutX="14.0" layoutY="172.0" prefHeight="88.0" prefWidth="228.0">

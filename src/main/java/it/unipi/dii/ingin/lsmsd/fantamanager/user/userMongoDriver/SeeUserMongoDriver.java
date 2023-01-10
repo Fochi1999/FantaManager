@@ -39,10 +39,7 @@ public class SeeUserMongoDriver {
 	
 	public static void delete_user(String username) {
 		
-		//connecting to mongoDB 
-		//MongoClient myClient = MongoClients.create(global.MONGO_URI);
-		//MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		//MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+		//TODO remove all trades from db and all keyvalues on redis
 		UserMongoDriver.openConnection();
 			
 		//delete user

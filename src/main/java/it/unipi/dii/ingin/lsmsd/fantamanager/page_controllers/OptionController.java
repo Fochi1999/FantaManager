@@ -13,7 +13,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,6 +23,7 @@ import javafx.scene.control.TextField;
 import static it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.SeeUserMongoDriver;
 
 public class OptionController implements Initializable {
 	
@@ -64,6 +65,9 @@ public class OptionController implements Initializable {
     @FXML private ImageView email_edit;
     @FXML private ImageView email_confirm;
     
+    @FXML private Text delete_warning;
+    @FXML private Pane delete_confirm;
+    @FXML private Pane delete_cancel;
     
     @FXML
     protected void click_home() throws IOException {
@@ -108,13 +112,14 @@ public class OptionController implements Initializable {
     	username_confirm.setVisible(false);
     	password_confirm.setVisible(false);
     	email_confirm.setVisible(false);
+    	delete_confirm.setVisible(false);
+    	delete_cancel.setVisible(false);
     	
     	username_warning.setText("");
     	password_warning.setText("");
     	email_warning.setText("");
-
-    	//finding the user
-    	//find_user();
+    	delete_warning.setText("");
+    	
     	show_user_info();
     }
     
@@ -157,7 +162,11 @@ public class OptionController implements Initializable {
     	email_confirm.setVisible(true);
     }
     
-    
+    public void show_delete_buttons() {
+    	delete_confirm.setVisible(true);
+    	delete_cancel.setVisible(true);
+    	delete_warning.setText("Are you sure you want to delete your account? If you accept you will be logged out.");
+    }
     
     //confirm buttons
     public void confirm_username_click() {
@@ -249,6 +258,17 @@ public class OptionController implements Initializable {
     	show_user_info();	//refresh fields
     }
     
+    public void confirm_delete(){	//delete user
+    	SeeUserMongoDriver.delete_user(global.user.username);
+    	Stage stage = (Stage)root.getScene().getWindow();
+    	stage.close();
+    }
+    
+    public void cancel_delete() {	//remove buttons and warnings
+    	delete_confirm.setVisible(false);
+    	delete_cancel.setVisible(false);
+    	delete_warning.setText("");
+    }
     
     public void refresh_warnings() {
     	//refreshing text

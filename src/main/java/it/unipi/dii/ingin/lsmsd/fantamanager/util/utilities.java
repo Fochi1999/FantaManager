@@ -93,7 +93,6 @@ public class utilities {
         			array[i] = Integer.parseInt(words[i]);
         		}
         	}
-        	System.out.println(Arrays.toString(array));
         	System.out.println("Updated matchdays retrieved");
         }
         catch(Exception e){
