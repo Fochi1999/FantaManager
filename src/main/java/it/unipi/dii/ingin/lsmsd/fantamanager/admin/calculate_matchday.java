@@ -5,6 +5,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.simple.JSONArray;
@@ -14,6 +15,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,65 +41,83 @@ public class calculate_matchday {
 
         try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){
             while(cursor.hasNext()) {
+            //for(int j=0;j<2;j++){
                 String doc = cursor.next().toJson();
                 System.out.println(doc);
                 JSONParser parser = new JSONParser();
                 JSONObject json_formation = (JSONObject) parser.parse(doc);
 
-                JSONObject formation= (JSONObject) json_formation.get("formations");
+                JSONObject formation = (JSONObject) json_formation.get("formations");
+                String username = (String) json_formation.get("username");
                 JSONObject match = (JSONObject) formation.get(String.valueOf(matchday));
-                JSONArray modulo=(JSONArray) match.get("modulo");
+                //System.out.println(match);
 
-                JSONObject cards = (JSONObject) match.get("players");
-                System.out.println(cards);
+                if (match != null) {
+                    JSONArray modulo = (JSONArray) match.get("modulo");
 
-                String username= (String) json_formation.get("username");
+                    JSONObject cards = (JSONObject) match.get("players");
+                    System.out.println(cards);
 
-                riazzera_vote_card_of_team(cards);
 
-                for (int i = 0; i < 11; i++) { //TODO farla a modo, qui prende solo i primi 11
-                    JSONObject card=(JSONObject) cards.get(String.valueOf(i));
-                    float score=player_score.get(card.get("name"));
-                    //inserisce il voto di ogni giocatore in formation   //TODO ragionare se sia corretto o meno avere questa ridondanza di avere il voto sia qui che sulle cards
-                    if(score==-5000){
-                        //se invece non gioca, l' inserimento viene fatto in take_card_from_bench
-                        score=take_card_from_bench(i,player_score,cards,modulo,username,matchday);
 
-                        //e in quello che non ha giocato ma era schierato titolare metto null
-                        if(score!=0) {
-                            System.out.println("titolare sostituito:" + card.get("name"));
+                    riazzera_vote_card_of_team(cards);
+
+                    for (int i = 0; i < 11; i++) {
+                        JSONObject card = (JSONObject) cards.get(String.valueOf(i));
+                        float score = player_score.get(card.get("name"));
+                        //inserisce il voto di ogni giocatore in formation
+                        if (score == -5000) {
+                            //se invece non gioca, l' inserimento viene fatto in take_card_from_bench
+                            score = take_card_from_bench(i, player_score, cards, modulo, username, matchday);
+
+                            //e in quello che non ha giocato ma era schierato titolare metto null
+                            if (score != 0) {
+                                System.out.println("titolare sostituito:" + card.get("name"));
+                                Bson filter = Filters.and(eq("username", username));
+                                Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", null);
+                                UpdateOptions options = new UpdateOptions().upsert(true);
+                                System.out.println(coll.updateOne(filter, update1, options));
+
+                                //setto voto anche nella variabile cards
+                                card.put("vote", null);
+                            } else {
+                                //altrimenti significa che nemmeno quelli della panchina erano validi o erano gia presi in altre posizioni, quindi il voto resta zero per quello che era titolare e non ha avuto rimpiazzo dalla panchina
+                                System.out.println(card.get("name") + " non sara rimpiazzato");
+                            }
+                        } else {
+
+                            System.out.println("titolare" + card.get("name"));
                             Bson filter = Filters.and(eq("username", username));
-                            Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", null);
+                            Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", score);
                             UpdateOptions options = new UpdateOptions().upsert(true);
                             System.out.println(coll.updateOne(filter, update1, options));
 
                             //setto voto anche nella variabile cards
-                            card.put("vote", null);
+                            card.put("vote", score);
                         }
-                        else{
-                            //altrimenti significa che nemmeno quelli della panchina erano validi o erano gia presi in altre posizioni, quindi il voto resta zero per quello che era titolare e non ha avuto rimpiazzo dalla panchina
-                            System.out.println(card.get("name")+" non sara rimpiazzato");
-                        }
+                        total_score += score;
                     }
-                    else {
 
-                        System.out.println("titolare"+card.get("name"));
-                        Bson filter = Filters.and(eq("username", username));
-                        Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", score);
-                        UpdateOptions options = new UpdateOptions().upsert(true);
-                        System.out.println(coll.updateOne(filter, update1, options));
-
-                        //setto voto anche nella variabile cards
-                        card.put("vote",score);
-                    }
-                    total_score+=score;
+                    //TODO controllo di questa query su tutti gli users
+                    Bson filter = Filters.and(eq("username", username));
+                    Bson update1 = Updates.set("formations." + matchday + ".tot", total_score);
+                    UpdateOptions options = new UpdateOptions().upsert(true);
+                    System.out.println(coll.updateOne(filter, update1, options));
                 }
+                else{
+                    //l-utente non ha inserito la formazione
+                    System.out.println("formazione non inserita");
 
-                //TODO controllo di questa query su tutti gli users
-                Bson filter = Filters.and(eq("username", username));
-                Bson update1 = Updates.set("formations." + matchday + ".tot",total_score);
-                UpdateOptions options = new UpdateOptions().upsert(true);
-                System.out.println(coll.updateOne(filter, update1, options));
+                    JSONObject formation_null=new JSONObject();
+                    formation_null.put("valid",false);
+                    formation_null.put("players",new JSONObject());
+                    formation_null.put("tot",0.0);
+                    formation_null.put("modulo",new ArrayList<>());
+                    Bson filter = Filters.and(eq("username", username));
+                    Bson update1 = Updates.set("formations." + matchday,formation_null);
+                    UpdateOptions options = new UpdateOptions().upsert(true);
+                    System.out.println(coll.updateOne(filter, update1, options));
+                }
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -341,7 +361,7 @@ public class calculate_matchday {
         calulate_user_team_score(matchday,player_score);   //per calcolo score di un team di un user
 
         //TODO gestire vettore su redis dei match calcolati
-
+        utilities.update_matchday(matchday-1); //partita 1 va messa ad indice 0 del vettore
     }
 
     private static int calculate_mod_value(float score) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore
