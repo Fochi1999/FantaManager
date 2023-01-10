@@ -36,9 +36,7 @@ public class OptionsMongoDriver {
 		}
 		
 		//connecting to mongoDB 
-    	//MongoClient myClient = MongoClients.create(global.MONGO_URI);
-    	//MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-    	//MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+
 		UserMongoDriver.openConnection();
     	
     	//updating attribute
@@ -61,10 +59,10 @@ public class OptionsMongoDriver {
     	}
     	catch(Exception e) {
     		System.out.println("Error on updating " + attribute_name + "for user: " + global.user.username);
+			UserMongoDriver.closeConnection();
     		return false;
     	}
-    	
-    	//myClient.close();
+
 		UserMongoDriver.closeConnection();
     	return true;
 	}
@@ -80,9 +78,7 @@ public class OptionsMongoDriver {
 	public static boolean find_duplicate(String attribute_name, String new_value){
 		
 		//connecting to mongoDB 
-    	//MongoClient myClient = MongoClients.create(global.MONGO_URI);
-    	//MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-    	//MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+
 		UserMongoDriver.openConnection();
 
     	Document attribute_value;
@@ -93,7 +89,7 @@ public class OptionsMongoDriver {
     	//finding the attribute
     	try {
     		attribute_value = UserMongoDriver.collection.find(filter).first();
-    		//myClient.close();
+
 			UserMongoDriver.closeConnection();
     		if(attribute_value == null) {	//attribute not in use
     			return false;
@@ -101,6 +97,7 @@ public class OptionsMongoDriver {
     	}
     	catch(Exception e) {
     		System.out.println("Error on finding " + attribute_name + "for user: " + global.user.username);
+			UserMongoDriver.closeConnection();
     		return true;
     	}
     	System.out.println("Duplicate found!");
