@@ -6,8 +6,8 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.RankingMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.RankingMongoDriver;
 
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -187,7 +187,7 @@ public class TradesController implements Initializable{
 		TradeMongoDriver.delete_my_trade(trade_id);
     	
     	TradeMongoDriver.closeConnection();
-				
+
     	//update user's credits info
     	if(chosen_trade.get_credits() < 0) {	//if a user offered credits, they will be refunded
     		OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),(0-chosen_trade.get_credits()));

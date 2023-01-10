@@ -9,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 import org.bson.Document;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.RankingMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.RankingMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import javafx.beans.value.ChangeListener;

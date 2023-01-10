@@ -73,7 +73,7 @@ public class user {
     public int getCredits() {
     	return credits;
     }
-        
+
     public int getPoints() {
     	return points;
     }

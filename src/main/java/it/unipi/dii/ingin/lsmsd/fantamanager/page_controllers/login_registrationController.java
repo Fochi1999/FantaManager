@@ -2,7 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.login;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.hash;
 import javafx.fxml.FXML;

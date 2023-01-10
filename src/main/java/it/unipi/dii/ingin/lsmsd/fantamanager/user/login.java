@@ -59,7 +59,8 @@ public class login {
 
         //INIZIALIZZARE LE VARIABILI GLOBAL
 
-        user u=new user(Nick,Pass,Region,Email,100,1,0);
+
+        user u=new user(Nick,Pass,Region,Email,100,0,1);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;
         try {

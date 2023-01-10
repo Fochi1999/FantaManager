@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.bson.Document;

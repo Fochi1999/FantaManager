@@ -5,13 +5,16 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.SeeUserMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.SeeUserMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
@@ -75,6 +78,17 @@ public class SeeCardController implements Initializable{
         Stage stage = (Stage)root.getScene().getWindow();
         util_controller.go_to_shop(stage);   
     }
+	@FXML
+	protected void click_shot_stats() throws IOException {
+
+		System.out.println("going to shot stats...");
+		Stage stage = (Stage)root.getScene().getWindow();
+		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("shot_stats_page.fxml"));
+		Scene scene = new Scene(fxmlLoader.load());
+		stage.setTitle("Ranking page");
+		stage.setScene(scene);
+		stage.show();
+	}
 	
 	@FXML
     protected void click_home() throws IOException {
@@ -142,7 +156,6 @@ public class SeeCardController implements Initializable{
 		double credits=card_doc.getDouble("credits");
 		if(check_credits((int)credits)) {
 			OptionsMongoDriver.update_user_credits(false, global.user.username, (int) credits);
-
 			card_collection bought_card = new card_collection(card_doc.getInteger("player_id"), card_doc.getString("fullname"), 1, card_doc.getString("team"), card_doc.getString("position"));
 			collection.add_card_to_collection(bought_card, global.id_user);
 			System.out.println("Card bought");

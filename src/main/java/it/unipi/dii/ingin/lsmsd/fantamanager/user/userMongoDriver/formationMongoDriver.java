@@ -1,4 +1,4 @@
-package it.unipi.dii.ingin.lsmsd.fantamanager.user;
+package it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,9 +51,11 @@ public class formationMongoDriver {
     }
 
     public static boolean insert_formation() throws ParseException {
-        MongoClient myClient = MongoClients.create(global.MONGO_URI);
-        MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+        //MongoClient myClient = MongoClients.create(global.MONGO_URI);
+        //MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+        //MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+        UserMongoDriver.openConnection();
+
         Bson user = Filters.eq("username", global.user.username);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;
@@ -66,14 +68,15 @@ public class formationMongoDriver {
         JSONObject formation=(JSONObject) create_object_formation(json);
         Bson update = Updates.set("formations", formation);
         try {
-            collection.updateOne(user, update);
+            UserMongoDriver.collection.updateOne(user, update);
         }
         catch(Exception e) {
             System.out.println("Error on updating formation for user: " + global.user.username);
             return false;
         }
 
-        myClient.close();
+        //myClient.close();
+        UserMongoDriver.closeConnection();
 
         return true;
 
