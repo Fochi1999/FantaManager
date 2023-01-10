@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+
+import static com.almasb.fxgl.core.math.FXGLMath.random;
 
 public class formation {
     public HashMap<Integer,player_formation> players;
@@ -131,20 +134,76 @@ public class formation {
         int nAtt=Attackers.size();
         int nMid=Midfielders.size();
         int nDef=Defenders.size();
+        int nGks=Gks.size();
         mod=get_casual_module();
+        int casAtt=utilities.getRandomInt(0,nAtt-mod[3]-1);
+        int casMid=utilities.getRandomInt(0,nMid-mod[2]-1);
+        int casDef=utilities.getRandomInt(0,nDef-mod[1]-1);
+        int casGk=utilities.getRandomInt(0,nGks-mod[0]-1);
         formation f=new formation(mod);
-        for(int i=0;i<19;i++){
-
+        for(int i=0;i<4;i++){
+            String role="";
+            if(i==0){
+                role="P-";
+            }
+            else if(i==1){
+                role="D-";
+            }
+            else if(i==2){
+                role="M-";
+            }
+            else if(i==3){
+                role="A-";
+            }
+            for(int j=0;j<mod[i];j++){
+                role=role+(j+1);
+                if(i==0){
+                    f.insert_new_player(Gks.get(casGk),role);
+                }
+                else if(i==1){
+                    f.insert_new_player(Defenders.get(casDef+j),role);
+                }
+                else if(i==2){
+                    f.insert_new_player(Defenders.get(casMid+j),role);
+                }
+                else if(i==3){
+                    f.insert_new_player(Defenders.get(casAtt+j),role);
+                }
+            }
+        }
+        for(int i=0;i<8;i++){
+            String role="S-";
+            if(i<2){
+                role=role+"P-"+(i+1);
+                f.insert_new_player(Gks.get(casGk+mod[0]+i),role);
+            }
+            else if(i<4){
+                role=role+"D-"+(i+1);
+                f.insert_new_player(Defenders.get(casDef+mod[1]+i),role);
+            }
+            else if(i<6){
+                role=role+"M-"+(i+1);
+                f.insert_new_player(Midfielders.get(casMid+mod[2]+i),role);
+            }
+            else{
+                role=role+"A-"+(i+1);
+                f.insert_new_player(Attackers.get(casAtt+mod[3]+i),role);
+            }
         }
         return f;
     }
 
     private static int[] get_casual_module() {
-        int[] mod=new int[4];
-        mod[0]=1;
-        mod[1]=4;
-        mod[2]=4;
-        mod[3]=2;
-        return mod;
+        int[][] mod={
+                { 1, 4,4,2 },
+                { 1, 4,5,1 },
+                { 1, 4,3,3 },
+                { 1, 5,4,1 },
+                { 1, 5,3,2 },
+                { 1, 3,5,2 },
+                { 1, 3,4,3 }
+        };
+        int nCasuale=(int) ((Math.random() * (7 - 0)));
+        return mod[nCasuale];
     }
 }
