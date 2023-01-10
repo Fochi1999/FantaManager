@@ -39,7 +39,8 @@ import redis.clients.jedis.Transaction;
 
 public class populateDB {
 
-	 //prossime due funzioni solo per creazione collection casuale per utente user_id:1
+	static int numero_player=0;
+
     static ArrayList<Document> get_cards_collection_mongoDB(){
 
     	//connecting to mongoDB 
@@ -451,7 +452,7 @@ public class populateDB {
 
 				if(player_API_name.equals(player_kickest_name) && player_API_team.equals(convert_team(player_kickest_team))){  //per risolvere problema G.Pezzella
 					System.out.println(player_API_name);
-					createPlayerDocuments(player_kickest,player_API,i,collection);
+					createPlayerDocuments(player_kickest,player_API,numero_player++,collection);
 				}
 				else{
 					//potrebbe non esserci o avere quelle stringhe strane
@@ -460,7 +461,7 @@ public class populateDB {
 
 					if(player_API_name.equals(player_kickest_name) && player_API_team.equals(convert_team(player_kickest_team))){  //per risolvere problema G.Pezzella
 						System.out.println(player_API_name);
-						createPlayerDocuments(player_kickest,player_API,i,collection);
+						createPlayerDocuments(player_kickest,player_API,numero_player++,collection);
 					}
 				}
 

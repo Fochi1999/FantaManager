@@ -44,10 +44,10 @@ public class collection {
                 try (Jedis jedis = pool.getResource()) {
                 	
                     int i = 0;
-                	while (i<=600) {
+                	while (i<=531) {  //number of cards  //TODO forse dovremmo fargli recuperare il numero, cosi da renderlo generico
                         String key_name = key_load+i+":name";
                         String value_name = jedis.get(key_name);
-                        System.out.println(key_name +" - "+value_name);
+                        //System.out.println(key_name +" - "+value_name);
                         
                         if (value_name != null) {
                         	String key_pos = key_load+i+":position";
