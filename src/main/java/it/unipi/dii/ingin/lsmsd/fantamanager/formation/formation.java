@@ -111,86 +111,84 @@ public class formation {
         return(!utilities.has_duplicates(ids));
     }
     public static formation getRandomFormation(ArrayList<card_collection> Cards){
-        int[] mod=new int[4];
-        ArrayList<player_formation>Attackers=new ArrayList<>();
-        ArrayList<player_formation>Midfielders=new ArrayList<>();
-        ArrayList<player_formation>Defenders=new ArrayList<>();
-        ArrayList<player_formation>Gks=new ArrayList<>();
-        for(int j=0;j<Cards.size();j++){
-            card_collection card=Cards.get(j);
-            if(card.get_position()=="Attacker"){
-                Attackers.add(new player_formation(card));
+        try {
+            int[] mod = new int[4];
+            ArrayList<player_formation> Attackers = new ArrayList<>();
+            ArrayList<player_formation> Midfielders = new ArrayList<>();
+            ArrayList<player_formation> Defenders = new ArrayList<>();
+            ArrayList<player_formation> Gks = new ArrayList<>();
+            for (int j = 0; j < Cards.size(); j++) {
+                card_collection card = Cards.get(j);
+                if (card.get_position().equals("Attacker")) {
+                    Attackers.add(new player_formation(card));
+                }
+                if (card.get_position().equals("Midfielder")) {
+                    Midfielders.add(new player_formation(card));
+                }
+                if (card.get_position().equals("Defender")) {
+                    Defenders.add(new player_formation(card));
+                }
+                if (card.get_position().equals("Goalkeeper")) {
+                    Gks.add(new player_formation(card));
+                }
             }
-            if(card.get_position()=="Midfielder"){
-                Midfielders.add(new player_formation(card));
+            int nAtt = Attackers.size();
+            int nMid = Midfielders.size();
+            int nDef = Defenders.size();
+            int nGks = Gks.size();
+            mod = get_casual_module();
+            int casAtt = utilities.getRandomInt(0, nAtt - mod[3] - 2);
+            int casMid = utilities.getRandomInt(0, nMid - mod[2] - 2);
+            int casDef = utilities.getRandomInt(0, nDef - mod[1] - 2);
+            int casGk = utilities.getRandomInt(0, nGks - mod[0] - 2);
+            formation f = new formation(mod);
+            for (int i = 0; i < 4; i++) {
+                String role = "";
+                if (i == 0) {
+                    role = "G-";
+                } else if (i == 1) {
+                    role = "D-";
+                } else if (i == 2) {
+                    role = "M-";
+                } else if (i == 3) {
+                    role = "A-";
+                }
+                for (int j = 0; j < mod[i]; j++) {
+                    role = role + (j + 1);
+                    if (i == 0) {
+                        f.insert_new_player(Gks.get(casGk), role);
+                    } else if (i == 1) {
+                        f.insert_new_player(Defenders.get(casDef + j), role);
+                    } else if (i == 2) {
+                        f.insert_new_player(Midfielders.get(casMid + j), role);
+                    } else if (i == 3) {
+                        f.insert_new_player(Attackers.get(casAtt + j), role);
+                    }
+                    role=role.substring(0,role.length()-1);
+                }
             }
-            if(card.get_position()=="Defender"){
-                Defenders.add(new player_formation(card));
+            for (int i = 0; i < 8; i++) {
+                String role = "S-";
+                if (i < 2) {
+                    role = role + "G-" + (i + 1);
+                    f.insert_new_player(Gks.get(casGk + mod[0] + i), role);
+                } else if (i < 4) {
+                    role = role + "D-" + (i + 1-2);
+                    f.insert_new_player(Defenders.get(casDef + mod[1] + i-2), role);
+                } else if (i < 6) {
+                    role = role + "M-" + (i + 1-4);
+                    f.insert_new_player(Midfielders.get(casMid + mod[2] + i-4), role);
+                } else {
+                    role = role + "A-" + (i + 1-6);
+                    f.insert_new_player(Attackers.get(casAtt + mod[3] + i-6), role);
+                }
             }
-            if(card.get_position()=="Goalkeeper"){
-                Gks.add(new player_formation(card));
-            }
+            f.valid=true;
+            return f;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
         }
-        int nAtt=Attackers.size();
-        int nMid=Midfielders.size();
-        int nDef=Defenders.size();
-        int nGks=Gks.size();
-        mod=get_casual_module();
-        int casAtt=utilities.getRandomInt(0,nAtt-mod[3]-1);
-        int casMid=utilities.getRandomInt(0,nMid-mod[2]-1);
-        int casDef=utilities.getRandomInt(0,nDef-mod[1]-1);
-        int casGk=utilities.getRandomInt(0,nGks-mod[0]-1);
-        formation f=new formation(mod);
-        for(int i=0;i<4;i++){
-            String role="";
-            if(i==0){
-                role="P-";
-            }
-            else if(i==1){
-                role="D-";
-            }
-            else if(i==2){
-                role="M-";
-            }
-            else if(i==3){
-                role="A-";
-            }
-            for(int j=0;j<mod[i];j++){
-                role=role+(j+1);
-                if(i==0){
-                    f.insert_new_player(Gks.get(casGk),role);
-                }
-                else if(i==1){
-                    f.insert_new_player(Defenders.get(casDef+j),role);
-                }
-                else if(i==2){
-                    f.insert_new_player(Defenders.get(casMid+j),role);
-                }
-                else if(i==3){
-                    f.insert_new_player(Defenders.get(casAtt+j),role);
-                }
-            }
-        }
-        for(int i=0;i<8;i++){
-            String role="S-";
-            if(i<2){
-                role=role+"P-"+(i+1);
-                f.insert_new_player(Gks.get(casGk+mod[0]+i),role);
-            }
-            else if(i<4){
-                role=role+"D-"+(i+1);
-                f.insert_new_player(Defenders.get(casDef+mod[1]+i),role);
-            }
-            else if(i<6){
-                role=role+"M-"+(i+1);
-                f.insert_new_player(Midfielders.get(casMid+mod[2]+i),role);
-            }
-            else{
-                role=role+"A-"+(i+1);
-                f.insert_new_player(Attackers.get(casAtt+mod[3]+i),role);
-            }
-        }
-        return f;
     }
 
     private static int[] get_casual_module() {
