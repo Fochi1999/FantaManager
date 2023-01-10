@@ -300,7 +300,7 @@ public class TradesController implements Initializable{
 
 				for(String card:chosen_trade.get_card_to()){
 					card_collection card_to= CardMongoDriver.search_player_by_name(card);
-					collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, i giocatori richiesti da chi ha generato il trade
+					collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, l'utente loggato, i giocatori richiesti da chi ha generato il trade
 					collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
 				}
 

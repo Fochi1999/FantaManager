@@ -337,8 +337,11 @@ public class calculate_matchday {
             throw new RuntimeException(e);
         }
         System.out.println("calculate matchday completed");
-        //formation.calculate_team_score(player_score);  //TODO per calcolo score di un team di un player
-        calulate_user_team_score(matchday,player_score);
+        //formation.calculate_team_score(player_score);
+        calulate_user_team_score(matchday,player_score);   //per calcolo score di un team di un user
+
+        //TODO gestire vettore su redis dei match calcolati
+
     }
 
     private static int calculate_mod_value(float score) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore
