@@ -32,6 +32,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
@@ -61,21 +62,35 @@ public class ShotsStatsController implements Initializable{
 		System.out.println(matchdays.toString());
 		for(int i=1;i<=last_updated_matchday;i++){
 			Document matchday=(Document)matchdays.get("matchday"+i);
-			Object shotsInfo=matchday.get("shotsinfo");
-			System.out.println(shotsInfo.toString()+shotsInfo.getClass());
+			System.out.println(matchday.toString());
+			Document statsmatchday=(Document)matchday.get("stats");
+			ArrayList<Document> shotsInfo=(ArrayList<Document>)statsmatchday.get("shotsInfo");
+			System.out.println(shotsInfo.toString()+" class "+shotsInfo.getClass());
+			for(int j=0;j<shotsInfo.size();j++){
+				Document shot=shotsInfo.get(j);
+				String minS=(String)shot.get("min");
+				String type=(String)shot.get("shotType");
+				String xS=(String)shot.get("X");
+				String yS=(String)shot.get("Y");
+				String result=(String)shot.get("results");
+				String situation=(String)shot.get("situation");
+				Document assist=(Document)shot.get("assist");
+				System.out.println("x"+xS+" y "+yS+" result"+result);
+				double x=Double.parseDouble(xS);
+				double y=Double.parseDouble(yS);
+				create_points_shots(x,y,result);
+			}
 		}
-		//TODO retrieve shot info
-		for (int i=0;i<100;i++){
-			create_points_shots(i,i,0);
-		}
+
+
 
 
 	}
 	
-	public void create_points_shots(double x,double y, int type){
+	public void create_points_shots(double x,double y, String type){
 		double Xlen=field_image.getImage().getWidth();
 		double Ylen=field_image.getImage().getHeight();
-		Circle point=new Circle(x,y,5);
+		Circle point=new Circle(y*Xlen,x*Ylen,5);
 		point.setFill(Color.DARKRED);
 		pane_field.getChildren().add(point);
 
