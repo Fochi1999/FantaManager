@@ -115,7 +115,7 @@ public class populateDB {
         			i++;
         		}
         		String user_id = user_list.get(i).get("_id").toString();
-        		int random_total_cards = ThreadLocalRandom.current().nextInt(30, 45);	//user's cards collection size
+        		int random_total_cards = ThreadLocalRandom.current().nextInt(30, 40);	//user's cards collection size
         		
         		for(int j=0; j<3; j++) {	//at least 3 attacker
         			
