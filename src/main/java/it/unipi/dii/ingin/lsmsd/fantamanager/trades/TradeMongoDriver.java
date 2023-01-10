@@ -8,7 +8,6 @@ import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;

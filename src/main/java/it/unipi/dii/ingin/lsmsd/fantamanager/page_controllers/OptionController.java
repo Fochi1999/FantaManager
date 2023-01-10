@@ -1,7 +1,5 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday;
-import it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday.*;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.event.ActionEvent;
@@ -23,7 +21,6 @@ import java.util.ResourceBundle;
 import javafx.scene.control.TextField;
 
 import static it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday.*;
-import static it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 
