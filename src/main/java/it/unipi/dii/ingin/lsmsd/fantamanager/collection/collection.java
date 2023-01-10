@@ -47,7 +47,6 @@ public class collection {
                 	while (i<=600) {
                         String key_name = key_load+i+":name";
                         String value_name = jedis.get(key_name);
-                        System.out.println(key_name +" - "+value_name);
                         
                         if (value_name != null) {
                         	String key_pos = key_load+i+":position";
