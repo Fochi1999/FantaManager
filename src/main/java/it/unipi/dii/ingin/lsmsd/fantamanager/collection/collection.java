@@ -104,7 +104,7 @@ public class collection {
                         String value = jedis.get(key);
                         Integer quantity = Integer.parseInt(value);
                         if (quantity > 1) {
-                            jedis.set("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
+                            jedis.set("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity - 1));
                         }
                         else{
                             jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":name", 0);
@@ -128,7 +128,7 @@ public class collection {
                     String value = jedis.get(key);
                     Integer quantity = Integer.parseInt(value);
                     if (quantity > 1) {
-                        jedis.set("user_id:" + global.id_user + ":card_id:" + card_id + ":quantity", String.valueOf(quantity - 1));
+                        jedis.set("user_id:" + global.id_user + ":card_id:" + card_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
                     }
                     else{
                         jedis.expire("user_id:" + global.id_user + ":card_id:" + card_id + ":name", 0);
