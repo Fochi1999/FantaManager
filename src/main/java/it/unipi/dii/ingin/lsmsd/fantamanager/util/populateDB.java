@@ -243,7 +243,7 @@ public class populateDB {
 			if(user_list.get(random0).getString("username").equals("admin")) {	//admin doesn't play
 				user_from_input = user_list.get(random0+1).getString("username");
         	}
-			int credits_input = ThreadLocalRandom.current().nextInt(-500, 501);
+			int credits_input = ThreadLocalRandom.current().nextInt(-20, 20);
 			int status_input = ThreadLocalRandom.current().nextInt(0, 2);
 			
 			//if the trade is created as 'completed' then add the user that accepted it
@@ -330,8 +330,8 @@ public class populateDB {
 		    	//creating attributes values	
 				String user_username = myReader.nextLine();
 		    	String user_password = hash.MD5(user_username);	//the password is the same as the username
-				int user_credits = ThreadLocalRandom.current().nextInt(0, 501);
-				int user_points = ThreadLocalRandom.current().nextInt(0, 351);
+				int user_credits = ThreadLocalRandom.current().nextInt(50, 351);
+				int user_points = ThreadLocalRandom.current().nextInt(0, 2001); 	//TODO inizializzare a 0 quando sarà finito calculate matchday/formations
 				String user_email = generate_random_email();
 				int random1 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
 				String user_region = utilities.regionList[random1];
