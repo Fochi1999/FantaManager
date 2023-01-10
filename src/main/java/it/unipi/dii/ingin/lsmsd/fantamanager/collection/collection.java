@@ -44,7 +44,7 @@ public class collection {
                 try (Jedis jedis = pool.getResource()) {
                 	
                     int i = 0;
-                	while (i<=600) {
+                	while (i<=600) {	//TODO inserire lunghezza effettiva di max card_id 
                         String key_name = key_load+i+":name";
                         String value_name = jedis.get(key_name);
                         
@@ -104,7 +104,7 @@ public class collection {
                         String value = jedis.get(key);
                         Integer quantity = Integer.parseInt(value);
                         if (quantity > 1) {
-                            jedis.set("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity - 1));
+                            jedis.set("user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity - 1));  //TODO provare funzionamento
                         }
                         else{
                             jedis.expire("user_id:" + global.id_user + ":card_id:" + card.card_id + ":name", 0);

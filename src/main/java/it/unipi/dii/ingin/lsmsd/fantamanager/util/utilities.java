@@ -46,20 +46,26 @@ public class utilities {
 	//function for update a specific matchday
 	public static void update_matchday(int matchday) {
 		
-		if(matchday < 0 || matchday > 38) { //error handling
+		if(matchday < -1 || matchday > 38) { //error handling
 			System.out.println("Matchday value out of range!");
 			return;
 		}
 		
 		JedisPool pool = new JedisPool("localhost", 6379);
 		
-		//updating the array
-		global.updated_matchdays[matchday] = 1;
-		
-        //set
+		//set
         try(Jedis jedis=pool.getResource()){
-        	jedis.set("admin:updated_matchdays", Arrays.toString(global.updated_matchdays));
-        	System.out.println("Setted value of 'updated_matchdays' matrix on position " + matchday);
+        	
+        	if(matchday == -1) {	//initialize
+        		int array[] = new int[38];
+        		jedis.set("admin:updated_matchdays", Arrays.toString(array));
+        		System.out.println("'updated_matchdays' matrix initialized");
+        	}
+        	else { //updating the array
+        		global.updated_matchdays[matchday] = 1;
+        		jedis.set("admin:updated_matchdays", Arrays.toString(global.updated_matchdays));
+        		System.out.println("Setted value of 'updated_matchdays' matrix on position " + matchday);
+        	}
         }
         catch(Exception e){
         	System.out.println("Error while setting the value of 'updated_matchdays' matrix");
@@ -87,6 +93,7 @@ public class utilities {
         			array[i] = Integer.parseInt(words[i]);
         		}
         	}
+        	System.out.println(Arrays.toString(array));
         	System.out.println("Updated matchdays retrieved");
         }
         catch(Exception e){
