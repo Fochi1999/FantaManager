@@ -4,7 +4,7 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import javafx.beans.property.Property;
 
 public class player_formation {
-   public String name;
+    public String name;
     public int id;
     public String team;
     public float vote;

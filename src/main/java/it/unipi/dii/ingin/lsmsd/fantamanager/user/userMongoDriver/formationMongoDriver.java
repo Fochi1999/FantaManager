@@ -19,6 +19,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.util.HashMap;
+
 
 public class formationMongoDriver {
 
@@ -50,28 +52,28 @@ public class formationMongoDriver {
         return true;
     }
 
-    public static boolean insert_formation() throws ParseException {
+    public static boolean insert_formation(String username, HashMap<Integer,formation> formation) throws ParseException {
         //MongoClient myClient = MongoClients.create(global.MONGO_URI);
         //MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
         //MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
         UserMongoDriver.openConnection();
 
-        Bson user = Filters.eq("username", global.user.username);
+        Bson user = Filters.eq("username", username);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;
         try {
-            json = ow.writeValueAsString(global.user.formations);
+            json = ow.writeValueAsString(formation);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println(json);
-        JSONObject formation=(JSONObject) create_object_formation(json);
-        Bson update = Updates.set("formations", formation);
+        JSONObject JsonFormation=(JSONObject) create_object_formation(json);
+        Bson update = Updates.set("formations", JsonFormation);
         try {
             UserMongoDriver.collection.updateOne(user, update);
         }
         catch(Exception e) {
-            System.out.println("Error on updating formation for user: " + global.user.username);
+            System.out.println("Error on updating formation for user: " + username);
             return false;
         }
 

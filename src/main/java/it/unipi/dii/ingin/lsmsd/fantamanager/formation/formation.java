@@ -107,4 +107,44 @@ public class formation {
         }
         return(!utilities.has_duplicates(ids));
     }
+    public static formation getRandomFormation(ArrayList<card_collection> Cards){
+        int[] mod=new int[4];
+        ArrayList<player_formation>Attackers=new ArrayList<>();
+        ArrayList<player_formation>Midfielders=new ArrayList<>();
+        ArrayList<player_formation>Defenders=new ArrayList<>();
+        ArrayList<player_formation>Gks=new ArrayList<>();
+        for(int j=0;j<Cards.size();j++){
+            card_collection card=Cards.get(j);
+            if(card.get_position()=="Attacker"){
+                Attackers.add(new player_formation(card));
+            }
+            if(card.get_position()=="Midfielder"){
+                Midfielders.add(new player_formation(card));
+            }
+            if(card.get_position()=="Defender"){
+                Defenders.add(new player_formation(card));
+            }
+            if(card.get_position()=="Goalkeeper"){
+                Gks.add(new player_formation(card));
+            }
+        }
+        int nAtt=Attackers.size();
+        int nMid=Midfielders.size();
+        int nDef=Defenders.size();
+        mod=get_casual_module();
+        formation f=new formation(mod);
+        for(int i=0;i<19;i++){
+
+        }
+        return f;
+    }
+
+    private static int[] get_casual_module() {
+        int[] mod=new int[4];
+        mod[0]=1;
+        mod[1]=4;
+        mod[2]=4;
+        mod[3]=2;
+        return mod;
+    }
 }

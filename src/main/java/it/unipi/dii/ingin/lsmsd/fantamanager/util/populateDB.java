@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,10 +14,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
+import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.user;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.formationMongoDriver;
 import org.bson.Document;
 
 import com.mongodb.client.MongoClient;
@@ -30,6 +36,7 @@ import com.mongodb.client.model.Updates;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -561,7 +568,18 @@ public class populateDB {
 		//System.out.println("PLAYER TRASFORM:" + player);
 		return player;
 	}
-
+	public static void create_random_formations(int last_matchday) throws ParseException {
+		ArrayList<Document> user_list = get_users_collection_mongoDB();
+		for(int i=0;i<user_list.size();i++){
+			ArrayList<card_collection>Cards= collection.load_collection(user_list.get(i).get("_id").toString());
+			HashMap<Integer,formation> formations=new HashMap<>();
+			for(int j=1;j<=last_matchday;j++){
+				formation f=formation.getRandomFormation(Cards);
+				formations.put(j,f);
+			}
+			formationMongoDriver.insert_formation(user_list.get(i).getString("username"),formations);
+		}
+	}
 
 	private static String convert_team(String team) {
 
@@ -631,5 +649,6 @@ public class populateDB {
 		}
 		return team;
 	}
+
 
 }
