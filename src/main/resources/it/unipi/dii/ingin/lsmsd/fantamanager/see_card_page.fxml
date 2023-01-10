@@ -84,7 +84,7 @@
       </Button>
       <AnchorPane layoutX="43.0" layoutY="554.0" prefHeight="80.0" prefWidth="174.0" style="-fx-border-radius: 20; -fx-border-width: 3;">
          <children>
-            <Button fx:id="buy_card" layoutX="8.0" layoutY="21.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="158.0" style="-fx-background-color: GREEN;" onMouseClicked="#buy_card" text="Buy Card">
+            <Button fx:id="buy_card" layoutX="8.0" layoutY="21.0" mnemonicParsing="false" onMouseClicked="#buy_card" prefHeight="38.0" prefWidth="158.0" style="-fx-background-color: GREEN;" text="Buy Card">
                <font>
                   <Font size="15.0" />
                </font>
@@ -104,5 +104,10 @@
          </font>
       </Button>
       <Text fx:id="matchday_error" fill="RED" layoutX="39.0" layoutY="433.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert a matchday value" textAlignment="CENTER" wrappingWidth="182.13671875" />
+      <Button fx:id="general_stats1" layoutX="51.0" layoutY="449.0" mnemonicParsing="false" onAction="#click_shot_stats" onMouseClicked="#get_general_stats" prefHeight="38.0" prefWidth="158.0" text="Shot stats">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
