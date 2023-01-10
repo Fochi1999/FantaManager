@@ -1,6 +1,8 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.collections.FXCollections;
@@ -14,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.LineTable;
@@ -53,7 +56,7 @@ public class CollectionController implements Initializable {
     }
 
     @FXML
-    protected void click_delete() throws IOException {
+    protected void click_delete() throws IOException, NoSuchAlgorithmException {
 
         String name_player=player_selected.getText();
 
@@ -61,8 +64,11 @@ public class CollectionController implements Initializable {
 
         for(int i=0; i<coll.size();i++){
                 if(coll.get(i).get_name().equals(name_player)){
-                        System.out.println(name_player);
+                        System.out.println("player_deleted:"+name_player);
                         collection.delete_card_from_collection(coll.get(i));
+                        int credits_received= CardMongoDriver.retrieve_card_credits(name_player); //recupero valore carta
+                        //System.out.println(credits_received+" "+credits_received/2);
+                        OptionsMongoDriver.update_user_credits(true,global.user.username,credits_received/2); //e rendo la metà arrotondata per difetto all'utente
                 }
         }
 

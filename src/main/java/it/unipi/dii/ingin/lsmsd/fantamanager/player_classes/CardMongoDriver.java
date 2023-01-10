@@ -10,6 +10,7 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.json.simple.parser.ParseException;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -250,6 +251,26 @@ public class CardMongoDriver {
             }
 
             return resultDoc;
+    }
+
+    public static int retrieve_card_credits(String username){
+
+            openConnection();
+            MongoCursor<Document> resultDoc;
+
+            //blank search field
+
+
+            try {
+                resultDoc = collection.find(eq("fullname",username)).projection(include("fullname","credits")).iterator();
+            }
+            catch(Exception e) {
+                System.out.println("Error on search.");
+                return Integer.parseInt(null);
+            }
+
+            Document card=resultDoc.next();
+            return (int) card.get("credits");
     }
 
 }
