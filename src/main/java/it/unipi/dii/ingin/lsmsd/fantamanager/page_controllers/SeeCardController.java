@@ -5,13 +5,16 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.SeeUserMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
@@ -75,6 +78,17 @@ public class SeeCardController implements Initializable{
         Stage stage = (Stage)root.getScene().getWindow();
         util_controller.go_to_shop(stage);   
     }
+	@FXML
+	protected void click_shot_stats() throws IOException {
+
+		System.out.println("going to shot stats...");
+		Stage stage = (Stage)root.getScene().getWindow();
+		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("shot_stats_page.fxml"));
+		Scene scene = new Scene(fxmlLoader.load());
+		stage.setTitle("Ranking page");
+		stage.setScene(scene);
+		stage.show();
+	}
 	
 	@FXML
     protected void click_home() throws IOException {
