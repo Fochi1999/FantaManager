@@ -230,12 +230,12 @@ public class populateDB {
     	String admin_password = hash.MD5(admin_username);	//the password is the same as the username
 		int admin_credits = 0;
 		int admin_points = 0;
-		int admin_collection = 0;	
+		//int admin_collection = 0;
 		String admin_email = generate_random_email();
 		int random0 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
 		String admin_region = utilities.regionList[random0];
 
-		user admin=new user(admin_username,admin_password,admin_region,admin_email,admin_credits,admin_collection,2,admin_points);
+		user admin=new user(admin_username,admin_password,admin_region,admin_email,admin_credits,2,admin_points);
 		user_list.add(admin);
 		//insert user from a file of 500k randomly generated usernames
 		try {
@@ -249,13 +249,13 @@ public class populateDB {
 		    	String user_password = hash.MD5(user_username);	//the password is the same as the username
 				int user_credits = ThreadLocalRandom.current().nextInt(0, 501);
 				int user_points = ThreadLocalRandom.current().nextInt(0, 351);
-				int user_collection = 0;	//TODO will be increased in another function
+				//int user_collection = 0;	//TODO will be increased in another function
 				String user_email = generate_random_email();
 				int random1 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
 				String user_region = utilities.regionList[random1];
 
 				//creating document
-				user new_user=new user(user_username,user_password,user_region,user_email,user_credits,user_collection,1,user_points);
+				user new_user=new user(user_username,user_password,user_region,user_email,user_credits,1,user_points);
 				//add
 				user_list.add(new_user);
 		    	//System.out.println(user_username);

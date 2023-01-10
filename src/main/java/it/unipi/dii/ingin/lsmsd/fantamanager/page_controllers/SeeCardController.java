@@ -142,7 +142,7 @@ public class SeeCardController implements Initializable{
 		double credits=card_doc.getDouble("credits");
 		if(check_credits((int)credits)) {
 			OptionsMongoDriver.update_user_credits(false, global.user.username, (int) credits);
-			OptionsMongoDriver.update_user_collection(true, global.user.username, 1);
+			//OptionsMongoDriver.update_user_collection(true, global.user.username, 1);
 
 			card_collection bought_card = new card_collection(card_doc.getInteger("player_id"), card_doc.getString("fullname"), 1, card_doc.getString("team"), card_doc.getString("position"));
 			collection.add_card_to_collection(bought_card, global.id_user);

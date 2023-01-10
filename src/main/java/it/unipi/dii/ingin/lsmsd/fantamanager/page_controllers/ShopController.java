@@ -269,7 +269,7 @@ public class ShopController implements Initializable {
 
 		if(global.user.getCredits()>=100){
 			OptionsMongoDriver.update_user_credits(false,global.user.username,100);
-			OptionsMongoDriver.update_user_collection(true,global.user.username,5);
+			//OptionsMongoDriver.update_user_collection(true,global.user.username,5);
 			ArrayList<Document> resultDoc = CardMongoDriver.retrieve_cards("");
 			for(int i=0; i<5;i++) {
 				Random random=new Random();

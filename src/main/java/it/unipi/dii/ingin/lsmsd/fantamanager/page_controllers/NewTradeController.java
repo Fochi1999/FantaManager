@@ -188,9 +188,9 @@ public class NewTradeController implements Initializable{
 		}
 		
 		//update user's collection info
-		if(card_from.size() > 0) {	//if one or more cards are offered, the user's collection value will be affected
-			OptionsMongoDriver.update_user_collection(false,global.user.getUsername(),card_from.size());
-		}
+		//if(card_from.size() > 0) {	//if one or more cards are offered, the user's collection value will be affected
+		//	OptionsMongoDriver.update_user_collection(false,global.user.getUsername(),card_from.size());
+		//}
 		
 		//update user's credits info
 		if(new_trade_total_credits < 0) {	//if a user offered credits(negative credits value), they will be temporary removed from his account
