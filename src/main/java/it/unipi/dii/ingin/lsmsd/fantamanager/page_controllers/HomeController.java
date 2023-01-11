@@ -42,7 +42,7 @@ public class HomeController implements Initializable {
         Stage stage = (Stage)root.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("formation_page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Option page");
+        stage.setTitle("Formation page");
         stage.setScene(scene);
         stage.show();
     }

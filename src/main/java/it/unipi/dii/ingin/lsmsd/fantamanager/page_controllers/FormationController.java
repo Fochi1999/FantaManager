@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.json.simple.parser.ParseException;
 
 public class FormationController implements Initializable {
@@ -63,7 +64,7 @@ public class FormationController implements Initializable {
         String formationString=scelta.getText();
 
         formationString="1-"+formationString; //aggiungo il portiere
-        System.out.println("E' stata scelta la formazione:");
+        System.out.println("Chosen formation: ");
         String[] modulo=formationString.split("-");
         int[] mod=new int[4];
         for(int i=0;i<4;i++){
@@ -132,14 +133,14 @@ public class FormationController implements Initializable {
     protected void click_save_formation() throws IOException, ParseException {
 
         if(global.saved_formation_local.isValid()){
-            click_home();
-            global.user.formations.put(global.next_matchday,global.saved_formation_local);
+            
+            global.user.formations.put(global.current_matchday,global.saved_formation_local);
             //formationMongoDriver.change_formation();
             formationMongoDriver.insert_formation(global.user.username,global.user.formations);
-
+            show_error_message("Formation saved");
         }
         else {
-            show_error_message("Formazione non valida");
+            show_error_message("Invalid formation");
         }
     }
     @FXML
@@ -150,32 +151,31 @@ public class FormationController implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    	err_mess.setText("");
         formationBoxes =new ArrayList<>();
         formationBoxes.add(box_por);
         formationBoxes.add(box_def);
         formationBoxes.add(box_mid);
         formationBoxes.add(box_att);
         formation f=global.saved_formation_local;
-
         if(f!=null){
-            if(f.valid) {
-                //inizializzare la formazione
-                System.out.println("la formazione salvata è di modulo ");
-                String[] moduleString = new String[4];
-                for (int i = 0; i < 4; i++) {
-                    moduleString[i] = Integer.toString(f.modulo[i]);
-                    System.out.println(moduleString[i] + " ");
+            //inizializzare la formazione
+            System.out.println("The saved formation has module: ");
+            String[] moduleString=new String[4];
+            for(int i=0;i<4;i++){
+                moduleString[i]=Integer.toString(f.modulo[i]);
+                System.out.println(moduleString[i]+" ");
 
-                }
-
-                for (int i = 0; i < 19; i++) {
-                    player_formation p = f.players.get(i);
-                    if (p != null) {
-                        System.out.println("index:" + i + " player: " + p.getName());
-                    }
-                }
-                create_layout_formation(moduleString);
             }
+
+            for(int i=0;i<19;i++) {
+                player_formation p = f.players.get(i);
+                if(p!=null){
+                    System.out.println("index:"+i+" player: "+p.getName());
+                }
+            }
+            create_layout_formation(moduleString);
+
         }
 
         players= collection.load_collection(global.id_user);

@@ -4,15 +4,19 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-background-radius: 7; -fx-border-width: 3;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController">
    <children>
-      <TableView fx:id="table_collection" layoutX="99.0" layoutY="40.0" prefHeight="495.0" prefWidth="466.0">
+      <TableView fx:id="table_collection" layoutX="99.0" layoutY="52.0" prefHeight="495.0" prefWidth="466.0">
          <columns>
             <TableColumn fx:id="player" editable="false" prefWidth="225.60003662109375" text="Player" />
             <TableColumn fx:id="squad" editable="false" minWidth="7.20001220703125" prefWidth="118.39996337890625" sortable="false" text="Squad" />
             <TableColumn fx:id="id" editable="false" prefWidth="122.39996337890625" text="id" />
          </columns></TableView>
-      <Button layoutX="308.0" layoutY="580.0" mnemonicParsing="false" onAction="#click_table" text="Select" />
+      <Button layoutX="272.0" layoutY="573.0" mnemonicParsing="false" onAction="#click_table" prefHeight="45.0" prefWidth="120.0" text="Select card">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
    </children>
 </AnchorPane>

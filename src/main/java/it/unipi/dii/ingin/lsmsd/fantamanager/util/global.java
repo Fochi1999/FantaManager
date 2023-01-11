@@ -1,5 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.util;
 
+import java.util.Arrays;
+
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.user;
 
@@ -17,6 +19,6 @@ public class global {
     public static final String TRADES_COLLECTION_NAME = "Trades";
     public static final String CARDS_COLLECTION_NAME = "Cards";
     
-    public static int next_matchday = 1;
+    public static int current_matchday = 0;
     public static int updated_matchdays[] = new int[38];
 }
