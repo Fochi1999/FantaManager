@@ -53,9 +53,7 @@ public class formationMongoDriver {
     }
 
     public static boolean insert_formation(String username, HashMap<Integer,formation> formation) throws ParseException {
-        //MongoClient myClient = MongoClients.create(global.MONGO_URI);
-        //MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-        //MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+
         UserMongoDriver.openConnection();
 
         Bson user = Filters.eq("username", username);
@@ -66,7 +64,7 @@ public class formationMongoDriver {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(json);
+        //System.out.println(json);
         JSONObject JsonFormation=(JSONObject) create_object_formation(json);
         Bson update = Updates.set("formations", JsonFormation);
         try {
@@ -92,7 +90,7 @@ public class formationMongoDriver {
         Object obj=jsonParser.parse(json);
 
         JSONObject formation= (JSONObject) obj;
-        System.out.println(formation);
+       //System.out.println(formation);
 
         return formation;
     }
