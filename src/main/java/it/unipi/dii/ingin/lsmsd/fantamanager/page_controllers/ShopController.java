@@ -240,10 +240,40 @@ public class ShopController implements Initializable {
 				return;
 			}
 			
-			show_cards(CardMongoDriver.search_card_by((String) skill.getValue(), (String) team.getValue(), (String) role.getValue()));
+			//show_cards(CardMongoDriver.search_card_by((String) skill.getValue(), (String) team.getValue(), (String) role.getValue()));
+
+			if(skill.getValue()==null){
+				show_cards(CardMongoDriver.search_card_by((String) skill.getValue(), (String) team.getValue(), (String) role.getValue()));
+			}
+			else{
+				show_cards_with_skill(CardMongoDriver.search_card_by((String) skill.getValue(), (String) team.getValue(), (String) role.getValue()));
+			}
 
 			CardMongoDriver.closeConnection();
 
+	}
+
+	private void show_cards_with_skill(ArrayList<Document> result) {  //per stampare anche la skill selezionata nella aggregation
+		//showing off trades
+		ObservableList<String> list = FXCollections.observableArrayList();
+		list.removeAll(list);	//clearing the list
+		int i = 0;
+		while(i < result.size()) {
+			Document card_doc = result.get(i);
+			System.out.println(card_doc);
+			String card_id = card_doc.get("_id").toString();
+			String card_fullname = card_doc.get("fullname").toString();
+			String card_credits = card_doc.get("credits").toString();
+			String card_team = card_doc.getString("team");
+			String card_role = card_doc.getString("position");
+			int card_skill= (int) card_doc.get(skill.getValue());
+			String card_output = card_fullname + " - Cost: " + card_credits +
+					" - Role: " + card_role + " - Team: " + card_team +" - "+skill.getValue()+":"+card_skill +" - ID: " + card_id;
+			list.add(card_output);
+			i=i+1;
+		}
+		card_list.getItems().clear();
+		card_list.getItems().addAll(list);
 	}
 
 	public void reload_page(MouseEvent mouseEvent) throws IOException {
