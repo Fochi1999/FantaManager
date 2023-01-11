@@ -70,4 +70,18 @@ public class login {
         System.out.println("User registered.");
         return login(Nick,Pass);
     }
+    
+    
+    public static void logout(){
+    	
+    	//resetting global variables
+    	global.user = null;
+    	global.nick = null;
+    	global.id_user = null;
+    	global.saved_formation_local = null;
+    	global.saved_formation_server = null;
+    	
+    	System.out.println("User logged out.");
+    }
+    
 }

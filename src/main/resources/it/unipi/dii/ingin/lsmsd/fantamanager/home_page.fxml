@@ -6,151 +6,154 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.HomeController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-border-color: WHITE; -fx-border-width: 3; -fx-border-radius: 8; -fx-background-radius: 7;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.HomeController">
    <children>
-      <BorderPane accessibleText="fdfddf" layoutY="1.0" prefHeight="177.0" prefWidth="670.0" AnchorPane.bottomAnchor="514.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
-         <center>
-            <Label alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="142.0" prefWidth="670.0" text="Fantamanager" textFill="WHITE" BorderPane.alignment="CENTER">
-               <graphic>
-                  <ImageView fitHeight="96.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../imm/ballicon_white.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
+      <Pane layoutX="16.0" layoutY="14.0" prefHeight="67.0" prefWidth="69.0" styleClass="ChoiseBox" stylesheets="@css/menu.css">
+         <children>
+            <ImageView fitHeight="53.0" fitWidth="60.0" layoutX="8.0" layoutY="7.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../imm/logout_icon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="76.0" layoutY="48.0" prefHeight="243.0" prefWidth="512.0">
+         <children>
+            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="142.0" prefWidth="370.0" text="FantaManager" textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font name="Yu Gothic Regular" size="41.0" />
+                  <Font name="Yu Gothic Bold" size="50.0" />
                </font>
             </Label>
-         </center>
-      </BorderPane>
-      <VBox layoutY="307.0" prefHeight="385.0" prefWidth="670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="307.0">
-         <children>
-            <HBox alignment="CENTER" prefHeight="300.0">
-               <children>
-                  <VBox fx:id="optionBox" alignment="TOP_CENTER" onMouseClicked="#click_option" prefWidth="150.0" styleClass="ChoiseBox">
-                     <HBox.margin>
-                        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
-                     </HBox.margin>
-                     <children>
-                        <ImageView id="optionImm" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" styleClass="immChoiseBox">
-                           <image>
-                              <Image url="@../../../../../../imm/option.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Options" textAlignment="CENTER" wrappingWidth="130.13673400878906">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <VBox alignment="TOP_CENTER" onMouseClicked="#click_formation" prefWidth="150.0" styleClass="ChoiseBox">
-                     <HBox.margin>
-                        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
-                     </HBox.margin>
-                     <children>
-                        <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../imm/formation_white.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Formation" textAlignment="CENTER" wrappingWidth="130.13673400878906">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <VBox alignment="TOP_CENTER" prefWidth="150.0" styleClass="ChoiseBox">
-                     <HBox.margin>
-                        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
-                     </HBox.margin>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                     <children>
-                        <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_ranking" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../imm/podio.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Rankings" textAlignment="CENTER" wrappingWidth="130.13673400878906">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="300.0">
-               <children>
-                  <VBox alignment="TOP_CENTER" prefWidth="150.0" styleClass="ChoiseBox">
-                     <HBox.margin>
-                        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
-                     </HBox.margin>
-                     <children>
-                        <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_shop" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../imm/shopcart.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Shop" textAlignment="CENTER" wrappingWidth="130.13673400878906">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <VBox alignment="TOP_CENTER" prefWidth="150.0" styleClass="ChoiseBox">
-                     <HBox.margin>
-                        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
-                     </HBox.margin>
-                     <children>
-                        <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_trades" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../imm/trade.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trades" textAlignment="CENTER" wrappingWidth="130.13673400878906">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <VBox alignment="TOP_CENTER" prefWidth="150.0" styleClass="ChoiseBox">
-                     <HBox.margin>
-                        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
-                     </HBox.margin>
-                     <children>
-                        <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_collection" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../imm/squad.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Collection" textAlignment="CENTER" wrappingWidth="130.13673400878906">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
+            <ImageView fitHeight="96.0" fitWidth="109.0" layoutX="402.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../imm/ballicon_white.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="welcomeText" fill="WHITE" layoutX="-29.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benvenuto" textAlignment="CENTER" wrappingWidth="569.2000732421875">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Text>
          </children>
-      </VBox>
-      <Text fx:id="welcomeText" fill="WHITE" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benvenuto" textAlignment="CENTER" wrappingWidth="670.0" AnchorPane.bottomAnchor="480.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="155.0">
-         <font>
-            <Font size="40.0" />
-         </font>
-      </Text>
+      </Pane>
+      <HBox alignment="CENTER" layoutX="6.0" layoutY="303.0" prefHeight="200.0" prefWidth="652.0">
+         <children>
+            <VBox fx:id="optionBox" alignment="TOP_CENTER" onMouseClicked="#click_option" prefWidth="150.0" styleClass="ChoiseBox">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+               </HBox.margin>
+               <children>
+                  <ImageView id="optionImm" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" styleClass="immChoiseBox">
+                     <image>
+                        <Image url="@../../../../../../imm/option.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Options" textAlignment="CENTER" wrappingWidth="130.13673400878906">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" onMouseClicked="#click_formation" prefWidth="150.0" styleClass="ChoiseBox">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+               </HBox.margin>
+               <children>
+                  <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imm/formation_white.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Formation" textAlignment="CENTER" wrappingWidth="130.13673400878906">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefWidth="150.0" styleClass="ChoiseBox">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+               </HBox.margin>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+               <children>
+                  <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_ranking" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imm/podio.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Rankings" textAlignment="CENTER" wrappingWidth="130.13673400878906">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="91.0" layoutY="478.0" prefHeight="200.0" prefWidth="482.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="253.0" prefWidth="150.0" styleClass="ChoiseBox">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+               </HBox.margin>
+               <children>
+                  <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_shop" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imm/shopcart.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Shop" textAlignment="CENTER" wrappingWidth="130.13673400878906">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefWidth="150.0" styleClass="ChoiseBox">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+               </HBox.margin>
+               <children>
+                  <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_trades" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imm/trade.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trades" textAlignment="CENTER" wrappingWidth="130.13673400878906">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefWidth="150.0" styleClass="ChoiseBox">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+               </HBox.margin>
+               <children>
+                  <ImageView fitHeight="120.0" fitWidth="120.0" onMouseClicked="#click_collection" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imm/squad.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Collection" textAlignment="CENTER" wrappingWidth="130.13673400878906">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

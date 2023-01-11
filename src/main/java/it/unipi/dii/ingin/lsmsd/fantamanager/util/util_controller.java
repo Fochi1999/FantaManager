@@ -40,4 +40,12 @@ public class util_controller {
         stage.setScene(scene);
         stage.show();
     }
+    
+    public static void go_to_login(Stage stage) throws IOException {
+    	FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("login_registration_page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Hello!");
+        stage.setScene(scene);
+        stage.show();
+    }
 }

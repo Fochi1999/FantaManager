@@ -2,7 +2,9 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.login;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -66,10 +68,6 @@ public class HomeController implements Initializable {
         stage.setTitle("Collection page");
         stage.setScene(scene);
         stage.show();
-
-        //CollectionController.apertura_pool();  //ok?
-
-        //CollectionController.create_table();   //ok?
     }
 
     @FXML
@@ -99,4 +97,11 @@ public class HomeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         welcomeText.setText("Welcome "+ global.user.username + "!");
     }
+    
+    public void logout() throws IOException{
+    	login.logout();
+    	Stage stage = (Stage)root.getScene().getWindow();
+    	util_controller.go_to_login(stage);
+    }
+    
 }

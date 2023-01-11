@@ -22,8 +22,10 @@ import javafx.scene.control.TextField;
 
 import static it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday.*;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.login;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.SeeUserMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 
 public class OptionController implements Initializable {
 	
@@ -165,7 +167,8 @@ public class OptionController implements Initializable {
     public void show_delete_buttons() {
     	delete_confirm.setVisible(true);
     	delete_cancel.setVisible(true);
-    	delete_warning.setText("Are you sure you want to delete your account? If you accept you will be logged out.");
+    	delete_warning.setText("Are you sure you want to delete your account? "
+    			+ "If you accept all your data will be lost and you will be logged out");
     }
     
     //confirm buttons
@@ -258,10 +261,14 @@ public class OptionController implements Initializable {
     	show_user_info();	//refresh fields
     }
     
-    public void confirm_delete(){	//delete user
+    public void confirm_delete() throws IOException{	//delete user
+    	//delete user
     	SeeUserMongoDriver.delete_user(global.user.username);
-    	Stage stage = (Stage)root.getScene().getWindow();
-    	stage.close();
+    	
+    	//and then logout
+    	login.logout();
+        Stage stage = (Stage)root.getScene().getWindow();
+        util_controller.go_to_login(stage);
     }
     
     public void cancel_delete() {	//remove buttons and warnings

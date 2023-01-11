@@ -162,14 +162,14 @@
                   <Text fx:id="email_warning" fill="RED" layoutX="14.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="216.5367431640625" />
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="3.0" layoutY="260.0" prefHeight="88.0" prefWidth="498.0">
+            <AnchorPane layoutX="3.0" layoutY="260.0" prefHeight="88.0" prefWidth="621.0">
                <children>
                   <Button fx:id="delete_account" layoutX="24.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#show_delete_buttons" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: RED;" text="Delete account">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Button>
-                  <Text fx:id="delete_warning" fill="RED" layoutX="25.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete your account? If you accept you will be logged out." wrappingWidth="448.53680419921875" />
+                  <Text fx:id="delete_warning" fill="RED" layoutX="24.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete your account? If you accept all your data will be lost and you will be logged out" wrappingWidth="599.7366943359375" />
                   <Pane fx:id="delete_confirm" layoutX="159.0" layoutY="24.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox">
                      <children>
                         <ImageView fitHeight="34.0" fitWidth="27.0" layoutX="6.0" layoutY="6.0" onMouseClicked="#confirm_delete" pickOnBounds="true" preserveRatio="true" styleClass="img">
