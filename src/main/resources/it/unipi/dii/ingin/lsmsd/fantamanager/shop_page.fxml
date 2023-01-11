@@ -9,6 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -45,11 +46,6 @@
             <Font size="15.0" />
          </font>
       </Button>
-      <Button fx:id="buy_packet" layoutX="14.0" layoutY="229.0" mnemonicParsing="false" onMouseClicked="#buy_packet" prefHeight="42.0" prefWidth="181.0" text="Buy packet - 100 credits" textAlignment="CENTER">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Button>
       <TextField fx:id="text_field" layoutX="351.0" layoutY="232.0" prefHeight="33.0" prefWidth="209.0" promptText="Search for a card...">
          <font>
             <Font size="16.0" />
@@ -68,7 +64,7 @@
       <AnchorPane layoutX="14.0" layoutY="278.0" prefHeight="338.0" prefWidth="635.0">
          <children>
             <ListView fx:id="card_list" prefHeight="277.0" prefWidth="635.0" />
-            <TextField fx:id="selected_card" alignment="CENTER" editable="false" layoutX="82.0" layoutY="287.0" prefHeight="42.0" prefWidth="470.0" promptText="Click on a card to view...">
+            <TextField fx:id="selected_card" alignment="CENTER" editable="false" layoutX="82.0" layoutY="287.0" prefHeight="42.0" prefWidth="470.0" promptText="Click on a card to view..." style="-fx-border-color: BLUE;">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -84,5 +80,37 @@
             <Font size="15.0" />
          </font>
       </Button>
+      <AnchorPane layoutX="14.0" layoutY="157.0" prefHeight="114.0" prefWidth="199.0">
+         <children>
+            <Button fx:id="buy_packet" layoutY="73.0" mnemonicParsing="false" onMouseClicked="#show_buy_buttons" prefHeight="42.0" prefWidth="190.0" text="Buy packet - 100 credits">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Text fx:id="buy_warning" fill="RED" layoutX="14.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm" wrappingWidth="73.60000000000008">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Pane fx:id="buy_confirm" layoutX="95.0" layoutY="32.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox">
+               <children>
+                  <ImageView fitHeight="34.0" fitWidth="27.0" layoutX="6.0" layoutY="6.0" onMouseClicked="#buy_packet" pickOnBounds="true" preserveRatio="true" styleClass="img">
+                     <image>
+                        <Image url="@../../../../../../imm/check_icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane fx:id="buy_cancel" layoutX="147.0" layoutY="32.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox">
+               <children>
+                  <ImageView fitHeight="27.0" fitWidth="27.0" layoutX="6.0" layoutY="6.0" onMouseClicked="#hide_buy_buttons" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../imm/x_icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

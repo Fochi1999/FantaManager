@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
@@ -13,19 +12,11 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDr
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.bson.Document;
-import org.bson.conversions.Bson;
-
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.*;
-import com.mongodb.client.result.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -39,12 +30,9 @@ import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
-import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Aggregates.limit;
-import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Indexes.descending;
-import static com.mongodb.client.model.Projections.*;
 
 public class ShopController implements Initializable {
 
@@ -74,6 +62,11 @@ public class ShopController implements Initializable {
 	private ChoiceBox team;
 	@FXML
 	private ChoiceBox role;
+	
+	@FXML private Pane buy_confirm;
+	@FXML private Pane buy_cancel;
+	@FXML private Text buy_warning;
+	
 
 	@FXML
 	private Button search_by_skill;
@@ -86,6 +79,7 @@ public class ShopController implements Initializable {
 		System.out.println("Opening shop page..."); 	
 		//disabling the button
 		see_card.setDisable(true);
+		hide_buy_buttons();
 
 		//disabling button for aggregation
 		//search_by_skill.setDisable(true);
@@ -280,12 +274,25 @@ public class ShopController implements Initializable {
 				collection.add_card_to_collection(card_extracted, global.id_user);
 				card_extracted_list.add(card_doc);
 			}
+			selected_card.setText("Packet bought. Here it is what cards you got!");
 			show_cards(card_extracted_list);
 		}
 		else{
-			selected_card.setText("Credito insufficiente per acquistare il packet");
+			selected_card.setText("You don't have enough credits!");
 		}
-
-
+		hide_buy_buttons();
+	}
+	
+	public void show_buy_buttons() {
+		buy_warning.setText("Confirm");
+		buy_confirm.setVisible(true);
+		buy_cancel.setVisible(true);
+	}
+	
+	
+	public void hide_buy_buttons() {
+		buy_warning.setText("");
+		buy_confirm.setVisible(false);
+		buy_cancel.setVisible(false);
 	}
 }

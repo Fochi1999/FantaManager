@@ -23,7 +23,7 @@
       <AnchorPane layoutX="15.0" layoutY="136.0" prefHeight="470.0" prefWidth="634.0">
          <children>
             <ListView fx:id="trade_list" layoutX="-1.0" prefHeight="302.0" prefWidth="634.0" style="-fx-scale-shape: Region;" AnchorPane.bottomAnchor="168.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0" />
-            <TextArea fx:id="selected_trade" editable="false" layoutX="-1.0" layoutY="330.0" prefHeight="126.0" prefWidth="634.0" promptText="Click on a trade to view..." wrapText="true">
+            <TextArea fx:id="selected_trade" editable="false" layoutX="-1.0" layoutY="330.0" prefHeight="126.0" prefWidth="634.0" promptText="Click on a trade to view..." style="-fx-border-color: BLUE;" wrapText="true">
                <font>
                   <Font size="16.0" />
                </font>

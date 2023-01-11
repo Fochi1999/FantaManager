@@ -329,7 +329,7 @@ public class populateDB {
 		user_list.add(admin);
 		//insert user from a file of 500k randomly generated usernames
 		try {
-			File myObj = new File("src/main/resources/temp/user.txt");
+			File myObj = new File("src/main/resources/temp/user2.txt");
 		    Scanner myReader = new Scanner(myObj);
 		    int num=0;
 		    while(num < total_users) {

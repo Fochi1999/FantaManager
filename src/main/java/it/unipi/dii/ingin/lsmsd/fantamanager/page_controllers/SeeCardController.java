@@ -33,6 +33,7 @@ import org.json.simple.parser.ParseException;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.see_card;
 
+//TODO buy card da ancora problemi con long/double su attribute credits
 
 public class SeeCardController implements Initializable{
 	

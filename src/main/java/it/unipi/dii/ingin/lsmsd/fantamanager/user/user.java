@@ -16,7 +16,7 @@ public class user {
 
     String password;
     String region;
-    String _id;
+    //String _id; <- non serve viene creata da mongo
     String email;
     public HashMap<Integer,formation> formations;
     int credits;
@@ -62,9 +62,10 @@ public class user {
     public int get_privilege() {
         return privilege;
     }
+    /*
     public String get_id() {
         return _id;
-    }
+    }*/
     public String getUsername(){
         return username;
     }

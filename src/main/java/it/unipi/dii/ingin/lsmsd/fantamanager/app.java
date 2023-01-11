@@ -29,12 +29,12 @@ public class app extends Application {
     	try {
     		//populateDB.create_users_collection_mongoDB(100000);		//users collection - mongo
             //populateDB.create_cards_collection_mongoDB();  -->prendi file cardsDUMP.json da chat gruppo
-    		//populateDB.create_trade_collection_mongoDB(100000);		//trades collection - mongo
+    		//populateDB.create_trade_collection_mongoDB(1000000);		//trades collection - mongo
     		//populateDB.create_user_card_collection_redis();			//user's card collection - redis
     		//utilities.update_matchday(-1);							//initialize the update_matchday matrix with all zero
 
     		global.updated_matchdays = utilities.get_updated_matchdays();
-            populateDB.create_random_formations(3);
+            //populateDB.create_random_formations(3);
     	} catch(Exception e){
     		e.printStackTrace();
     	}
