@@ -92,7 +92,7 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <Pane fx:id="buy_confirm" layoutX="95.0" layoutY="32.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox">
+            <Pane fx:id="buy_confirm" layoutX="95.0" layoutY="32.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox" stylesheets="@css/menu.css">
                <children>
                   <ImageView fitHeight="34.0" fitWidth="27.0" layoutX="6.0" layoutY="6.0" onMouseClicked="#buy_packet" pickOnBounds="true" preserveRatio="true" styleClass="img">
                      <image>
@@ -101,7 +101,7 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="buy_cancel" layoutX="147.0" layoutY="32.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox">
+            <Pane fx:id="buy_cancel" layoutX="150.0" layoutY="32.0" prefHeight="38.0" prefWidth="39.0" styleClass="ChoiseBox" stylesheets="@css/menu.css">
                <children>
                   <ImageView fitHeight="27.0" fitWidth="27.0" layoutX="6.0" layoutY="6.0" onMouseClicked="#hide_buy_buttons" pickOnBounds="true" preserveRatio="true">
                      <image>

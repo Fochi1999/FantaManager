@@ -162,7 +162,7 @@
                   <Text fx:id="email_warning" fill="RED" layoutX="14.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="216.5367431640625" />
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="260.0" prefHeight="88.0" prefWidth="498.0">
+            <AnchorPane layoutX="3.0" layoutY="260.0" prefHeight="88.0" prefWidth="498.0">
                <children>
                   <Button fx:id="delete_account" layoutX="24.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#show_delete_buttons" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: RED;" text="Delete account">
                      <font>
