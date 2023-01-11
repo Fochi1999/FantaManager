@@ -101,6 +101,19 @@ public class utilities {
         pool.close();
         return array;
 	}
+
+	private static void get_last_match_updated(int[] value) {
+
+			int last_match_updated=0;
+
+			for(int i=0;i< value.length;i++){
+					if(value[i]==1){
+						last_match_updated=i+1;
+					}
+			}
+
+	}
+
 	public static int getRandomInt(int min, int max){
 		return (int) ((Math.random() * (max - min)) + min);
 	}
