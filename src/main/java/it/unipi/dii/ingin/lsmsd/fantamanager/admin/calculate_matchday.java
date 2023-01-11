@@ -41,7 +41,7 @@ public class calculate_matchday {
 
         try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){
             while(cursor.hasNext()) {
-            //for(int j=0;j<2;j++){
+            //for(int j=0;j<5;j++){
                 String doc = cursor.next().toJson();
                 System.out.println(doc);
                 JSONParser parser = new JSONParser();
@@ -52,7 +52,7 @@ public class calculate_matchday {
                 JSONObject match = (JSONObject) formation.get(String.valueOf(matchday));
                 //System.out.println(match);
 
-                if (match != null) {
+                if (match != null && (boolean)match.get("valid")) {   //TODO oppure se valid è false
                     JSONArray modulo = (JSONArray) match.get("modulo");
 
                     JSONObject cards = (JSONObject) match.get("players");
@@ -342,11 +342,11 @@ public class calculate_matchday {
 
                 //Bson filter = Filters.eq("fullname", player_name);   //change 1045
                 Bson filter= Filters.and(eq("fullname", player_name),eq("team", team));  //AND per risolvere problema L.Pellegrini
-                //Bson update1 = Updates.set("statistics.matchday.matchday" + matchday+".score-value", score_value);
+                Bson update1 = Updates.set("statistics.matchday.matchday" + matchday+".score-value", score_value);
                 Bson update2= Updates.set("credits", credits+mod_value);
-                //Bson update=Updates.combine(update1,update2);
+                Bson update=Updates.combine(update1,update2);
                 UpdateOptions options = new UpdateOptions().upsert(true);
-                System.out.println(coll.updateOne(filter, update2, options));
+                System.out.println(coll.updateOne(filter, update, options));
 
                 player_score.put(player_name,score);
 
@@ -361,7 +361,7 @@ public class calculate_matchday {
         calulate_user_team_score(matchday,player_score);   //per calcolo score di un team di un user
 
         //TODO gestire vettore su redis dei match calcolati
-        utilities.update_matchday(matchday-1); //partita 1 va messa ad indice 0 del vettore
+        utilities.update_matchday(matchday); //da qui cambia vettore e anche la variabile della prossima giornata su redis
     }
 
     private static int calculate_mod_value(float score) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore
