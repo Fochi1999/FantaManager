@@ -7,12 +7,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
-import org.json.simple.JSONObject;
-
-import java.util.ArrayList;
 
 public class login {
 
@@ -35,7 +31,7 @@ public class login {
 
         global.id_user=user_doc.get("_id").toString();
         global.user=new user(nick,password,user_doc.getString("region"),user_doc.getString("email"),user_doc.getInteger("credits"),user_doc.getInteger("_privilege"), user_doc.getInteger("points"),formation.toJson());
-        global.saved_formation_server=global.user.formations.get(global.current_matchday);
+        global.saved_formation_server=global.user.formations.get(global.next_matchday);
         global.saved_formation_local=global.saved_formation_server;
         System.out.println("User logged in. ID: " + global.id_user);
         return true;
