@@ -1,13 +1,17 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
@@ -45,6 +49,9 @@ public class OptionController implements Initializable {
     
     @FXML
     private HBox admin_hbox;
+
+	@FXML
+	private Button admin_button;
     
     @FXML private TextField username_field;
     @FXML private TextField password_field;
@@ -85,8 +92,9 @@ public class OptionController implements Initializable {
     	//case of admin logged in: showing the 'calculate matchday' option
     	int livpriv=global.user.get_privilege();
     	if(livpriv>=2){
-    		
-    		for(int i=1;i<=38;i++){
+
+			admin_button.setVisible(true);
+			/*for(int i=1;i<=38;i++){
                 matchday_list.getItems().add(i);
             }
             
@@ -102,12 +110,13 @@ public class OptionController implements Initializable {
 					retrieve_info_matchday((Integer) matchday_list.getValue());
 					calculate_card_score((Integer) matchday_list.getValue());
                 }
-            });
+            });*/
         }
     	
     	//normal user logged: hiding the options above
         else {
-        	admin_hbox.setVisible(false);
+        	//admin_hbox.setVisible(false);de
+			admin_button.setVisible(false);
         }
 
     	//hiding buttons and warnings
@@ -283,4 +292,13 @@ public class OptionController implements Initializable {
     	password_warning.setText("");
     	email_warning.setText("");
     }
+
+	public void admin_page(MouseEvent mouseEvent) throws IOException {
+		Stage stage= (Stage)root.getScene().getWindow();
+		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("admin_page.fxml"));
+		Scene scene = new Scene(fxmlLoader.load());
+		stage.setTitle("Admin page");
+		stage.setScene(scene);
+		stage.show();
+	}
 }
