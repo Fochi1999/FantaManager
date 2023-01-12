@@ -48,7 +48,6 @@ public class AdminPageController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
             //for choice box to calculate matchday score
-
             for (int i = 1; i <= 38; i++) {
                 matchday_list.getItems().add(i);
             }
@@ -75,15 +74,15 @@ public class AdminPageController implements Initializable {
             for(int i=0;i<38;i++){
                 if(array[i]==1){
                     //match calcolato
-                    if(i%5==0 && i!=0)
+                    if(i%4==0 && i!=0)
                         elenco_match+="\n";
-                    elenco_match+="(match"+i+",YES) ";
+                    elenco_match+="(Matchday "+(i+1)+": YES) ";
 
                 }else{
                     //match non calcolato
-                    if(i%5==0 && i!=0)
+                    if(i%4==0 && i!=0)
                         elenco_match+="\n";
-                    elenco_match+="(match"+i+",NO) ";
+                    elenco_match+="(Matchday "+(i+1)+": NO) ";
 
                 }
             }

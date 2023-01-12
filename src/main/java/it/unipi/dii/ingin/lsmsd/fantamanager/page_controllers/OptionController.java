@@ -89,28 +89,10 @@ public class OptionController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         
-    	//case of admin logged in: showing the 'calculate matchday' option
+    	//case of admin logged in: showing the 'admin page' option
     	int livpriv=global.user.get_privilege();
     	if(livpriv>=2){
-
 			admin_button.setVisible(true);
-			/*for(int i=1;i<=38;i++){
-                matchday_list.getItems().add(i);
-            }
-            
-            calculate_button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-                    //System.out.println("QUI INSERIRE COME CALCOLARE LA GIORNATA");
-					//qui da player_class
-                    //retrieve_matchday((Integer) matchday_list.getValue());
-                    //calculate_matchday((Integer) matchday_list.getValue());
-					//calculate_player_score((Integer) matchday_list.getValue());
-
-					//qui da admin/calculate_matchday
-					retrieve_info_matchday((Integer) matchday_list.getValue());
-					calculate_card_score((Integer) matchday_list.getValue());
-                }
-            });*/
         }
     	
     	//normal user logged: hiding the options above

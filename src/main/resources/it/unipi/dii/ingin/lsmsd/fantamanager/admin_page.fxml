@@ -14,7 +14,7 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-border-width: 3; -fx-background-radius: 7;" styleClass="matchday" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.AdminPageController">
    <children>
-      <BorderPane layoutX="98.0" layoutY="23.0" prefHeight="184.0" prefWidth="468.0" style="-fx-border-color: WHITE; -fx-border-radius: 20; -fx-border-width: 10;">
+      <BorderPane layoutX="94.0" layoutY="22.0" prefHeight="184.0" prefWidth="487.0" style="-fx-border-color: WHITE; -fx-border-radius: 20; -fx-border-width: 10;">
          <right>
             <ImageView fitHeight="116.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
@@ -26,48 +26,39 @@
             </ImageView>
          </right>
          <center>
-            <Label alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="142.0" prefWidth="314.0" text="ADMINpage" textFill="WHITE" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="142.0" prefWidth="314.0" text="ADMIN page" textFill="WHITE" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold Italic" size="50.0" />
                </font>
             </Label>
          </center>
       </BorderPane>
-      <Button layoutX="44.0" layoutY="587.0" mnemonicParsing="false" onMouseClicked="#click_home" prefHeight="44.0" prefWidth="81.0" text="Home">
+      <Button layoutX="42.0" layoutY="616.0" mnemonicParsing="false" onMouseClicked="#click_home" prefHeight="44.0" prefWidth="81.0" text="Home">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <AnchorPane layoutX="317.0" layoutY="580.0" prefHeight="58.0" prefWidth="294.0" style="-fx-border-color: RED; -fx-border-radius: 20; -fx-border-width: 5;">
-         <children>
-            <Button fx:id="calculate_button" layoutX="152.0" layoutY="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="127.0" text="Calculate matchday" />
-            <ChoiceBox fx:id="matchday_list" layoutX="14.0" layoutY="10.0" prefHeight="38.0" prefWidth="138.0" />
-         </children>
-      </AnchorPane>
-      <Text fill="#faf8f8" layoutX="98.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Matchday to be calculated" wrappingWidth="382.9366455078125">
+      <Text fill="#faf8f8" layoutX="140.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Calculated matchdays:" textAlignment="CENTER" wrappingWidth="382.9366455078125">
          <font>
             <Font name="System Bold Italic" size="24.0" />
          </font>
       </Text>
-      <Text fill="#faf8f8" layoutX="98.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Increase next matchday" wrappingWidth="382.9366455078125">
+      <Text fill="#faf8f8" layoutX="381.0" layoutY="552.0" strokeType="OUTSIDE" strokeWidth="0.0" text="if the calculation of the results of the matches was postponed for some reasons" textAlignment="CENTER" wrappingWidth="238.1365966796875" />
+      <Button layoutX="381.0" layoutY="487.0" mnemonicParsing="false" onMouseClicked="#increase_next_matchday" prefHeight="40.0" prefWidth="238.0" text="Increase next_matchday value">
          <font>
-            <Font name="System Bold Italic" size="24.0" />
-         </font>
-      </Text>
-      <Text fill="#faf8f8" layoutX="370.0" layoutY="458.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(if the calculation of the result of the matches for some reason was postponed)" wrappingWidth="221.336669921875">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Button layoutX="126.0" layoutY="504.0" mnemonicParsing="false" onMouseClicked="#increase_next_matchday" prefHeight="44.0" prefWidth="221.0" text="Increase next_matchday">
-         <font>
-            <Font size="18.0" />
+            <Font size="15.0" />
          </font>
       </Button>
-      <TextArea fx:id="match_calculated" layoutX="50.0" layoutY="252.0" prefHeight="184.0" prefWidth="578.0">
+      <TextArea fx:id="match_calculated" editable="false" layoutX="42.0" layoutY="271.0" prefHeight="184.0" prefWidth="578.0">
          <font>
             <Font size="15.0" />
          </font>
       </TextArea>
+      <ChoiceBox fx:id="matchday_list" layoutX="42.0" layoutY="487.0" prefHeight="40.0" prefWidth="50.0" />
+      <Button fx:id="calculate_button" layoutX="94.0" layoutY="487.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="163.0" text="Calculate matchday">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

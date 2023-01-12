@@ -199,7 +199,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <Button fx:id="admin_button" layoutX="461.0" layoutY="612.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="151.0" onMouseClicked="#admin_page" text="Admin page">
+      <Button fx:id="admin_button" layoutX="455.0" layoutY="621.0" mnemonicParsing="false" onMouseClicked="#admin_page" prefHeight="44.0" prefWidth="127.0" text="Admin page">
          <font>
             <Font size="14.0" />
          </font>
