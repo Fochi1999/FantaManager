@@ -37,7 +37,8 @@ public class collection {
 
                 ArrayList<card_collection> cards=new ArrayList<>();
 
-                String key_load = crea_chiave_load(user_id);  //qui dovremmo inserire this.user_id, oppure togliere il parametro e farlo come commentato sopra
+                //String key_load = crea_chiave_load(user_id);
+                String key_load="user_id:"+user_id+":card_id:";
                 
                 JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
             	JedisPool pool = new JedisPool(jedisPoolConfig, "localhost", 6379);
@@ -96,7 +97,7 @@ public class collection {
 
                     System.out.println("Card deleted: "+ card);
 
-                if(presence_card(card,global.id_user)) {
+                //if(presence_card(card,global.id_user)) {
                     apertura_pool();
                     //devo aumentare solo la quantity
                     String key = "user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity";
@@ -113,7 +114,7 @@ public class collection {
                             jedis.del("user_id:" + global.id_user + ":card_id:" + card.card_id + ":position");
                         }
                     }
-                }
+                //}
                     closePool();
             }
 
