@@ -34,6 +34,10 @@ public class user {
         this.credits=credits;
         this.privilege=privilege;
         formations=new HashMap<>();
+        for(int i=1;i<=38;i++){
+            formation f=new formation();
+            formations.put(i,f);
+        }
     }
     public user(String nick, String hashPass,String region,String email, int credits, int privilege, int points,String formationJson){
 

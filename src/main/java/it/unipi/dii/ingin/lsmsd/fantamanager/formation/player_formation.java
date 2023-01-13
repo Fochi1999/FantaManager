@@ -11,12 +11,18 @@ public class player_formation {
     public player_formation(card_collection p){
         this.name=p.get_name();
         this.id=p.get_id();
-        this.team=p.get_team().substring(0,3);
+        this.team=p.get_team();
         this.vote=0;
 
     }
     public player_formation() {
     //NON RIMUOVERE SERVE A JACKSON
+    }
+    public player_formation(String name, int id, String team, int vote) {
+        this.name=name;
+        this.id=id;
+        this.team=team;
+        this.vote=0;
     }
     public String getName(){
         return name;

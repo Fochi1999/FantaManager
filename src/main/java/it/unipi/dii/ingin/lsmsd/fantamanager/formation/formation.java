@@ -42,6 +42,11 @@ public class formation {
     }
     public formation(){
         players=new HashMap<>();
+        for(int i=0;i<=18;i++){
+            player_formation p=new player_formation("",0,"",0);
+            players.put(i,p);
+        }
+
         modulo=new int[4];
         tot=0;
     }

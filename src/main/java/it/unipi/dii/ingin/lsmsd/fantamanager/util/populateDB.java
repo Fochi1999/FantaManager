@@ -568,7 +568,7 @@ public class populateDB {
 		//System.out.println("PLAYER TRASFORM:" + player);
 		return player;
 	}
-	public static void create_random_formations(int last_matchday) throws ParseException {
+	public static void create_random_formations(int matchday) throws ParseException {
 		ArrayList<Document> user_list = get_users_collection_mongoDB();
 		for(int i=0;i<user_list.size();i++){
 			ArrayList<card_collection>Cards= collection.load_collection(user_list.get(i).get("_id").toString());
@@ -576,10 +576,10 @@ public class populateDB {
 				continue;
 			}
 			HashMap<Integer,formation> formations=new HashMap<>();
-			for(int j=1;j<=last_matchday;j++){
-				formation f=formation.getRandomFormation(Cards);
-				formations.put(j,f);
-			}
+
+			formation f=formation.getRandomFormation(Cards);
+			formations.put(matchday,f);
+
 			formationMongoDriver.insert_formation(user_list.get(i).getString("username"),formations);
 		}
 	}

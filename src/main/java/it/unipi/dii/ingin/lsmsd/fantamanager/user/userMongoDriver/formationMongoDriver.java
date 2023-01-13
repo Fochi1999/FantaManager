@@ -55,7 +55,6 @@ public class formationMongoDriver {
     public static boolean insert_formation(String username, HashMap<Integer,formation> formation) throws ParseException {
 
         UserMongoDriver.openConnection();
-
         Bson user = Filters.eq("username", username);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;
@@ -77,7 +76,6 @@ public class formationMongoDriver {
 
         //myClient.close();
         UserMongoDriver.closeConnection();
-
         return true;
 
 
