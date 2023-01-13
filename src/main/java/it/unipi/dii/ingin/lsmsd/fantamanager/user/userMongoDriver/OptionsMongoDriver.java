@@ -48,7 +48,8 @@ public class OptionsMongoDriver {
     	//changing value to integer for some attributes
     	Bson update;
     	if(attribute_name.equals("credits") || attribute_name.equals("collection") || attribute_name.equals("points")) {
-    		update = Updates.set(attribute_name, Integer.parseInt(new_value));
+			int nv=Integer.parseInt(new_value);
+    		update = Updates.set(attribute_name, nv);
     	}
     	else {
     		update = Updates.set(attribute_name, new_value);
