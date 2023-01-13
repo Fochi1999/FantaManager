@@ -5,16 +5,59 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-background-radius: 7; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ShotsStatsController">
    <children>
-      <Pane fx:id="pane_field" layoutX="122.0" layoutY="13.0" prefHeight="633.0" prefWidth="416.0" />
-      <ImageView fx:id="field_image" fitHeight="633.0" fitWidth="526.0" layoutX="123.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../../../imm/pitch_white.png" />
-         </image>
-      </ImageView>
       <Button layoutX="291.0" layoutY="652.0" mnemonicParsing="false" onAction="#click_back" text="Back" />
       <Button layoutX="332.0" layoutY="652.0" mnemonicParsing="false" onAction="#click_home" text="Home" />
+      <ImageView fx:id="field_image" fitHeight="440.0" fitWidth="526.0" layoutX="68.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../imm/soccer_field.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="pane_field" layoutX="69.0" layoutY="41.0" prefHeight="390.0" prefWidth="526.0" />
+      <VBox alignment="TOP_CENTER" layoutX="69.0" layoutY="430.0" prefHeight="218.0" prefWidth="526.0" style="-fx-background-color: YELLOW; -fx-border-color: BROWN; -fx-border-width: 10;">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shot type" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="shot_type" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="X" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" fx:id="xshot" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Y" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="yshot" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Result" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="result" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="XG" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="XG" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Time" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="time" strokeType="OUTSIDE" strokeWidth="0.0" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

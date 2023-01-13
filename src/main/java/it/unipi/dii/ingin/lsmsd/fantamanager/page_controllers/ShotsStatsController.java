@@ -43,6 +43,12 @@ public class ShotsStatsController implements Initializable{
 	@FXML public Parent root;
 	@FXML private ImageView field_image;
 	@FXML private Pane pane_field;
+	@FXML private Text shot_type;
+	@FXML private Text xshot;
+	@FXML private Text yshot;
+	@FXML private Text result;
+	@FXML private Text XG;
+	@FXML private Text time;
 
 	private int last_updated_matchday;
 
@@ -54,7 +60,7 @@ public class ShotsStatsController implements Initializable{
 		//buy_card.setDisable(true);	//disabling the buy button
 		
 		search_card();
-		last_updated_matchday = 2;	//TODO implementare
+		last_updated_matchday = 4;	//TODO implementare
 		System.out.println(card_doc.toString());
 		Document stats=(Document)card_doc.get("statistics");
 		System.out.println(stats.toString());
@@ -75,11 +81,13 @@ public class ShotsStatsController implements Initializable{
 				String result=(String)shot.get("results");
 				String situation=(String)shot.get("situation");
 				Document assist=(Document)shot.get("assist");
+				String expectedgoals=(String)shot.get("xG");
 				System.out.println("x"+xS+" y "+yS+" result"+result);
 				double x=Double.parseDouble(xS);
 				double y=Double.parseDouble(yS);
-				create_points_shots(x,y,result);
+				create_points_shots(x,y,type,result,expectedgoals,minS,j+1);
 			}
+
 		}
 
 
@@ -87,12 +95,24 @@ public class ShotsStatsController implements Initializable{
 
 	}
 	
-	public void create_points_shots(double x,double y, String type){
+	public void create_points_shots(double x,double y, String shot_type,String result,String XG,String min,int giornata){
 		double Xlen=field_image.getImage().getWidth();
 		double Ylen=field_image.getImage().getHeight();
-		Circle point=new Circle(y*Xlen,x*Ylen,5);
-		point.setFill(Color.DARKRED);
+		double X=y*Xlen/4;
+		double Y=x*Ylen/4.3;
+		Circle point=new Circle(X,Y,8);
+		point.setFill(Color.RED);
 		pane_field.getChildren().add(point);
+		point.setOnMouseEntered(e -> {
+			this.shot_type.setText(shot_type);
+			this.xshot.setText(Double.toString(X));
+			this.yshot.setText(Double.toString(Y));
+			this.result.setText(result);
+			this.XG.setText(XG);
+			this.time.setText(min+" minute of "+giornata+" matchday");
+
+		});
+
 
 	}
 	@FXML
