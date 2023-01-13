@@ -26,9 +26,9 @@ public class calculate_matchday {
 
 
 
-    public static void calulate_user_team_score(int matchday,Map<String,Float> player_score){
+    public static void calulate_user_team_score(int matchday,Map<String,Double> player_score){
 
-        Float total_score = Float.valueOf(0);
+        Double total_score = Double.valueOf(0);
 
         //String url = "mongodb://localhost:27017";
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
@@ -52,7 +52,7 @@ public class calculate_matchday {
                 JSONObject match = (JSONObject) formation.get(String.valueOf(matchday));
                 //System.out.println(match);
 
-                if (match != null && (boolean)match.get("valid")) {   //TODO oppure se valid è false
+                if (match != null && (boolean)match.get("valid")) {
                     JSONArray modulo = (JSONArray) match.get("modulo");
 
                     JSONObject cards = (JSONObject) match.get("players");
@@ -64,7 +64,7 @@ public class calculate_matchday {
 
                     for (int i = 0; i < 11; i++) {
                         JSONObject card = (JSONObject) cards.get(String.valueOf(i));
-                        float score = player_score.get(card.get("name"));
+                        Double score = player_score.get(card.get("name"));
                         //inserisce il voto di ogni giocatore in formation
                         if (score == -5000) {
                             //se invece non gioca, l' inserimento viene fatto in take_card_from_bench
@@ -126,7 +126,7 @@ public class calculate_matchday {
 
     }
 
-    private static float take_card_from_bench(int i, Map<String, Float> player_score, JSONObject cards, JSONArray modulo, String username, int matchday) {
+    private static Double take_card_from_bench(int i, Map<String, Double> player_score, JSONObject cards, JSONArray modulo, String username, int matchday) {
 
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
@@ -136,7 +136,7 @@ public class calculate_matchday {
         // Access a Collection
         MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
 
-        float score = 0;
+        Double score = Double.valueOf(0);
         int place_of_bench=0;
 
                 Long num_dif= (Long) modulo.get(1);
@@ -147,11 +147,11 @@ public class calculate_matchday {
                     //portiere
                     JSONObject card=(JSONObject) cards.get(String.valueOf(11)); //primo in panchina
                     score=player_score.get(card.get("name"));
-                    if(score==-5000 || (Float)card.get("vote")!=0){
+                    if(score==-5000 || (Double)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(12));  //secondo in panchina
                         score=player_score.get(card.get("name"));
-                        if(score==-5000 || (Float)card.get("vote")!=0){
-                            return 0; //non avra rimpiazzo dalla panchina
+                        if(score==-5000 || (Double)card.get("vote")!=0){
+                            return Double.valueOf(0); //non avra rimpiazzo dalla panchina
                         }
                         place_of_bench=12;
                     }
@@ -163,11 +163,11 @@ public class calculate_matchday {
                         //difensore
                     JSONObject card=(JSONObject) cards.get(String.valueOf(13)); //primo in panchina
                     score=player_score.get(card.get("name"));
-                    if(score==-5000 || (Float)card.get("vote")!=0){
+                    if(score==-5000 || (Double)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(14));  //secondo in panchina
                         score=player_score.get(card.get("name"));
-                        if(score==-5000 || (Float)card.get("vote")!=0){
-                            return 0;//non avra rimpiazzo dalla panchina
+                        if(score==-5000 || (Double)card.get("vote")!=0){
+                            return Double.valueOf(0);//non avra rimpiazzo dalla panchina
                         }
                         place_of_bench=14;
                     }
@@ -179,11 +179,11 @@ public class calculate_matchday {
                     //centrocampista
                     JSONObject card=(JSONObject) cards.get(String.valueOf(15)); //primo in panchina
                     score=player_score.get(card.get("name"));
-                    if(score==-5000 || (Float)card.get("vote")!=0){
+                    if(score==-5000 || (Double)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(16));  //secondo in panchina
                         score=player_score.get(card.get("name"));
-                        if(score==-5000 || (Float)card.get("vote")!=0){
-                            return 0;//non avra rimpiazzo dalla panchina
+                        if(score==-5000 || (Double)card.get("vote")!=0){
+                            return Double.valueOf(0);//non avra rimpiazzo dalla panchina
                         }
                         place_of_bench=16;
                     }
@@ -195,11 +195,11 @@ public class calculate_matchday {
                     //attaccante
                     JSONObject card=(JSONObject) cards.get(String.valueOf(17)); //primo in panchina
                     score=player_score.get(card.get("name"));
-                    if(score==-5000 || (Float)card.get("vote")!=0){
+                    if(score==-5000 || (Double)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(18));  //secondo in panchina
                         score=player_score.get(card.get("name"));
-                        if(score==-5000 || (Float)card.get("vote")!=0){
-                            return 0;//non avra rimpiazzo dalla panchina
+                        if(score==-5000 || (Double)card.get("vote")!=0){
+                            return Double.valueOf(0);//non avra rimpiazzo dalla panchina
                         }
                         place_of_bench=18;
                     }
@@ -228,14 +228,14 @@ public class calculate_matchday {
 
        for(int i=0;i<18;i++){
            JSONObject card=(JSONObject) cards.get(String.valueOf(i));
-           card.put("vote", Float.valueOf(0));
+           card.put("vote", Double.valueOf(0));
        }
 
     }
 
     public static void calculate_card_score(int matchday) {
 
-        Map<String,Float> player_score=new HashMap<String,Float>();  //per calcolo score di un team di un player
+        Map<String,Double> player_score=new HashMap<String,Double>();  //per calcolo score di un team di un player
 
         //String url = "mongodb://localhost:27017";
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
@@ -348,7 +348,7 @@ public class calculate_matchday {
                 UpdateOptions options = new UpdateOptions().upsert(true);
                 System.out.println(coll.updateOne(filter, update, options));
 
-                player_score.put(player_name,score);
+                player_score.put(player_name,Double.valueOf(score));
 
 
 
