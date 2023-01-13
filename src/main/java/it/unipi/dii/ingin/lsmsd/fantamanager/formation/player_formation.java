@@ -7,7 +7,7 @@ public class player_formation {
     public String name;
     public int id;
     public String team;
-    public float vote;
+    public double vote;
     public player_formation(card_collection p){
         this.name=p.get_name();
         this.id=p.get_id();
@@ -18,11 +18,11 @@ public class player_formation {
     public player_formation() {
     //NON RIMUOVERE SERVE A JACKSON
     }
-    public player_formation(String name, int id, String team, int vote) {
+    public player_formation(String name, int id, String team, double vote) {
         this.name=name;
         this.id=id;
         this.team=team;
-        this.vote=0;
+        this.vote=vote;
     }
     public String getName(){
         return name;
