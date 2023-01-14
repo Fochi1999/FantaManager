@@ -316,6 +316,37 @@ public class populateDB {
 		System.out.println("Creating 'User' collection...");
 		ArrayList<user> user_list = new ArrayList();
 		
+		//creating formation
+		
+		//player
+		JSONObject player = new JSONObject();
+		player.put("name", "");
+		player.put("id", 0);
+		player.put("team", "");
+		player.put("vote", 0);
+		ArrayList<JSONObject> players = new ArrayList<>();
+		for(int i=0; i<18;i++) {
+			players.add(i,player);
+		}
+		//module
+		JSONObject module = new JSONObject();
+		module.put("0", 0);
+		module.put("1", 0);
+		module.put("2", 0);
+		module.put("3", 0);
+		
+		//formation
+		ArrayList<JSONObject> formations = new ArrayList<>();
+		JSONObject formation = new JSONObject();
+		formation.put("tot",0);
+		formation.put("valid",false);
+		formation.put("module", module);
+		formation.put("players", players);
+		for(int i=0; i<39; i++) {
+			formations.add(i, formation);
+		}
+		
+		
 		//adding the admin first
 		String admin_username = "admin";
     	String admin_password = hash.MD5(admin_username);	//the password is the same as the username
@@ -325,57 +356,59 @@ public class populateDB {
 		int random0 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
 		String admin_region = utilities.regionList[random0];
 
-		user admin=new user(admin_username,admin_password,admin_region,admin_email,admin_credits,2,admin_points);
-		user_list.add(admin);
+		//user admin=new user(admin_username,admin_password,admin_region,admin_email,admin_credits,2,admin_points);
+		ArrayList<Document> user_list_doc=new ArrayList<>();
+		//adding admin
+		Document admin = new Document();
+		admin.append("username", admin_username);
+		admin.append("password", admin_password);
+		admin.append("credits", admin_credits);
+		admin.append("points", admin_points);
+		admin.append("email", admin_email);
+		admin.append("region", admin_region);
+		admin.append("formations", formations);
+		user_list_doc.add(admin);
+		
 		//insert user from a file of 500k randomly generated usernames
 		try {
 			File myObj = new File("src/main/resources/temp/user2.txt");
 		    Scanner myReader = new Scanner(myObj);
-		    int num=0;
-			int tot=0;
+		    int tot=0;
 
 			while(tot < total_users) {
-				ArrayList<Document> user_list_doc=new ArrayList<>();
-				num = 0;
-				while (num < 1000) {
+				
+				//creating attributes values
+				String user_username = myReader.nextLine();
+				String user_password = hash.MD5(user_username);    //the password is the same as the username
+				int user_credits = ThreadLocalRandom.current().nextInt(50, 351);
+				int user_points = ThreadLocalRandom.current().nextInt(0, 2001);    //TODO inizializzare a 0 quando sarà finito calculate matchday/formations
+				String user_email = generate_random_email();
+				int random1 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
+				String user_region = utilities.regionList[random1];
 
-					//creating attributes values
-					String user_username = myReader.nextLine();
-					String user_password = hash.MD5(user_username);    //the password is the same as the username
-					int user_credits = ThreadLocalRandom.current().nextInt(50, 351);
-					int user_points = ThreadLocalRandom.current().nextInt(0, 2001);    //TODO inizializzare a 0 quando sarà finito calculate matchday/formations
-					String user_email = generate_random_email();
-					int random1 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
-					String user_region = utilities.regionList[random1];
-
-					//creating document
-					user new_user = new user(user_username, user_password, user_region, user_email, user_credits, 1, user_points);
-					//add
-
-					//System.out.println(user_username);
-
-
-					ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-					String json = null;
-					try {
-						json = ow.writeValueAsString(new_user);
-						user_list_doc.add(Document.parse(json));
-					} catch (JsonProcessingException e) {
-						throw new RuntimeException(e);
-					}
-					num = num + 1;
-					tot=tot+1;
-				}
-				//connecting to mongoDB
-				MongoClient myClient = MongoClients.create(global.MONGO_URI);
-				MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-				MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
-				collection.insertMany(user_list_doc);
-				myClient.close();
-
+				//creating document
+				Document new_user_doc = new Document();
+				new_user_doc.append("username", user_username);
+				new_user_doc.append("password", user_password);
+				new_user_doc.append("credits", user_credits);
+				new_user_doc.append("points", user_points);
+				new_user_doc.append("email", user_email);
+				new_user_doc.append("region", user_region);
+				new_user_doc.append("formations", formations);
+					
+				//add	
+				user_list_doc.add(new_user_doc);
+				System.out.println("Users created: "+(tot+1) + "/" + total_users);
+				tot=tot+1;
 			}
 			myReader.close();
-
+			
+			//connecting to mongoDB
+			MongoClient myClient = MongoClients.create(global.MONGO_URI);
+			MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+			MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+			collection.insertMany(user_list_doc);
+			myClient.close();
 
 		}
 		catch (FileNotFoundException e) {
