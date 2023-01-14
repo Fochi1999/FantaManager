@@ -27,7 +27,7 @@ public class app extends Application {
 
     public static void main(String[] args) {
     	try {
-    		populateDB.create_users_collection_mongoDB(10000);		//users collection - mongo
+    		//populateDB.create_users_collection_mongoDB(100000);		//users collection - mongo
             //populateDB.create_cards_collection_mongoDB();  -->prendi file cardsDUMP.json da chat gruppo
     		//populateDB.create_trade_collection_mongoDB(1000000);		//trades collection - mongo
     		//populateDB.create_user_card_collection_redis();			//user's card collection - redis
