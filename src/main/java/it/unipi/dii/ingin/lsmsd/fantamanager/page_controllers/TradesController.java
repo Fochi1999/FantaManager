@@ -255,7 +255,7 @@ public class TradesController implements Initializable{
 			//System.out.println(card_from.get(0).toString());
 			String card_from_string=convert_array_trade(card_from);
 			ArrayList<Document> card_to = (ArrayList<Document>) trade_doc.get("card_to");
-			String card_to_string=convert_array_trade(card_from);
+			String card_to_string=convert_array_trade(card_to);
     		String credits = trade_doc.get("credits").toString();
     		String user_from = trade_doc.getString("user_from");
     		trade_output = trade_output + ">> Players offered: " + card_from_string + " \n<< Players wanted: " + card_to_string
