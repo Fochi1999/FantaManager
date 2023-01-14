@@ -211,7 +211,7 @@ public class CardMongoDriver {
     }
 
 
-    public static card_collection search_player_by_name(String name) {
+    /*public static card_collection search_player_by_name(String name) {
 
         openConnection();
         MongoCursor<Document> resultDoc;
@@ -235,7 +235,7 @@ public class CardMongoDriver {
 
         }
         return player;
-    }
+    }*/
 
     public static MongoCursor<Document> retrieve_player_for_trade(){
         openConnection();

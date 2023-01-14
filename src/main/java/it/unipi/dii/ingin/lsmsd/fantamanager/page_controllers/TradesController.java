@@ -129,9 +129,9 @@ public class TradesController implements Initializable{
 			Trade chosen_trade=retrieve_trade();
 			
 			for(JSONObject card:chosen_trade.get_card_to()){
-				//card_collection card_to= CardMongoDriver.search_player_by_name(card);
-				//if(!collection.presence_card(card_to,global.id_user))
-					//	return false;
+				card_collection card_to= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
+				if(!collection.presence_card(card_to,global.id_user))
+						return false;
 			}
 			return true;
 	}
@@ -177,9 +177,9 @@ public class TradesController implements Initializable{
 		Trade chosen_trade=retrieve_trade();
 		System.out.println(chosen_trade);
 		for(JSONObject card:chosen_trade.get_card_from()){
-			//card_collection card_from= CardMongoDriver.search_player_by_name(card);
-			System.out.println(card);
-			//collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
+			card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
+			//System.out.println(card);
+			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
 		}
 		
 		//delete
@@ -295,15 +295,15 @@ public class TradesController implements Initializable{
 				Trade chosen_trade=retrieve_trade();
 
 				for(JSONObject card:chosen_trade.get_card_from()){
-					//card_collection card_from= CardMongoDriver.search_player_by_name(card);
-					//collection.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
+					card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
+					collection.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
 						//dalla collection dell' altro tizio non vanno tolti in quanto si sono tolti al momento in cui lui li ha offerti
 				}
 
 				for(JSONObject card:chosen_trade.get_card_to()){
-				//	card_collection card_to= CardMongoDriver.search_player_by_name(card);
-				//	collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, l'utente loggato, i giocatori richiesti da chi ha generato il trade
-				//	collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
+					card_collection card_to= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
+					collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, l'utente loggato, i giocatori richiesti da chi ha generato il trade
+					collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
 				}
 
 				
