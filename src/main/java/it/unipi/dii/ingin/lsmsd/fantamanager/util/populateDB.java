@@ -348,7 +348,7 @@ public class populateDB {
 			players.put(String.valueOf(i),player);
 		}
 		//module
-		JSONObject module = new JSONObject();
+		JSONObject module = new JSONObject();  //TODO rifare come array
 		module.put("0", 0);
 		module.put("1", 0);
 		module.put("2", 0);
