@@ -124,8 +124,8 @@ public class NewTradeController implements Initializable{
 	}
 
 	
-	@FXML
-	/*private void create_trade() throws IOException, NoSuchAlgorithmException {
+	/*@FXML
+	private void create_trade() throws IOException, NoSuchAlgorithmException {
 		
 		if(!check_fields()) {
 			System.out.println("Error on input fields!");

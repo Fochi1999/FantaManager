@@ -162,7 +162,7 @@ public class TradeMongoDriver {
         //searching for the trades
         Bson filter = Filters.eq("status",0);
         try {
-            resultDoc = collection.find(filter).limit(500).iterator();	//limit(500) because the load will be too much otherwise   
+            resultDoc = collection.find(filter).limit(500).iterator();	//limit(500) because the load will be too much otherwise  //TODO, facciamo limit con un criterio, sennò non va bene
         } catch (Exception e) {
             System.out.println("An error has occured while viewing trades!");
             return null;
@@ -187,12 +187,11 @@ public class TradeMongoDriver {
         }
         
         String trade_id = trade_doc.get("_id").toString();
-        ArrayList<JSONObject> card_from = (ArrayList<JSONObject>) trade_doc.get("card_from");
-        ArrayList<JSONObject> card_to = (ArrayList<JSONObject>) trade_doc.get("card_to");
+        ArrayList<Document> card_from = (ArrayList<Document>) trade_doc.get("card_from");
+        ArrayList<Document> card_to = (ArrayList<Document>) trade_doc.get("card_to");
         int credits = Integer.valueOf(trade_doc.get("credits").toString());
         String user_from = trade_doc.getString("user_from");
         trade=new Trade(trade_id,user_from,global.id_user,credits,card_from,card_to,1);
-        //update_status_trade();  //TODO
 
         return trade;
     }
@@ -229,17 +228,18 @@ public class TradeMongoDriver {
     
     //deleting all trades involving that user
 	public static void delete_all_trades(String username) { //used when deleting an user
-    	TradeMongoDriver.openConnection();
+    	openConnection();
     	try {
-    		TradeMongoDriver.collection.deleteMany(Filters.eq("user_from", username));
-    		TradeMongoDriver.collection.deleteMany(Filters.eq("user_to", username));
+    		collection.deleteMany(Filters.eq("user_from", username));
+    		//TradeMongoDriver.collection.deleteMany(Filters.eq("user_to", username));
+            collection.deleteMany(Filters.eq("user_to", username));
     	}
     	catch(Exception e) {
     		System.out.println("Error! Cannot delete this user's trades now. Try later");
-    		TradeMongoDriver.closeConnection();
+    		closeConnection();
     		return;
     	}
-    	TradeMongoDriver.closeConnection();
+    	closeConnection();
     }
    
 }

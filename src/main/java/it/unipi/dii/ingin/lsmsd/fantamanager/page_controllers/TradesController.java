@@ -3,7 +3,6 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
@@ -28,6 +27,7 @@ import javafx.beans.value.ObservableValue;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.*;
 import javafx.stage.Stage;
@@ -127,8 +127,10 @@ public class TradesController implements Initializable{
 
 	private boolean control_owned_cards() {		//checks if the user owns the correct cards in order to accept the trade
 			Trade chosen_trade=retrieve_trade();
+
+			ArrayList<Document> cards=chosen_trade.get_card_to();
 			
-			for(JSONObject card:chosen_trade.get_card_to()){
+			for(Document card:cards){
 				card_collection card_to= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
 				if(!collection.presence_card(card_to,global.id_user))
 						return false;
@@ -176,7 +178,7 @@ public class TradesController implements Initializable{
 		//devo riaggiungere i giocatori alla mia collection, visto che quando li propongo mi vengono tolti temporaneamente dalla collection
 		Trade chosen_trade=retrieve_trade();
 		System.out.println(chosen_trade);
-		for(JSONObject card:chosen_trade.get_card_from()){
+		for(Document card:chosen_trade.get_card_from()){
 			card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
 			//System.out.println(card);
 			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
@@ -249,11 +251,14 @@ public class TradesController implements Initializable{
     		}
     		
     		String trade_id = trade_doc.get("_id").toString();
-    		String card_from = trade_doc.get("card_from").toString();
-    		String card_to = trade_doc.get("card_to").toString();
+    		ArrayList<Document> card_from = (ArrayList<Document>) trade_doc.get("card_from");
+			//System.out.println(card_from.get(0).toString());
+			String card_from_string=convert_array_trade(card_from);
+			ArrayList<Document> card_to = (ArrayList<Document>) trade_doc.get("card_to");
+			String card_to_string=convert_array_trade(card_from);
     		String credits = trade_doc.get("credits").toString();
     		String user_from = trade_doc.getString("user_from");
-    		trade_output = trade_output + ">> Players offered: " + card_from + " \n<< Players wanted: " + card_to 
+    		trade_output = trade_output + ">> Players offered: " + card_from_string + " \n<< Players wanted: " + card_to_string
     				+ " \n$$$ Credits: " + credits +" \n--- Trade request made by: " + user_from + " \n%% trade_id: " + trade_id;
     		
     		list.add(trade_output);
@@ -263,7 +268,17 @@ public class TradesController implements Initializable{
 
 		TradeMongoDriver.closeConnection();
 	}
-	
+
+	private String convert_array_trade(ArrayList<Document> cards) {
+			String cards_trade = "";
+			for(int i=0;i<cards.size();i++){
+					String card=(cards.get(i).toJson());
+					System.out.println(card);
+					cards_trade+=card;
+			}
+			return cards_trade;
+	}
+
 
 	public void show_most_present(MouseEvent mouseEvent) {
 
@@ -274,7 +289,8 @@ public class TradesController implements Initializable{
 					//System.out.println(cursor.next().toJson());
 					//show_trades(cursor);
 					Document card=cursor.next();
-					card_trade += "" + card.get("_id")+"-->"+card.get("count")+"times\n";
+					Document card_value= (Document) card.get("_id");
+					card_trade += "" + card_value.toJson()+"-->"+card.get("count")+"times\n";
 				}
 				selected_trade.setText(card_trade); //the trade will show up on the lower Area
 			}
@@ -294,13 +310,13 @@ public class TradesController implements Initializable{
 
 				Trade chosen_trade=retrieve_trade();
 
-				for(JSONObject card:chosen_trade.get_card_from()){
+				for(Document card:chosen_trade.get_card_from()){
 					card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
 					collection.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
 						//dalla collection dell' altro tizio non vanno tolti in quanto si sono tolti al momento in cui lui li ha offerti
 				}
 
-				for(JSONObject card:chosen_trade.get_card_to()){
+				for(Document card:chosen_trade.get_card_to()){
 					card_collection card_to= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
 					collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, l'utente loggato, i giocatori richiesti da chi ha generato il trade
 					collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
