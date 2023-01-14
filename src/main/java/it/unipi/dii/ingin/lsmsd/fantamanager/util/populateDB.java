@@ -342,9 +342,10 @@ public class populateDB {
 		player.put("id", 0);
 		player.put("team", "");
 		player.put("vote", 0);
-		ArrayList<JSONObject> players = new ArrayList<>();
+		//ArrayList<JSONObject> players = new ArrayList<>();
+		JSONObject players =new JSONObject();
 		for(int i=0; i<18;i++) {
-			players.add(i,player);
+			players.put(String.valueOf(i),player);
 		}
 		//module
 		JSONObject module = new JSONObject();
@@ -354,14 +355,15 @@ public class populateDB {
 		module.put("3", 0);
 		
 		//formation
-		ArrayList<JSONObject> formations = new ArrayList<>();
+		//ArrayList<JSONObject> formations = new ArrayList<>();
+		JSONObject formations=new JSONObject();
 		JSONObject formation = new JSONObject();
 		formation.put("tot",0);
 		formation.put("valid",false);
 		formation.put("module", module);
 		formation.put("players", players);
 		for(int i=0; i<39; i++) {
-			formations.add(i, formation);
+			formations.put(String.valueOf(i), formation);
 		}
 		
 		
@@ -370,6 +372,7 @@ public class populateDB {
     	String admin_password = hash.MD5(admin_username);	//the password is the same as the username
 		int admin_credits = 0;
 		int admin_points = 0;
+		int admin_privilege=2;
 		String admin_email = generate_random_email();
 		int random0 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
 		String admin_region = utilities.regionList[random0];
@@ -384,6 +387,7 @@ public class populateDB {
 		admin.append("points", admin_points);
 		admin.append("email", admin_email);
 		admin.append("region", admin_region);
+		admin.append("_privilege",admin_privilege);
 		admin.append("formations", formations);
 		user_list_doc.add(admin);
 		
@@ -403,6 +407,7 @@ public class populateDB {
 				String user_email = generate_random_email();
 				int random1 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
 				String user_region = utilities.regionList[random1];
+				int user_privilege=1;
 
 				//creating document
 				Document new_user_doc = new Document();
@@ -412,6 +417,7 @@ public class populateDB {
 				new_user_doc.append("points", user_points);
 				new_user_doc.append("email", user_email);
 				new_user_doc.append("region", user_region);
+				new_user_doc.append("_privilege",user_privilege);
 				new_user_doc.append("formations", formations);
 					
 				//add	

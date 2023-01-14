@@ -13,6 +13,7 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.json.simple.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -186,8 +187,8 @@ public class TradeMongoDriver {
         }
         
         String trade_id = trade_doc.get("_id").toString();
-        ArrayList<String> card_from = (ArrayList<String>) trade_doc.get("card_from");
-        ArrayList<String> card_to = (ArrayList<String>) trade_doc.get("card_to");
+        ArrayList<JSONObject> card_from = (ArrayList<JSONObject>) trade_doc.get("card_from");
+        ArrayList<JSONObject> card_to = (ArrayList<JSONObject>) trade_doc.get("card_to");
         int credits = Integer.valueOf(trade_doc.get("credits").toString());
         String user_from = trade_doc.getString("user_from");
         trade=new Trade(trade_id,user_from,global.id_user,credits,card_from,card_to,1);
