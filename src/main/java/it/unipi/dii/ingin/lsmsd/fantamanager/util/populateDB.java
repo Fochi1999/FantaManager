@@ -43,6 +43,9 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Transaction;
 
+import static com.mongodb.client.model.Projections.fields;
+import static com.mongodb.client.model.Projections.include;
+
 
 public class populateDB {
 
@@ -85,7 +88,7 @@ public class populateDB {
     	//retieving cards name
     	ArrayList<Document> user_list = new ArrayList<>();
     	try {
-    		MongoCursor<Document> user_doc = collection.find().iterator();
+    		MongoCursor<Document> user_doc = collection.find().projection(fields(include("_id","username"))).iterator();
     		while(user_doc.hasNext()) {
     			user_list.add(user_doc.next());
     		}
