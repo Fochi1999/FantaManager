@@ -57,7 +57,7 @@ public class populateDB {
     	MongoClient myClient = MongoClients.create(global.MONGO_URI);
     	MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
     	MongoCollection<Document> collection = database.getCollection(global.TRADES_COLLECTION_NAME);
-    			
+    		
     	//retieving cards name
     	ArrayList<Document> card_list = new ArrayList<>();
     	try {
@@ -109,8 +109,10 @@ public class populateDB {
     	System.out.println("Creating user's collection on redis...");
     	
     	//retrieve documents from mongo
-    	ArrayList<Document> user_list = get_users_collection_mongoDB();
     	ArrayList<Document> cards_list = get_cards_collection_mongoDB();
+    	System.out.println("Cards retrieved..");
+    	ArrayList<Document> user_list = get_users_collection_mongoDB();
+    	System.out.println("Users retrieved..");
     	
     	//connecting to redis
     	JedisPool pool = new JedisPool("localhost", 6379);
@@ -242,7 +244,9 @@ public class populateDB {
 		ArrayList<Document> TradeList = new ArrayList();
 		
 		ArrayList<Document> card_list = get_cards_collection_mongoDB();
+    	System.out.println("Cards retrieved..");
 		ArrayList<Document> user_list = get_users_collection_mongoDB();
+		System.out.println("Users retrieved..");
 		
 		//creating trade classes
 		for(int i=0; i < total_trades; i++) {
@@ -271,16 +275,26 @@ public class populateDB {
 			int random_array_lenght1 =  ThreadLocalRandom.current().nextInt(1, 3 + 1);
 			int random_array_lenght2 =  ThreadLocalRandom.current().nextInt(0, 3 + 1); //even 0 cards could be received
 			
-			ArrayList<String> card_from_input = new ArrayList<>();
+			ArrayList<JSONObject> card_from_input = new ArrayList<>();
 			for(int j = 0; j < random_array_lenght1; j++) {
+				JSONObject new_card = new JSONObject();
 				int random = ThreadLocalRandom.current().nextInt(0, card_list.size()-1);
-				card_from_input.add(card_list.get(random).getString("fullname"));
+				new_card.put("card_name", card_list.get(random).get("fullname"));
+				new_card.put("card_id", card_list.get(random).get("player_id"));
+				new_card.put("card_team", card_list.get(random).get("team"));
+				new_card.put("card_position", card_list.get(random).get("position"));
+				card_from_input.add(new_card);
 			}
 			
-			ArrayList<String> card_to_input = new ArrayList<>();
+			ArrayList<JSONObject> card_to_input = new ArrayList<>();
 			for(int j = 0; j < random_array_lenght2; j++) {
+				JSONObject new_card = new JSONObject();
 				int random = ThreadLocalRandom.current().nextInt(0, card_list.size()-1);
-				card_to_input.add(card_list.get(random).getString("fullname"));
+				new_card.put("card_name", card_list.get(random).get("fullname"));
+				new_card.put("card_id", card_list.get(random).get("player_id"));
+				new_card.put("card_team", card_list.get(random).get("team"));
+				new_card.put("card_position", card_list.get(random).get("position"));
+				card_to_input.add(new_card);
 			}
 			
 			//creating the document
@@ -293,7 +307,8 @@ public class populateDB {
 			doc.append("status", status_input);
 			
 			//adding to list
-			TradeList.add(doc);			
+			TradeList.add(doc);	
+			System.out.println("Trades created: "+ (i+1) + "/" + total_trades);
 		}
 		
 		//connecting to mongoDB 

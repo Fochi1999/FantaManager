@@ -6,6 +6,7 @@ import org.bson.Document;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import org.json.simple.JSONObject;
 
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Indexes.descending;
@@ -15,8 +16,8 @@ public class Trade{
 	String trade_id;
 	String user_from;
 	String user_to;
-	ArrayList<String> card_from;
-	ArrayList<String> card_to;
+	ArrayList<JSONObject> card_from;
+	ArrayList<JSONObject> card_to;
 	int credits;	// negative value: offered credits - positive value: wanted credits
 	int status; 	// 0: pending - 1:completed
 	
@@ -24,7 +25,7 @@ public class Trade{
 	
 	//constructor
 	public Trade(String trade_id_input, String user_from_input, String user_to_input, int credits_input,
-				 ArrayList<String> card_from_input, ArrayList<String> card_to_input, int status_input) {
+				 ArrayList<JSONObject> card_from_input, ArrayList<JSONObject> card_to_input, int status_input) {
 		
 		//error prevention condition
 		if(status_input > 0)
@@ -62,9 +63,9 @@ public class Trade{
 		return this.status;
 	}
 
-	public ArrayList<String> get_card_from(){return this.card_from;}
+	public ArrayList<JSONObject> get_card_from(){return this.card_from;}
 
-	public ArrayList<String> get_card_to(){return this.card_to;}
+	public ArrayList<JSONObject> get_card_to(){return this.card_to;}
 
 
 	
