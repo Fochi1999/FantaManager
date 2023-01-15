@@ -58,7 +58,7 @@
          </font></Button>
       <Button layoutX="546.0" layoutY="95.0" mnemonicParsing="false" onMouseClicked="#show_most_present" prefHeight="26.0" prefWidth="94.0" text="Most Present" />
       <ChoiceBox fx:id="offered_wanted" layoutX="341.0" layoutY="95.0" prefHeight="26.0" prefWidth="191.0" />
-      <Button fx:id="create_trade" layoutX="174.0" layoutY="614.0" mnemonicParsing="false" onMouseClicked="#create_trade" prefHeight="46.0" prefWidth="112.0" text="Create trade">
+      <Button layoutX="174.0" layoutY="614.0" mnemonicParsing="false" onMouseClicked="#create_trade" prefHeight="46.0" prefWidth="112.0" text="Create trade">
          <font>
             <Font size="15.0" />
          </font>

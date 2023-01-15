@@ -180,7 +180,6 @@ public class TradesController implements Initializable{
 		System.out.println(chosen_trade);
 		for(Document card:chosen_trade.get_card_from()){
 			card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
-			//System.out.println(card);
 			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
 		}
 		
@@ -196,8 +195,7 @@ public class TradesController implements Initializable{
     	if(chosen_trade.get_credits() < 0) {	//if a user offered credits, they will be refunded
     		OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),(0-chosen_trade.get_credits()));
     	}
-    			
-    	
+    			  	
 		selected_trade.setText("");
     	my_requests_button_onclick(); //refreshing the available trade list
     }
@@ -205,6 +203,11 @@ public class TradesController implements Initializable{
     
 	public void show_all_button_onclick() {
 
+		//resets input values
+    	search_card_from.setText("");
+    	search_card_to.setText("");
+    	offered_wanted.setValue(null);
+    	
     	
     	show_trades(TradeMongoDriver.trades_pending(),false);
 		TradeMongoDriver.closeConnection();
@@ -272,9 +275,13 @@ public class TradesController implements Initializable{
 	private String convert_array_trade(ArrayList<Document> cards) {
 			String cards_trade = "";
 			for(int i=0;i<cards.size();i++){
-					String card=(cards.get(i).toJson());
-					System.out.println(card);
-					cards_trade+=card;
+				String card_name=(cards.get(i).getString("card_name"));
+				String card_team=(cards.get(i).getString("card_team"));
+				
+				cards_trade+= card_name + " ("+card_team+")";
+				if(i<cards.size()-1) {
+					cards_trade+=" - ";
+				}
 			}
 			return cards_trade;
 	}
@@ -286,11 +293,9 @@ public class TradesController implements Initializable{
 
 			try(MongoCursor<Document> cursor= TradeMongoDriver.retrieve_most_present((String) offered_wanted.getValue())){
 				while(cursor.hasNext()){
-					//System.out.println(cursor.next().toJson());
-					//show_trades(cursor);
 					Document card=cursor.next();
-					Document card_value= (Document) card.get("_id");
-					card_trade += "" + card_value.toJson()+"-->"+card.get("count")+"times\n";
+					Document card_value = (Document) card.get("_id");
+					card_trade += "" + card_value.get("card_name").toString()+" --> "+card.get("count")+"times\n";
 				}
 				selected_trade.setText(card_trade); //the trade will show up on the lower Area
 			}

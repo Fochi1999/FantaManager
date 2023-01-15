@@ -124,7 +124,7 @@ public class NewTradeController implements Initializable{
 	}
 
 	
-	/*@FXML
+	@FXML
 	private void create_trade() throws IOException, NoSuchAlgorithmException {
 		
 		if(!check_fields()) {
@@ -137,44 +137,74 @@ public class NewTradeController implements Initializable{
 		int user_credits = global.user.getCredits();
 		if(Integer.parseInt(credits_from.getText()) > user_credits){
 			System.out.println("Credit input value exceeded! Sorry, you don't have that much credits :/");
-			error_text.setText("Credit input value exceeded! Sorry, you don't have that much credits :/");
+			error_text.setText("Credit input value exceeded! Insufficient funds!");
 			return;
 		}
 		
 		//create with mongoDB
 		ArrayList<String> card_from_collection=new ArrayList<>();
 		
-		ArrayList<String> card_from=new ArrayList<>();
+		ArrayList<Document> card_from=new ArrayList<>();
 		if(card_from_checkbox1.isSelected() && !card_from1.getText().equals("")) {
 			String words[] = card_from1.getText().toString().split(" ");
 			card_from_collection.add(words[words.length-1]);
 			String words2[] = card_from1.getText().toString().split(" <> ");
-			card_from.add(words2[0]);
+			Document card_doc = new Document();
+			card_doc.append("card_id", Integer.parseInt(words[words.length-1]));
+			card_doc.append("card_name", words2[0]);
+			card_doc.append("card_team", words2[2].substring(6));
+			card_doc.append("card_position", words2[1].substring(10));
+			card_from.add(card_doc);
 		}
 		if(card_from_checkbox2.isSelected() && !card_from2.getText().equals("")) {
 			String words[] = card_from2.getText().toString().split(" ");
 			card_from_collection.add(words[words.length-1]);
 			String words2[] = card_from2.getText().toString().split(" <> ");
-			card_from.add(words2[0]);
+			Document card_doc = new Document();
+			card_doc.append("card_id", Integer.parseInt(words[words.length-1]));
+			card_doc.append("card_name", words2[0]);
+			card_doc.append("card_team", words2[2].substring(6));
+			card_doc.append("card_position", words2[1].substring(10));
+			card_from.add(card_doc);
 		}
 		if(card_from_checkbox3.isSelected() && !card_from3.getText().equals("")) {
 			String words[] = card_from3.getText().toString().split(" ");
 			card_from_collection.add(words[words.length-1]);
 			String words2[] = card_from3.getText().toString().split(" <> ");
-			card_from.add(words2[0]);
+			Document card_doc = new Document();
+			card_doc.append("card_id", Integer.parseInt(words[words.length-1]));
+			card_doc.append("card_name", words2[0]);
+			card_doc.append("card_team", words2[2].substring(6));
+			card_doc.append("card_position", words2[1].substring(10));
+			card_from.add(card_doc);
 		}
-		ArrayList<String> card_to=new ArrayList<>();
+		ArrayList<Document> card_to=new ArrayList<>();
 		if(card_to_checkbox1.isSelected() && !card_to1.getText().equals("")) {
-			String words2[] = card_to1.getText().toString().split("<>");
-			card_to.add(words2[0]);
+			String words2[] = card_to1.getText().toString().split(" <> ");
+			Document card_doc = new Document();
+			card_doc.append("card_id", Integer.parseInt(words2[3].substring(1)));
+			card_doc.append("card_name", words2[0]);
+			card_doc.append("card_team", words2[2].substring(6));
+			card_doc.append("card_position", words2[1].substring(10));
+			card_to.add(card_doc);
 		}	
 		if(card_to_checkbox2.isSelected() && !card_to2.getText().equals("")) {
-			String words2[] = card_to2.getText().toString().split("<>");
-			card_to.add(words2[0]);
+			String words2[] = card_to2.getText().toString().split(" <> ");
+			Document card_doc = new Document();
+			card_doc.append("card_id", Integer.parseInt(words2[3].substring(1)));
+			card_doc.append("card_name", words2[0]);
+			card_doc.append("card_team", words2[2].substring(6));
+			card_doc.append("card_position", words2[1].substring(10));
+			card_to.add(card_doc);
 		}
 		if(card_to_checkbox3.isSelected() && !card_to3.getText().equals("")) {
-			String words2[] = card_to3.getText().toString().split("<>");
-			card_to.add(words2[0]);
+			String words2[] = card_to3.getText().toString().split(" <> ");
+			Document card_doc = new Document();
+			card_doc.append("card_id", Integer.parseInt(words2[3].substring(1)));
+			card_doc.append("card_name", words2[0]);
+			card_doc.append("card_team", words2[2].substring(6));
+			card_doc.append("card_position", words2[1].substring(10));
+			card_to.add(card_doc);
 		}
 		int new_trade_total_credits = Integer.parseInt(credits_to.getText())-Integer.parseInt(credits_from.getText());
 		Trade new_trade=new Trade("", global.user.username,"",new_trade_total_credits,card_from,card_to,0);
@@ -194,7 +224,7 @@ public class NewTradeController implements Initializable{
 		
 		//reload of the page
 		reload_page_trades();
-	}*/
+	}
 
 	private void reload_page_trades() throws IOException {
 		System.out.println("Opening 'new trade' page...");

@@ -122,10 +122,10 @@ public class TradeMongoDriver {
 
         //preparing bsons
         Pattern pattern0 = Pattern.compile(from_input, Pattern.CASE_INSENSITIVE);
-        Bson card_from_equal = Filters.regex("card_from", pattern0);
+        Bson card_from_equal = Filters.regex("card_from.card_name", pattern0);
 
         Pattern pattern1 = Pattern.compile(to_input, Pattern.CASE_INSENSITIVE);
-        Bson card_to_equal = Filters.regex("card_to", pattern1);
+        Bson card_to_equal = Filters.regex("card_to.card_name", pattern1);
 
 
         //searching for the trades

@@ -644,6 +644,7 @@ public class populateDB {
 			formations.put(matchday,f);
 
 			formationMongoDriver.insert_formation(user_list.get(i).getString("username"),formations);
+			System.out.println("Formation created: "+(i+1)+"/"+user_list.size());
 		}
 	}
 
