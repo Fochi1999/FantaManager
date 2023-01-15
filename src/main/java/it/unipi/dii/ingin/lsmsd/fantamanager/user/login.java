@@ -26,7 +26,8 @@ public class login {
 
         System.out.println(user_doc.get("formations"));
         Document formation = (Document) user_doc.get("formations");
-        System.out.println(formation.toJson());
+        //Document formation_for_next_match=(Document) formation.get(global.next_matchday);
+        //System.out.println(formation_for_next_match.toJson());
 
 
         global.id_user=user_doc.get("_id").toString();

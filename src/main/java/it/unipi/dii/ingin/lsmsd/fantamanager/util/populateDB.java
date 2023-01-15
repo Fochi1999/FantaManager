@@ -350,11 +350,12 @@ public class populateDB {
 			players.put(String.valueOf(i),player);
 		}
 		//module
-		JSONObject module = new JSONObject();  //TODO rifare come array se dà problemi
-		module.put("0", 0);
-		module.put("1", 0);
-		module.put("2", 0);
-		module.put("3", 0);
+		ArrayList<Integer> module = new ArrayList<>();
+		module.add(0, 0);
+		module.add(1, 0);
+		module.add(2, 0);
+		module.add(3, 0);
+
 
 		//formation
 		//ArrayList<JSONObject> formations = new ArrayList<>();
@@ -362,7 +363,7 @@ public class populateDB {
 		JSONObject formation = new JSONObject();
 		formation.put("tot",0);
 		formation.put("valid",false);
-		formation.put("module", module);
+		formation.put("modulo", module);
 		formation.put("players", players);
 		for(int i=1; i<39; i++) {
 			formations.put(String.valueOf(i), formation);
