@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
@@ -88,7 +90,7 @@ public class populateDB {
     	//retieving cards name
     	ArrayList<Document> user_list = new ArrayList<>();
     	try {
-    		MongoCursor<Document> user_doc = collection.find().projection(fields(include("_id","username"))).iterator();
+    		MongoCursor<Document> user_doc = collection.find().projection(fields(include("_id","username","formations"))).iterator();
     		while(user_doc.hasNext()) {
     			user_list.add(user_doc.next());
     		}
@@ -353,7 +355,7 @@ public class populateDB {
 		module.put("1", 0);
 		module.put("2", 0);
 		module.put("3", 0);
-		
+
 		//formation
 		//ArrayList<JSONObject> formations = new ArrayList<>();
 		JSONObject formations=new JSONObject();
@@ -362,7 +364,7 @@ public class populateDB {
 		formation.put("valid",false);
 		formation.put("module", module);
 		formation.put("players", players);
-		for(int i=0; i<39; i++) {
+		for(int i=1; i<39; i++) {
 			formations.put(String.valueOf(i), formation);
 		}
 		
@@ -639,10 +641,20 @@ public class populateDB {
 				continue;
 			}
 			HashMap<Integer,formation> formations=new HashMap<>();
-
+			String formationJson=user_list.get(i).get("formations").toString();
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				TypeReference<HashMap<Integer, formation>> typeRef = new TypeReference<HashMap<Integer, formation>>() {};
+				Map<Integer,formation> map = mapper.readValue(formationJson, typeRef);
+				formations= new HashMap<Integer, formation>(map);
+				System.out.println(formations.toString());
+			} catch(Exception e){
+				//e.printStackTrace();
+				formations=new HashMap<>();
+				System.out.println("formazione non trovata");
+			}
 			formation f=formation.getRandomFormation(Cards);
 			formations.put(matchday,f);
-
 			formationMongoDriver.insert_formation(user_list.get(i).getString("username"),formations);
 			System.out.println("Formation created: "+(i+1)+"/"+user_list.size());
 		}

@@ -31,11 +31,11 @@ public class app extends Application {
             //populateDB.create_cards_collection_mongoDB();  -->prendi file cardsDUMP.json da chat gruppo
     		//populateDB.create_trade_collection_mongoDB(10000);		//trades collection - mongo
     		//populateDB.create_user_card_collection_redis();			//user's card collection - redis
-    		//utilities.update_matchday(-1);							//initialize the update_matchday matrix with all zero
-            //utilities.set_next_matchday_redis(1);                   //initialize the next_matchday a 1, prima che inizi il campionato
+    		utilities.update_matchday(-1);							//initialize the update_matchday matrix with all zero
+            utilities.set_next_matchday_redis(1);                   //initialize the next_matchday a 1, prima che inizi il campionato
 
     		global.updated_matchdays = utilities.get_updated_matchdays();
-            //populateDB.create_random_formations(1);
+            populateDB.create_random_formations(1);
     	} catch(Exception e){
     		e.printStackTrace();
     	}
