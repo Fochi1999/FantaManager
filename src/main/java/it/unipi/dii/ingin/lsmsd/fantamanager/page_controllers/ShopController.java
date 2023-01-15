@@ -337,4 +337,8 @@ public class ShopController implements Initializable {
 		buy_confirm.setVisible(false);
 		buy_cancel.setVisible(false);
 	}
+
+    public void best_cards(MouseEvent mouseEvent) throws ParseException {
+			show_cards(CardMongoDriver.best_cards());
+    }
 }

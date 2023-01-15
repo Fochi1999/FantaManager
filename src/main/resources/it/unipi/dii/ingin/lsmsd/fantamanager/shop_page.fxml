@@ -112,5 +112,6 @@
             </Pane>
          </children>
       </AnchorPane>
+      <Button layoutX="94.0" layoutY="635.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" onMouseClicked="#best_cards" text="Best Cards" />
    </children>
 </AnchorPane>
