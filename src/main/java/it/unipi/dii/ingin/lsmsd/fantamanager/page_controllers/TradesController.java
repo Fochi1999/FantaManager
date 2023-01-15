@@ -295,7 +295,7 @@ public class TradesController implements Initializable{
 				while(cursor.hasNext()){
 					Document card=cursor.next();
 					Document card_value = (Document) card.get("_id");
-					card_trade += "" + card_value.get("card_name").toString()+" --> "+card.get("count")+"times\n";
+					card_trade += "" + card_value.get("card_name").toString()+" ("+card_value.get("card_team").toString()+")"+" --> "+card.get("count")+"times\n";
 				}
 				selected_trade.setText(card_trade); //the trade will show up on the lower Area
 			}
