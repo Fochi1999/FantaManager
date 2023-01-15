@@ -106,6 +106,6 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <Button fx:id="see_formation_button" layoutX="113.0" layoutY="523.0" mnemonicParsing="false" text="See" />
+      <Button fx:id="see_formation_button" layoutX="113.0" layoutY="523.0" mnemonicParsing="false" onMouseClicked="#click_see_formation" text="See" />
    </children>
 </AnchorPane>

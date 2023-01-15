@@ -3,7 +3,6 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController;
-import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,7 +11,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import static com.almasb.fxgl.core.math.FXGLMath.random;
 
@@ -23,7 +21,7 @@ public class formation {
     public int tot;
     public boolean valid;
     public formation(int[] m,ArrayList<player_formation> p){
-        module=new int[3];
+        module =new int[3];
         for(int i=0;i<3;i++){
             module[i]=m[i];
         }
@@ -33,7 +31,7 @@ public class formation {
         }
     }
     public formation(int[] m){
-        module=new int[4];
+        module =new int[4];
         for(int i=0;i<4;i++){
             module[i]=m[i];
         }
@@ -47,7 +45,7 @@ public class formation {
             players.put(i,p);
         }
 
-        module=new int[4];
+        module =new int[4];
         tot=0;
     }
     public static void choose_player(Stage stage, ArrayList<card_collection> p, String roles) throws IOException {

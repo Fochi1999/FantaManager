@@ -178,11 +178,13 @@ public class SeeUserController implements Initializable{
     		System.out.println(e);
     	}
 	}
+	@FXML
 	protected void click_see_formation() throws IOException {
+		System.out.println("going to user formations...");
 		SeeUserFormationController.matchday= (int) choise_box_formation.getSelectionModel().getSelectedItem();
 		SeeUserFormationController.user_document=user_doc;
 		Stage stage = (Stage)root.getScene().getWindow();
-		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("ranking_page.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("see_formation_user_page.fxml"));
 		Scene scene = new Scene(fxmlLoader.load());
 		stage.setTitle("Ranking page");
 		stage.setScene(scene);
