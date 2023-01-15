@@ -35,6 +35,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class NewTradeController implements Initializable{
 
@@ -208,19 +209,49 @@ public class NewTradeController implements Initializable{
 		}
 		int new_trade_total_credits = Integer.parseInt(credits_to.getText())-Integer.parseInt(credits_from.getText());
 		Trade new_trade=new Trade("", global.user.username,"",new_trade_total_credits,card_from,card_to,0);
-		TradeMongoDriver.create_new_trade(new_trade);
-
-		System.out.println(card_from +"   "+ card_to +"   "+ card_from_collection);
 		
-		//delete dalla propria collection su redis
-		for(String card:card_from_collection){
-			collection.delete_card_from_collection(card);
+		System.out.println("Creating new trade...");
+		
+		//INSERT ON DB
+		
+		//MongoDB
+		ObjectId new_trade_id = null;
+		try{
+			//insert new trade on mongoDB
+			new_trade_id = TradeMongoDriver.create_new_trade(new_trade);
+			
+			//update user's credits info (mongoDB)
+			if(new_trade_total_credits < 0) {	//if a user offered credits(negative credits value), they will be temporary removed from his account
+				OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),new_trade_total_credits);
+			}
+			System.out.print("MongoDB...OK\t");
+		}
+		catch(Exception e){	//handling error
+			error_text.setText("Network error! Try again later");
+			return;
 		}
 		
-		//update user's credits info
-		if(new_trade_total_credits < 0) {	//if a user offered credits(negative credits value), they will be temporary removed from his account
-			OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),new_trade_total_credits);
+		//REDIS
+		try {
+			for(String card:card_from_collection){
+				collection.delete_card_from_collection(card);
+			}
+			System.out.print("Redis...OK\t\n");
 		}
+		catch(Exception e){ //handling error
+			error_text.setText("Network error! Try again later");
+			
+			//return user's credits
+			if(new_trade_total_credits < 0) {	
+				OptionsMongoDriver.update_user_credits(false,global.user.getUsername(),new_trade_total_credits);
+			}
+			//delete the newly created trade from mongoDB
+			TradeMongoDriver.delete_my_trade(new_trade_id);
+			System.out.println("New trade deleted due to network error");
+			return;
+		}
+		
+		System.out.println("Trade created - "+card_from +" || "+ card_to +" || "+ card_from_collection);
 		
 		//reload of the page
 		reload_page_trades();

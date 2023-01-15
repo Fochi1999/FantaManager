@@ -143,10 +143,8 @@ public class collection {
         }
             
             public static void add_card_to_collection(card_collection card, String retrieve_user) {
-                    System.out.println("Card added to "+retrieve_user+":"+card.name);
-
-
-                    if(presence_card(card,retrieve_user)){
+                    
+            	if(presence_card(card,retrieve_user)){
                         apertura_pool();
                         //devo aumentare solo la quantity
                         String key="user_id:"+retrieve_user+":card_id:"+card.card_id+":quantity";
@@ -170,6 +168,7 @@ public class collection {
                         }
                     }
                     closePool();
+                    System.out.println("Card added to "+retrieve_user+":"+card.name);
             }
 
             public static boolean presence_card(card_collection card, String retrieve_user) {

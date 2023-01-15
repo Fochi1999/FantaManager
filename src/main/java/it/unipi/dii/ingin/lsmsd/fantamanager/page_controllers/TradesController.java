@@ -174,28 +174,51 @@ public class TradesController implements Initializable{
     		System.out.println("No trade selected to delete!");
     		return;
     	}
+    	Trade chosen_trade=retrieve_trade();
     	
-		//devo riaggiungere i giocatori alla mia collection, visto che quando li propongo mi vengono tolti temporaneamente dalla collection
-		Trade chosen_trade=retrieve_trade();
-		System.out.println(chosen_trade);
-		for(Document card:chosen_trade.get_card_from()){
-			card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
-			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
-		}
-		
-		//delete
+    	//MongoDB
     	String words_arr[] = trade_text.split(" ");
-		ObjectId trade_id = new ObjectId(words_arr[words_arr.length-1]);
-		System.out.println("Deleting trade with object id: " + trade_id);
-		TradeMongoDriver.delete_my_trade(trade_id);
-    	
-    	TradeMongoDriver.closeConnection();
+    	ObjectId trade_id = new ObjectId(words_arr[words_arr.length-1]);
+    	try{
+    		
+    		System.out.println("Deleting trade with object id: " + trade_id);
+    		TradeMongoDriver.delete_my_trade(trade_id);
+        	TradeMongoDriver.closeConnection();
 
-    	//update user's credits info
-    	if(chosen_trade.get_credits() < 0) {	//if a user offered credits, they will be refunded
-    		OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),(0-chosen_trade.get_credits()));
+        	//update user's credits info
+        	if(chosen_trade.get_credits() < 0) {	//if a user offered credits, they will be refunded
+        		OptionsMongoDriver.update_user_credits(true,global.user.getUsername(),(0-chosen_trade.get_credits()));
+        	}
+    		System.out.print("MongoDB...OK\t");
     	}
-    			  	
+    	catch(Exception e){	//handling error
+    		selected_trade.setText("Network error! Try again later");
+    		return;
+    	}
+    			
+    	//REDIS
+    	try {
+    		//return cards into a user's collection (cards were removed after the creation of the trade)
+    		for(Document card:chosen_trade.get_card_from()){
+    			card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
+    			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
+    		}
+    		System.out.print("Redis...OK\t\n");
+    	}
+    	catch(Exception e){ //handling error
+    		selected_trade.setText("Network error! Try again later");
+    				
+    		//revert credit value
+        	if(chosen_trade.get_credits() < 0) {	
+        		OptionsMongoDriver.update_user_credits(false,global.user.getUsername(),(0-chosen_trade.get_credits()));
+        	}
+        	
+    		//reinsert the newly delete trade
+    		TradeMongoDriver.create_new_trade(chosen_trade);
+    		System.out.println("Trade reinserted due to network error with key-valueDB");
+    		return;
+    	}
+    				  	
 		selected_trade.setText("");
     	my_requests_button_onclick(); //refreshing the available trade list
     }
@@ -314,33 +337,65 @@ public class TradesController implements Initializable{
 
 
 				Trade chosen_trade=retrieve_trade();
-
-				for(Document card:chosen_trade.get_card_from()){
-					card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
-					collection.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
-						//dalla collection dell' altro tizio non vanno tolti in quanto si sono tolti al momento in cui lui li ha offerti
-				}
-
-				for(Document card:chosen_trade.get_card_to()){
-					card_collection card_to= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
-					collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, l'utente loggato, i giocatori richiesti da chi ha generato il trade
-					collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
-				}
-
-				
-				//update user's credits informations
 				int total_credits = chosen_trade.get_credits();
-				if(total_credits < 0) {	//negative credits value means: credits wanted from the trade owner 
+				//CHANGES ON DBs
+				
+				//MONGODB
+				try {
+					//update user's credits informations
+					if(total_credits < 0) {	//negative credits value means: credits wanted from the trade owner 
+						total_credits = 0-total_credits;
+						OptionsMongoDriver.update_user_credits(true, chosen_trade.get_user_from(), total_credits);
+						OptionsMongoDriver.update_user_credits(false, global.user.username, total_credits);
+					}
+					else {	//positive credits value means: credits offered by the trade owner (credits already removed when trade was created)
+						OptionsMongoDriver.update_user_credits(true, global.user.username, total_credits);
+					}
 					total_credits = 0-total_credits;
-					OptionsMongoDriver.update_user_credits(true, chosen_trade.get_user_from(), total_credits);
-					OptionsMongoDriver.update_user_credits(false, global.user.username, total_credits);
+					//update status trade
+					TradeMongoDriver.update_trade(chosen_trade,"status");
+					
+					System.out.print("MongoDB...OK\t");
 				}
-				else {	//positive credits value means: credits offered by the trade owner (credits already removed when trade was created)
-					OptionsMongoDriver.update_user_credits(true, global.user.username, total_credits);
+				catch(Exception e) {
+					selected_trade.setText("Network error! Try again later");
+					return;
 				}
 				
-				//update status trade
-				TradeMongoDriver.update_trade(chosen_trade,"status");
+				//REDIS
+				try {
+					for(Document card:chosen_trade.get_card_from()){
+						card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
+						collection.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
+						//dalla collection dell' altro tizio non vanno tolti in quanto si sono tolti al momento in cui lui li ha offerti
+					}
+
+					for(Document card:chosen_trade.get_card_to()){
+						card_collection card_to= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
+						collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, l'utente loggato, i giocatori richiesti da chi ha generato il trade
+						collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
+					}
+				}
+				catch(Exception e) {
+					
+					//reverting mongoDB changes:
+					//update user's credits informations
+					if(total_credits < 0) {	//negative credits value means: credits wanted from the trade owner 
+						total_credits = 0-total_credits;
+						OptionsMongoDriver.update_user_credits(false, chosen_trade.get_user_from(), total_credits);
+						OptionsMongoDriver.update_user_credits(true, global.user.username, total_credits);
+					}
+					else {	//positive credits value means: credits offered by the trade owner (credits already removed when trade was created)
+						OptionsMongoDriver.update_user_credits(false, global.user.username, total_credits);
+					}
+					
+					//revert trade status to pending
+					TradeMongoDriver.revert_trade(chosen_trade,"status");
+					
+					selected_trade.setText("Network error! Try again later");
+					return;
+				}
+				
 				accept_button.setDisable(true);
 				delete_button.setDisable(true);
 				show_all_button_onclick();

@@ -209,7 +209,20 @@ public class TradeMongoDriver {
         }
     }
 
-    public static void create_new_trade(Trade new_trade){  //TODO finire
+    public static void revert_trade(Trade chosen_trade, String field) { 
+        openConnection();
+
+        //searching for the trades
+        try {
+            UpdateResult result = collection.updateOne(eq("_id",new ObjectId(chosen_trade.trade_id)),Updates.set(field,0));
+            System.out.println(result);
+        } catch (Exception e) {
+            System.out.println("An error has occured while deleting the trade!");
+
+        }
+    }
+    
+    public static ObjectId create_new_trade(Trade new_trade){  //TODO finire
 
             openConnection();
 
@@ -222,8 +235,9 @@ public class TradeMongoDriver {
             doc.append("status", 0);
 
             collection.insertOne(doc);
-
+            ObjectId id = doc.getObjectId("_id");
             closeConnection();
+            return id;
     }
     
     //deleting all trades involving that user
