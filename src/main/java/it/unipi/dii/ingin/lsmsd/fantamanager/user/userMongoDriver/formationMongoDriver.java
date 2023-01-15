@@ -9,17 +9,13 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import it.unipi.dii.ingin.lsmsd.fantamanager.admin.calculate_matchday;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.util.HashMap;
 
 
 public class formationMongoDriver {
@@ -52,7 +48,7 @@ public class formationMongoDriver {
         return true;
     }
 
-    public static boolean insert_formation(String username, HashMap<Integer,formation> formation) throws ParseException {
+    public static boolean insert_formation(String username, formation formation, int matchday) throws ParseException {
 
         UserMongoDriver.openConnection();
         Bson user = Filters.eq("username", username);
@@ -63,9 +59,13 @@ public class formationMongoDriver {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        //System.out.println(json);
-        JSONObject JsonFormation=(JSONObject) create_object_formation(json);
-        Bson update = Updates.set("formations", JsonFormation);
+        System.out.println(json);
+        JSONObject JsonFormation=create_object_formation(json);
+        //Document formations=(Document) formation;
+        //System.out.println(JsonFormation);
+        //JSONObject form=(JSONObject) json;
+
+        Bson update = Updates.set("formations."+matchday, JsonFormation);
         try {
             UserMongoDriver.collection.updateOne(user, update);
         }
@@ -81,15 +81,11 @@ public class formationMongoDriver {
 
     }
 
-    private static Object create_object_formation(String json) throws ParseException {
+    private static JSONObject create_object_formation(String form) throws ParseException {
 
-        JSONParser jsonParser=new JSONParser();
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(form);
 
-        Object obj=jsonParser.parse(json);
-
-        JSONObject formation= (JSONObject) obj;
-       //System.out.println(formation);
-
-        return formation;
+        return json;
     }
 }

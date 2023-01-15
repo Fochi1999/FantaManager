@@ -136,7 +136,7 @@ public class FormationController implements Initializable {
             
             global.user.formations.put(global.next_matchday,global.saved_formation_local);
             //formationMongoDriver.change_formation();
-            formationMongoDriver.insert_formation(global.user.username,global.user.formations);
+            formationMongoDriver.insert_formation(global.user.username,global.user.formations.get(global.next_matchday),global.next_matchday);
             show_error_message("Formation saved");
         }
         else {

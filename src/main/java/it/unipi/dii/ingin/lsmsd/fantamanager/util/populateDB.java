@@ -640,7 +640,7 @@ public class populateDB {
 			if(user_list.get(i).get("username").equals("admin")){
 				continue;
 			}
-			HashMap<Integer,formation> formations=new HashMap<>();
+			/*HashMap<Integer,formation> formations=new HashMap<>();
 			String formationJson=user_list.get(i).get("formations").toString();
 			try {
 				ObjectMapper mapper = new ObjectMapper();
@@ -652,10 +652,10 @@ public class populateDB {
 				//e.printStackTrace();
 				formations=new HashMap<>();
 				System.out.println("formazione non trovata");
-			}
+			}*/
 			formation f=formation.getRandomFormation(Cards);
-			formations.put(matchday,f);
-			formationMongoDriver.insert_formation(user_list.get(i).getString("username"),formations);
+			//formations.put(matchday,f);
+			formationMongoDriver.insert_formation(user_list.get(i).getString("username"),f,matchday);
 			System.out.println("Formation created: "+(i+1)+"/"+user_list.size());
 		}
 	}
