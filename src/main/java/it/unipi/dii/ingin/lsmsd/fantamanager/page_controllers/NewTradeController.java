@@ -326,6 +326,10 @@ public class NewTradeController implements Initializable{
 								@Override
 								public void handle(ActionEvent actionEvent) {
 									card_from1.setText(selected_card.getText());
+									if(!check_duplicates("from")) {
+										error_text.setText("Cannot insert duplicates!");
+										card_from1.setText("");
+									}
 								}
 							});
 					 }
@@ -341,6 +345,10 @@ public class NewTradeController implements Initializable{
 							 @Override
 							 public void handle(ActionEvent actionEvent) {
 								 card_from2.setText(selected_card.getText());
+									if(!check_duplicates("from")) {
+										error_text.setText("Cannot insert duplicates!");
+										card_from2.setText("");
+									}
 							 }
 						 });
 					 }
@@ -356,6 +364,10 @@ public class NewTradeController implements Initializable{
 							 @Override
 							 public void handle(ActionEvent actionEvent) {
 								 card_from3.setText(selected_card.getText());
+									if(!check_duplicates("from")) {
+										error_text.setText("Cannot insert duplicates!");
+										card_from3.setText("");
+									}
 							 }
 						 });
 					 }
@@ -372,6 +384,10 @@ public class NewTradeController implements Initializable{
 							 @Override
 							 public void handle(ActionEvent actionEvent) {
 								 card_to1.setText(selected_card.getText());
+									if(!check_duplicates("to")) {
+										error_text.setText("Cannot insert duplicates!");
+										card_to1.setText("");
+									}
 							 }
 						 });
 					 }
@@ -387,6 +403,10 @@ public class NewTradeController implements Initializable{
 							 @Override
 							 public void handle(ActionEvent actionEvent) {
 								 card_to2.setText(selected_card.getText());
+									if(!check_duplicates("to")) {
+										error_text.setText("Cannot insert duplicates!");
+										card_to2.setText("");
+									}
 							 }
 						 });
 					 }
@@ -402,6 +422,10 @@ public class NewTradeController implements Initializable{
 							 @Override
 							 public void handle(ActionEvent actionEvent) {
 								 card_to3.setText(selected_card.getText());
+									if(!check_duplicates("to")) {
+										error_text.setText("Cannot insert duplicates!");
+										card_to3.setText("");
+									}
 							 }
 						 });
 					 }
@@ -529,4 +553,21 @@ public class NewTradeController implements Initializable{
 	}
 
 
+	private boolean check_duplicates(String side) {
+		if(side.equals("from")) {
+			if((!card_from1.getText().equals("") && card_from1.getText().equals(card_from2.getText())) || (!card_from3.getText().equals("") && card_from1.getText().equals(card_from3.getText())) 
+					|| (!card_from2.getText().equals("") && card_from2.getText().equals(card_from3.getText())))
+					return false;
+			return true;
+		}
+		if(side.equals("to")) {
+			if((!card_to1.getText().equals("") && card_to1.getText().equals(card_to2.getText())) || (!card_to3.getText().equals("") && card_to1.getText().equals(card_to3.getText())) 
+					|| (!card_to2.getText().equals("") && card_to2.getText().equals(card_to3.getText())))
+				return false;
+			return true;
+		}
+		else 
+			return false;
+	}
+	
 }
