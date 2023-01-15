@@ -119,7 +119,7 @@ public class FormationController implements Initializable {
                     throw new RuntimeException(ex);
                 }
             }});
-        int index=formation.get_index(role,global.saved_formation_local.modulo);
+        int index=formation.get_index(role,global.saved_formation_local.module);
         player_formation p=global.saved_formation_local.players.get(index);
         if(p!=null){
             choise_player.setText(p.getName());
@@ -163,7 +163,7 @@ public class FormationController implements Initializable {
             System.out.println("The saved formation has module: ");
             String[] moduleString=new String[4];
             for(int i=0;i<4;i++){
-                moduleString[i]=Integer.toString(f.modulo[i]);
+                moduleString[i]=Integer.toString(f.module[i]);
                 System.out.println(moduleString[i]+" ");
 
             }

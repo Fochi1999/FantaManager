@@ -19,13 +19,13 @@ import static com.almasb.fxgl.core.math.FXGLMath.random;
 public class formation {
     public HashMap<Integer,player_formation> players;
     // 0: portiere, poi 11 giocatori a seconda del modulo es 3-4-3, 1-3: D, 4-7:M, 8-10: A, panchina, 11-12:P, 13-14:D,15-16:M,17-18:A
-    public int[] modulo;
+    public int[] module;
     public int tot;
     public boolean valid;
     public formation(int[] m,ArrayList<player_formation> p){
-        modulo=new int[3];
+        module=new int[3];
         for(int i=0;i<3;i++){
-            modulo[i]=m[i];
+            module[i]=m[i];
         }
         players=new HashMap<>();
         for(int i=0;i<3;i++){
@@ -33,9 +33,9 @@ public class formation {
         }
     }
     public formation(int[] m){
-        modulo=new int[4];
+        module=new int[4];
         for(int i=0;i<4;i++){
-            modulo[i]=m[i];
+            module[i]=m[i];
         }
         players=new HashMap<>();
         tot=0;
@@ -47,7 +47,7 @@ public class formation {
             players.put(i,p);
         }
 
-        modulo=new int[4];
+        module=new int[4];
         tot=0;
     }
     public static void choose_player(Stage stage, ArrayList<card_collection> p, String roles) throws IOException {
@@ -67,7 +67,7 @@ public class formation {
 
     public void insert_new_player(player_formation p, String role) {
         //passo dal ruolo alla posizione nell'array che deve avere il giocatore
-        int index=get_index(role, modulo);
+        int index=get_index(role, module);
         players.put(index,p);
         System.out.println("inserito il player "+p.getName()+" nella posizione di "+role+"corrispondente all'indice "+ index);
 

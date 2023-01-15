@@ -329,8 +329,65 @@ public class populateDB {
 		System.out.println("Trades collection created!");
 		myClient.close();
 	}
-    
-    
+
+	public static void create_users_collection_mongoDB_edo(int total_users){
+		System.out.println("Creating 'User' collection...");
+		ArrayList<user> user_list = new ArrayList();
+		ArrayList<Document> user_list_doc=new ArrayList<>();
+		try {
+			File myObj = new File("src/main/resources/temp/user2.txt");
+			Scanner myReader = new Scanner(myObj);
+			int tot=0;
+
+			while(tot < total_users) {
+
+				//creating attributes values
+				String user_username = myReader.nextLine();
+				String user_password = hash.MD5(user_username);    //the password is the same as the username
+				int user_credits = ThreadLocalRandom.current().nextInt(50, 351);
+				int user_points = ThreadLocalRandom.current().nextInt(0, 2001);    //TODO inizializzare a 0 quando sarà finito calculate matchday/formations
+				String user_email = generate_random_email();
+				int random1 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
+				String user_region = utilities.regionList[random1];
+				int user_privilege=1;
+				user u=new user(user_username,user_password,user_region,user_email,user_credits,user_privilege,user_points);
+				//creating document
+				Document new_user_doc = new Document();
+				ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+				String json = null;
+				try {
+					json = ow.writeValueAsString(u);
+				} catch (JsonProcessingException e) {
+					throw new RuntimeException(e);
+				}
+				JSONParser parser = new JSONParser();
+				JSONObject jsonUser = (JSONObject) parser.parse(json);
+				//System.out.println(jsonUser.toString());
+				//add
+				user_list_doc.add(Document.parse(jsonUser.toString()));
+				System.out.println("Users created: "+(tot+1) + "/" + total_users);
+				tot=tot+1;
+			}
+			myReader.close();
+
+			//connecting to mongoDB
+			MongoClient myClient = MongoClients.create(global.MONGO_URI);
+			MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
+			MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+			collection.insertMany(user_list_doc);
+			myClient.close();
+
+		}
+		catch (FileNotFoundException | NoSuchAlgorithmException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+
+		System.out.println("User collection created!");
+	}
+
     public static void create_users_collection_mongoDB(int total_users) throws NoSuchAlgorithmException{
 		
 		System.out.println("Creating 'User' collection...");
@@ -363,7 +420,7 @@ public class populateDB {
 		JSONObject formation = new JSONObject();
 		formation.put("tot",0);
 		formation.put("valid",false);
-		formation.put("modulo", module);
+		formation.put("module", module);
 		formation.put("players", players);
 		for(int i=1; i<39; i++) {
 			formations.put(String.valueOf(i), formation);

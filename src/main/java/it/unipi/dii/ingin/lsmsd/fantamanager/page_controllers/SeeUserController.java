@@ -5,10 +5,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import org.bson.Document;
 
@@ -31,7 +35,8 @@ import javafx.scene.layout.AnchorPane;
 
 public class SeeUserController implements Initializable{
 
-	
+	@FXML private ChoiceBox choise_box_formation;
+	@FXML private Button see_formation_button;
 	@FXML private TextField region_field;
 	//@FXML private TextField collection_field;
 	@FXML private TextField points_field;
@@ -63,6 +68,12 @@ public class SeeUserController implements Initializable{
     	}
     	
     	search_user();
+		ObservableList<Integer> availableChoices = FXCollections.observableArrayList();
+
+		for(int i=1;i<=38;i++){
+			availableChoices.add(i);
+		}
+		choise_box_formation.setItems(availableChoices);
 	}
 	
 	@FXML
@@ -167,5 +178,14 @@ public class SeeUserController implements Initializable{
     		System.out.println(e);
     	}
 	}
-	
+	protected void click_see_formation() throws IOException {
+		SeeUserFormationController.matchday= (int) choise_box_formation.getSelectionModel().getSelectedItem();
+		SeeUserFormationController.user_document=user_doc;
+		Stage stage = (Stage)root.getScene().getWindow();
+		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("ranking_page.fxml"));
+		Scene scene = new Scene(fxmlLoader.load());
+		stage.setTitle("Ranking page");
+		stage.setScene(scene);
+		stage.show();
+	}
 }
