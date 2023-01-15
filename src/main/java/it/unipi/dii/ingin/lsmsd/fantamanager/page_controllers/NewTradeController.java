@@ -182,7 +182,7 @@ public class NewTradeController implements Initializable{
 		if(card_to_checkbox1.isSelected() && !card_to1.getText().equals("")) {
 			String words2[] = card_to1.getText().toString().split(" <> ");
 			Document card_doc = new Document();
-			card_doc.append("card_id", Integer.parseInt(words2[3].substring(1)));
+			card_doc.append("card_id", Integer.parseInt(words2[3].substring(4)));
 			card_doc.append("card_name", words2[0]);
 			card_doc.append("card_team", words2[2].substring(6));
 			card_doc.append("card_position", words2[1].substring(10));
@@ -191,7 +191,7 @@ public class NewTradeController implements Initializable{
 		if(card_to_checkbox2.isSelected() && !card_to2.getText().equals("")) {
 			String words2[] = card_to2.getText().toString().split(" <> ");
 			Document card_doc = new Document();
-			card_doc.append("card_id", Integer.parseInt(words2[3].substring(1)));
+			card_doc.append("card_id", Integer.parseInt(words2[3].substring(4)));
 			card_doc.append("card_name", words2[0]);
 			card_doc.append("card_team", words2[2].substring(6));
 			card_doc.append("card_position", words2[1].substring(10));
@@ -200,7 +200,7 @@ public class NewTradeController implements Initializable{
 		if(card_to_checkbox3.isSelected() && !card_to3.getText().equals("")) {
 			String words2[] = card_to3.getText().toString().split(" <> ");
 			Document card_doc = new Document();
-			card_doc.append("card_id", Integer.parseInt(words2[3].substring(1)));
+			card_doc.append("card_id", Integer.parseInt(words2[3].substring(4)));
 			card_doc.append("card_name", words2[0]);
 			card_doc.append("card_team", words2[2].substring(6));
 			card_doc.append("card_position", words2[1].substring(10));
