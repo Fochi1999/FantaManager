@@ -1,6 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.player_classes;
 
 import com.mongodb.client.*;
+import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Filters;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
@@ -16,9 +17,10 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Accumulators.first;
+import static com.mongodb.client.model.Accumulators.*;
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Aggregates.match;
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Indexes.descending;
 import static com.mongodb.client.model.Projections.*;
 
@@ -274,6 +276,36 @@ public class CardMongoDriver {
 
             Document card=resultDoc.next();
             return (int) card.get("credits");
+    }
+
+    public static ArrayList<Document> best_cards(){
+
+            //10 giocatori che hanno preso piu volte un voto superiore a 10(da rivedere punteggio)
+
+            openConnection();
+            MongoCursor<Document> resultDoc = null;
+            ArrayList<Document> result=new ArrayList<>();
+            //System.out.println("best cards");
+
+            Bson p1=project(fields(computed("statistics.matchday", eq("$objectToArray", "$statistics.matchday")),include("fullname"), include("team"),include("credits"),include("position")));
+            Bson match=match(gte("statistics.matchday.v.score-value.score",10));
+            Bson u=unwind("$statistics.matchday");
+            Bson group=group("$fullname", sum("count",1), first("fullname","$fullname"), first("credits","$credits"), first("position","$position"),
+                    first("team","$team"), first("id","$_id"));
+            Bson order=sort(descending("count"));
+            Bson limit=limit(10);
+
+
+            try{
+                resultDoc = collection.aggregate(Arrays.asList(p1,u,match,group,order,limit)).iterator();
+            } catch (Exception e) {
+                    return null;
+            }
+
+            while(resultDoc.hasNext()) {
+                result.add(resultDoc.next());
+            }
+            return result;
     }
 
 }
