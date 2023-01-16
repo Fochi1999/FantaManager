@@ -65,7 +65,53 @@ public class general_statistics {
     public long penalty_missed;
     public long penalty_saved;
 
-    //Constructor with values
+    //CONSTRUCTOR
+    public general_statistics(){
+        this.games_appearences = 0;
+        this.games_lineup = 0;
+        this.games_minutes = 0;
+
+        this.substitutes_in = 0;
+        this.substitutes_out = 0;
+        this.substitutes_bench = 0;
+
+        this.shots_total = 0;
+        this.shots_on = 0;
+
+        this.goals_total = 0;
+        this.goals_conceded = 0;
+        this.goals_assists = 0;
+        this.goals_saves = 0;
+
+        this.passes_total = 0;
+        this.passes_key = 0;
+        this.passes_accuracy = 0;
+
+        this.tackles_total = 0;
+        this.tackles_blocks = 0;
+        this.tackles_interceptions = 0;
+
+        this.duels_total = 0;
+        this.duels_won = 0;
+
+        this.dribbles_attempts = 0;
+        this.dribbles_success = 0;
+        this.dribbles_past = 0;
+
+        this.fouls_drawn = 0;
+        this.fouls_committed = 0;
+
+        this.cards_yellow = 0;
+        this.cards_red = 0;
+        this.cards_yellowred = 0;
+
+        this.penalty_won = 0;
+        this.penalty_commutted = 0;
+        this.penalty_scored = 0;
+        this.penalty_missed = 0;
+        this.penalty_saved = 0;
+    }
+
     public static general_statistics add_info(general_statistics gen_stats, long games_appearences, long games_lineup, long games_minutes, long substitutes_in, long substitutes_out, long substitutes_bench, long shots_total, long shots_on, long goals_total, long goals_conceded, long goals_assists,
                                                     long goals_saves, long passes_total, long passes_key, long passes_accuracy, long tackles_total, long tackles_blocks, long tackles_interceptions, long duels_total, long duels_won, long dribbles_attempts,
                                                     long dribbles_success, long dribbles_past, long fouls_drawn, long fouls_committed, long cards_yellow, long cards_red, long cards_yellowred, long penalty_won, long penalty_commutted,
@@ -194,7 +240,7 @@ public class general_statistics {
             System.out.println("gen_stats non trovate");
         }
 
-        general_statistics general_stats_match =general_statistics.add_info(old_gen_stats,games_appearence,start,min,substitutes_in,substitutes_out,substitutes_bench,shot,on_tar_shot,goal,goal_con,assist,save,pass,key_p,acc_p,tackle,tackle_block,tackle_inter,
+        general_statistics general_stats_match =add_info(old_gen_stats,games_appearence,start,min,substitutes_in,substitutes_out,substitutes_bench,shot,on_tar_shot,goal,goal_con,assist,save,pass,key_p,acc_p,tackle,tackle_block,tackle_inter,
                 total_duel,duel_won,dribbles,succ_dribbles,dribbles_past,was_foul,foul,yellow_card,red_card,second_yellow,penalty_won,penalty_commuted,pen_goal,pen_missed,pen_save);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
