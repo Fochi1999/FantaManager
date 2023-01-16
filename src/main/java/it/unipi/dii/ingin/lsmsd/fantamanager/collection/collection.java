@@ -246,9 +246,9 @@ public class collection {
             try (Jedis jedis = pool.getResource()) {
             	
                 int i = 0;
-            	while (i<=600) {	//TODO inserire lunghezza effettiva di max card_id 
+            	while (i<=600) {	
                     String key_name = key_load+i+":name";
-                    System.out.println(key_name);
+                    System.out.println("Deleting "+key_name);
                     jedis.del(key_name);
                     
                     String key_pos = key_load+i+":position";

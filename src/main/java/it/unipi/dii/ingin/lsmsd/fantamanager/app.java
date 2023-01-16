@@ -27,9 +27,9 @@ public class app extends Application {
 
     public static void main(String[] args) {
     	try {
-    		//populateDB.create_users_collection_mongoDB(50000);		//users collection - mongo
+    		//populateDB.create_users_collection_mongoDB(5000);		//users collection - mongo	(50k = 2Gb)
             //populateDB.create_cards_collection_mongoDB();  -->prendi file cardsDUMP.json da chat gruppo
-    		//populateDB.create_trade_collection_mongoDB(500000);		//trades collection - mongo
+    		//populateDB.create_trade_collection_mongoDB(200000);		//trades collection - mongo
     		//populateDB.create_user_card_collection_redis();			//user's card collection - redis
     		//utilities.update_matchday(-1);							//initialize the update_matchday matrix with all zero
             //utilities.set_next_matchday_redis(1);                   //initialize the next_matchday a 1, prima che inizi il campionato

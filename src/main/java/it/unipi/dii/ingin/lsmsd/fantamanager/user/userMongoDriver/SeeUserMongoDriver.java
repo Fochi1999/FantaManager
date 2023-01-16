@@ -2,19 +2,16 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver;
 
 import org.bson.Document;
 import com.mongodb.client.model.Filters;
+import java.util.ArrayList;
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 
 public class SeeUserMongoDriver {
 
 	public static Document search_user(String username) {
 		
-		//connecting to mongoDB 
-		//MongoClient myClient = MongoClients.create(global.MONGO_URI);
-		//MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		//MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
 		UserMongoDriver.openConnection();
     	
 		//searching user
@@ -34,30 +31,40 @@ public class SeeUserMongoDriver {
 	}	
 	
 	
-	public static void delete_user(String username) {
+	public static boolean delete_user(String username, String _id) {
 		
-		//TODO remove all trades from db and all keyvalues on redis
-		UserMongoDriver.openConnection();
-			
-		//deleting all trades
-		TradeMongoDriver.delete_all_trades(username);
-		
-		//deleting all keys on redis
-		collection.delete_user_card_collection(global.id_user);
-		
-		//delete user
+		ArrayList<card_collection> user_card_list = collection.load_collection(_id);
+		//REDIS
 		try {
-			System.out.println(UserMongoDriver.collection.deleteOne(Filters.eq("username", username)));
+			collection.delete_user_card_collection(_id);
+			System.out.print("Redis..OK\t");
 		}
 		catch(Exception e) {
 			System.out.println("Error! Cannot delete this user now. Try later");
-			UserMongoDriver.closeConnection();
-			return;
+			return false;
+		}
+		
+		//MONGODB
+		try {
+			UserMongoDriver.openConnection();
+			TradeMongoDriver.delete_all_trades(username);
+			System.out.println(UserMongoDriver.collection.deleteOne(Filters.eq("username", username)));
+			System.out.print("MongoDB..OK\t\n");
+		}
+		catch(Exception e) {	//handling exception
+			int i=0;
+			while(i<user_card_list.size()) {
+				collection.add_card_to_collection(user_card_list.get(i), _id);
+				i++;
+			}
+			
+			System.out.println("Error! Cannot delete this user now. Try later...card collection restored on Redis");
+			return false;
 		}
 		UserMongoDriver.closeConnection();
 		
-		System.out.println("User '"+ username + "' successfully deleted.");
-		return;
+		System.out.println("User '"+ username + "' successfully deleted from databases.");
+		return true;
 	}
 	
 }

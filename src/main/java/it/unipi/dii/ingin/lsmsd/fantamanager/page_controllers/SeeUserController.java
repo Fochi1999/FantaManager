@@ -27,20 +27,20 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
-//TODO remove collection field
 
 public class SeeUserController implements Initializable{
 
 	@FXML private ChoiceBox choise_box_formation;
 	@FXML private Button see_formation_button;
+	@FXML private Pane confirm_delete;
+	@FXML private Pane cancel_delete;
+	
 	@FXML private TextField region_field;
-	//@FXML private TextField collection_field;
 	@FXML private TextField points_field;
-	//@FXML private TextFlow text_flow;
 	@FXML
 	private ListView<String> collection_list;
 	@FXML private Text username_field;
@@ -48,7 +48,7 @@ public class SeeUserController implements Initializable{
 	@FXML private AnchorPane admin_area;
 	@FXML private Text admin_edit_warning;
 	@FXML private TextField admin_edit_field;
-	
+		
 	@FXML private Parent root;
 	
 	private String username = RankingController.user_input;
@@ -59,6 +59,7 @@ public class SeeUserController implements Initializable{
 		
 		System.out.println("Opening user page...");
 		username_field.setText(username+"'s");
+		hide_delete_buttons();
 		
 		//hiding delete button from normal users
 		int priv = global.user.get_privilege();
@@ -105,13 +106,8 @@ public class SeeUserController implements Initializable{
 		
     	//showing up the info
     	region_field.setText(user_doc.getString("region"));
-    	//collection_field.setText(user_doc.get("collection").toString());
     	points_field.setText(user_doc.get("points").toString());
-    	
-    	//TODO adding user profile info (?) ---> io ci metterei la collection qui
-    	//Text t1 = new Text("Analytics will be added here (?)");
-    	//text_flow.getChildren().add(t1);
-		System.out.println(user_doc.get("_id").toString());
+    	System.out.println(user_doc.get("_id").toString());
 		ArrayList<card_collection> collection_user_selected= collection.load_collection(user_doc.get("_id").toString());
 		show_collection(collection_user_selected);
 	}
@@ -139,8 +135,10 @@ public class SeeUserController implements Initializable{
 
 	public void click_delete() throws IOException{
 		
-		SeeUserMongoDriver.delete_user(username);
-		click_back();	//automatically go back to the ranking page
+		if(SeeUserMongoDriver.delete_user(username, user_doc.get("_id").toString()))
+			click_back();	//automatically go back to the ranking page
+		else 
+			admin_edit_warning.setText("Network error! Try again later");
 	}
 	
 	public void edit_username() {
@@ -164,13 +162,13 @@ public class SeeUserController implements Initializable{
     		Boolean res = OptionsMongoDriver.edit_attribute(username, "username", new_value);
     		if(res) {
     			System.out.println("Username successfully changed to: " + new_value);
-    			global.user.changeUsername(new_value);	//changing the global variable
     			admin_edit_warning.setText("Username successfully changed. An email has been sent to the user for more information about.");
+    			username_field.setText(new_value+"'s");
     			username = new_value;
-    			username_field.setText(username+"'s");
+    			search_user();
     		}
     		else {
-    			admin_edit_warning.setText("Error! Try again later");
+    			admin_edit_warning.setText("Network error! Try again later");
     		}
     		
     	}
@@ -178,6 +176,7 @@ public class SeeUserController implements Initializable{
     		System.out.println(e);
     	}
 	}
+	
 	@FXML
 	protected void click_see_formation() throws IOException {
 		try {
@@ -194,5 +193,17 @@ public class SeeUserController implements Initializable{
 		}catch(Exception e){
 			System.out.println("Impossibile caricare formazione");
 		}
+	}
+	
+	public void show_delete_buttons() {
+		confirm_delete.setVisible(true);
+		cancel_delete.setVisible(true);
+		admin_edit_warning.setText("Are you sure?");
+	}
+	
+	public void hide_delete_buttons() {
+		confirm_delete.setVisible(false);
+		cancel_delete.setVisible(false);
+		admin_edit_warning.setText("");
 	}
 }

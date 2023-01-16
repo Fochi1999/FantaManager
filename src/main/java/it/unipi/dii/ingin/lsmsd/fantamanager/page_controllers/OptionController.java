@@ -3,8 +3,6 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -253,13 +251,18 @@ public class OptionController implements Initializable {
     }
     
     public void confirm_delete() throws IOException{	//delete user
-    	//delete user
-    	SeeUserMongoDriver.delete_user(global.user.username);
     	
-    	//and then logout
-    	login.logout();
-        Stage stage = (Stage)root.getScene().getWindow();
-        util_controller.go_to_login(stage);
+    	//delete user
+    	if(SeeUserMongoDriver.delete_user(global.user.username, global.id_user)) {
+    		//and then logout
+        	login.logout();
+            Stage stage = (Stage)root.getScene().getWindow();
+            util_controller.go_to_login(stage);
+        
+    	}
+    	else {
+    		delete_warning.setText("Network error! Try again later...");
+    	}
     }
     
     public void cancel_delete() {	//remove buttons and warnings
