@@ -1,7 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.formation;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import javafx.beans.property.Property;
 
 public class player_formation {
     public String name;

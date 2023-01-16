@@ -60,32 +60,34 @@ public class ShotsStatsController implements Initializable{
 		//buy_card.setDisable(true);	//disabling the buy button
 		
 		search_card();
-		last_updated_matchday = 4;	//TODO implementare
+			//TODO implementare
 		System.out.println(card_doc.toString());
 		Document stats=(Document)card_doc.get("statistics");
 		System.out.println(stats.toString());
 		Document matchdays=(Document)stats.get("matchday");
 		System.out.println(matchdays.toString());
-		for(int i=1;i<=last_updated_matchday;i++){
-			Document matchday=(Document)matchdays.get("matchday"+i);
-			System.out.println(matchday.toString());
-			Document statsmatchday=(Document)matchday.get("stats");
-			ArrayList<Document> shotsInfo=(ArrayList<Document>)statsmatchday.get("shotsInfo");
-			System.out.println(shotsInfo.toString()+" class "+shotsInfo.getClass());
-			for(int j=0;j<shotsInfo.size();j++){
-				Document shot=shotsInfo.get(j);
-				String minS=(String)shot.get("min");
-				String type=(String)shot.get("shotType");
-				String xS=(String)shot.get("X");
-				String yS=(String)shot.get("Y");
-				String result=(String)shot.get("results");
-				String situation=(String)shot.get("situation");
-				Document assist=(Document)shot.get("assist");
-				String expectedgoals=(String)shot.get("xG");
-				System.out.println("x"+xS+" y "+yS+" result"+result);
-				double x=Double.parseDouble(xS);
-				double y=Double.parseDouble(yS);
-				create_points_shots(x,y,type,result,expectedgoals,minS,j+1);
+		for(int i=1;i<=38;i++){
+			if(global.updated_matchdays[i-1]==1) {
+				Document matchday = (Document) matchdays.get("matchday" + i);
+				System.out.println(matchday.toString());
+				Document statsmatchday = (Document) matchday.get("stats");
+				ArrayList<Document> shotsInfo = (ArrayList<Document>) statsmatchday.get("shotsInfo");
+				System.out.println(shotsInfo.toString() + " class " + shotsInfo.getClass());
+				for (int j = 0; j < shotsInfo.size(); j++) {
+					Document shot = shotsInfo.get(j);
+					String minS = (String) shot.get("min");
+					String type = (String) shot.get("shotType");
+					String xS = (String) shot.get("X");
+					String yS = (String) shot.get("Y");
+					String result = (String) shot.get("results");
+					String situation = (String) shot.get("situation");
+					Document assist = (Document) shot.get("assist");
+					String expectedgoals = (String) shot.get("xG");
+					System.out.println("x" + xS + " y " + yS + " result" + result);
+					double x = Double.parseDouble(xS);
+					double y = Double.parseDouble(yS);
+					create_points_shots(x, y, type, result, expectedgoals, minS, j + 1);
+				}
 			}
 
 		}

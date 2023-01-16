@@ -81,14 +81,19 @@ public class SeeCardController implements Initializable{
     }
 	@FXML
 	protected void click_shot_stats() throws IOException {
-
+	try {
 		System.out.println("going to shot stats...");
-		Stage stage = (Stage)root.getScene().getWindow();
+		Stage stage = (Stage) root.getScene().getWindow();
 		FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("shot_stats_page.fxml"));
 		Scene scene = new Scene(fxmlLoader.load());
-		stage.setTitle("Ranking page");
+		stage.setTitle("Shots page");
 		stage.setScene(scene);
 		stage.show();
+	}
+	catch(Exception e){
+		e.printStackTrace();
+		System.out.println("errore nel caricare gli shots");
+		}
 	}
 	
 	@FXML

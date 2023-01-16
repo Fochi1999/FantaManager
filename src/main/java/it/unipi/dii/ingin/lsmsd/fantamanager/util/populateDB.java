@@ -403,7 +403,7 @@ public class populateDB {
 		player.put("vote", 0);
 		//ArrayList<JSONObject> players = new ArrayList<>();
 		JSONObject players =new JSONObject();
-		for(int i=0; i<18;i++) {
+		for(int i=0; i<=18;i++) {
 			players.put(String.valueOf(i),player);
 		}
 		//module

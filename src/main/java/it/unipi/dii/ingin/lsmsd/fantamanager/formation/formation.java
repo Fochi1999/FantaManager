@@ -102,7 +102,7 @@ public class formation {
     }
 
     public boolean isValid() {
-        int[] ids=new int[19];
+        long[] ids=new long[19];
         for(int i=0;i<19;i++){
             if(players.get(i)==null){
                 return false;

@@ -53,7 +53,7 @@ public class calculate_matchday {
                 //System.out.println(match);
 
                 if (match != null && (boolean)match.get("valid")) {
-                    JSONArray modulo = (JSONArray) match.get("modulo");
+                    JSONArray modulo = (JSONArray) match.get("module");
 
                     JSONObject cards = (JSONObject) match.get("players");
                     System.out.println(cards);

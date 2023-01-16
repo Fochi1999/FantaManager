@@ -14,10 +14,10 @@ public class utilities {
 			"Friuli-Venezia Giulia","Lazio","Liguria","Lombardy","Marche","Molise","Piedmont","Apulia",
 			"Sardinia","Sicily","Trentino-South Tyrol","Tuscany", "Umbria","Aosta Valley","Veneto"};	
 	
-	public static boolean has_duplicates(int[] arr){
-        HashMap<Integer, Integer> map = new HashMap<>();
+	public static boolean has_duplicates(long[] arr){
+        HashMap<Long, Integer> map = new HashMap<>();
 
-        for (int element : arr)
+        for (long element : arr)
         {
             if(map.get(element) == null)
             {
@@ -29,9 +29,9 @@ public class utilities {
             }
         }
 
-        Set<Map.Entry<Integer, Integer>> entrySet = map.entrySet();
+        Set<Map.Entry<Long, Integer>> entrySet = map.entrySet();
 
-        for (Map.Entry<Integer, Integer> entry : entrySet)
+        for (Map.Entry<Long, Integer> entry : entrySet)
         {
             if(entry.getValue() > 1)
             {
