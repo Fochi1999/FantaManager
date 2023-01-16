@@ -90,9 +90,14 @@ public class populateDB {
     	//retieving cards name
     	ArrayList<Document> user_list = new ArrayList<>();
     	try {
-    		MongoCursor<Document> user_doc = collection.find().projection(fields(include("_id","username","formations"))).iterator();
+    		MongoCursor<Document> user_doc = collection.find().iterator();
     		while(user_doc.hasNext()) {
-    			user_list.add(user_doc.next());
+    			Document user = user_doc.next();
+    			Document new_user = new Document();
+    			new_user.append("username", user.getString("username"));
+    			new_user.append("_id", user.get("_id"));
+    			
+    			user_list.add(new_user);
     		}
     	}
     	catch(Exception e){
