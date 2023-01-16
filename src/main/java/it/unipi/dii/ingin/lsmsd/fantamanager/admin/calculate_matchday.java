@@ -40,12 +40,12 @@ public class calculate_matchday {
         MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
 
         try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){
-            while(cursor.hasNext()) {
-            //for(int j=0;j<5;j++){
-                Double total_score = Double.valueOf(0);
+            //while(cursor.hasNext()) {
+            for(int j=0;j<10;j++){
+                //Double total_score = Double.valueOf(0);
 
                 String doc = cursor.next().toJson();
-                System.out.println(doc);
+                //System.out.println(doc);
                 JSONParser parser = new JSONParser();
                 JSONObject json_formation = (JSONObject) parser.parse(doc);
 
@@ -58,8 +58,8 @@ public class calculate_matchday {
                     JSONArray modulo = (JSONArray) match.get("module");
 
                     JSONObject cards = (JSONObject) match.get("players");
-                    System.out.println(cards);
-
+                    //System.out.println(cards);
+                    Double total_score = Double.valueOf(0);
 
 
                     riazzera_vote_card_of_team(cards);
@@ -74,7 +74,7 @@ public class calculate_matchday {
 
                             //e in quello che non ha giocato ma era schierato titolare metto null
                             if (score != 0) {
-                                System.out.println("titolare sostituito:" + card.get("name"));
+                                //System.out.println("titolare sostituito:" + card.get("name"));
                                 Bson filter = Filters.and(eq("username", username));
                                 Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", null);
                                 UpdateOptions options = new UpdateOptions().upsert(true);
@@ -211,8 +211,8 @@ public class calculate_matchday {
                 }
 
         JSONObject card=(JSONObject) cards.get(String.valueOf(place_of_bench));
-        System.out.println("dalla panchina:"+card.get("name"));
-        System.out.println("score dalla panchina:"+player_score.get(card.get("name")));
+        //System.out.println("dalla panchina:"+card.get("name"));
+        //System.out.println("score dalla panchina:"+player_score.get(card.get("id")));
 
         Bson filter = Filters.and(eq("username", username));
         Bson update1 = Updates.set("formations." + matchday + ".players."+place_of_bench+".vote",score);
