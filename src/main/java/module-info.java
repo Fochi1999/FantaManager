@@ -26,6 +26,7 @@ module it.unipi.dii.ingin.lsmsd.fantamanager {
     exports it.unipi.dii.ingin.lsmsd.fantamanager.formation;
     opens it.unipi.dii.ingin.lsmsd.fantamanager.formation to javafx.fxml,com.fasterxml.jackson.databind;
     exports it.unipi.dii.ingin.lsmsd.fantamanager.user to com.fasterxml.jackson.databind;
+    exports it.unipi.dii.ingin.lsmsd.fantamanager.admin to com.fasterxml.jackson.databind;
     exports it.unipi.dii.ingin.lsmsd.fantamanager.player_classes to com.google.gson;
 
 }
