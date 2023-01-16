@@ -16,6 +16,9 @@ import java.util.regex.Matcher;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.hash;
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
+
+import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 
 public class OptionsMongoDriver {
 	
@@ -36,7 +39,6 @@ public class OptionsMongoDriver {
 		}
 		
 		//connecting to mongoDB 
-
 		UserMongoDriver.openConnection();
     	
     	//updating attribute
@@ -62,6 +64,12 @@ public class OptionsMongoDriver {
     		System.out.println("Error on updating " + attribute_name + "for user: " + global.user.username);
 			UserMongoDriver.closeConnection();
     		return false;
+    	}
+    	
+    	if(attribute_name.equals("username")) { //if the username has been changed, this change has to be done on trades entities 
+    		TradeMongoDriver.change_username_ontrades(username, new_value, "user_from");
+    		TradeMongoDriver.change_username_ontrades(username, new_value, "user_to");
+    		System.out.println("Username changed on all user's trades");
     	}
 
 		UserMongoDriver.closeConnection();

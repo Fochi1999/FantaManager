@@ -256,4 +256,25 @@ public class TradeMongoDriver {
     	closeConnection();
     }
    
+	public static void change_username_ontrades(String username, String new_value, String position) {
+		
+		if(!position.equals("user_from") && !position.equals("user_to")) {
+			return;
+		}
+		
+		openConnection();
+		
+		Bson user = Filters.eq(position, username);
+		Bson update = Updates.set(position, new_value);
+		
+		try {
+			collection.updateOne(user, update);
+		}
+		catch(Exception e) {
+			System.out.println("Impossible to update trade now");
+		}
+		
+		closeConnection();
+	}
+	
 }
