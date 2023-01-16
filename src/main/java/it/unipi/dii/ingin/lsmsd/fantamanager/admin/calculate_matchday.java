@@ -26,9 +26,9 @@ public class calculate_matchday {
 
 
 
-    public static void calulate_user_team_score(int matchday,Map<String,Double> player_score){
+    public static void calulate_user_team_score(int matchday, Map<Long, Double> player_score){
 
-        Double total_score = Double.valueOf(0);
+
 
         //String url = "mongodb://localhost:27017";
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
@@ -42,6 +42,8 @@ public class calculate_matchday {
         try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){
             while(cursor.hasNext()) {
             //for(int j=0;j<5;j++){
+                Double total_score = Double.valueOf(0);
+
                 String doc = cursor.next().toJson();
                 System.out.println(doc);
                 JSONParser parser = new JSONParser();
@@ -64,7 +66,7 @@ public class calculate_matchday {
 
                     for (int i = 0; i < 11; i++) {
                         JSONObject card = (JSONObject) cards.get(String.valueOf(i));
-                        Double score = player_score.get(card.get("name"));
+                        Double score = player_score.get(card.get("id"));
                         //inserisce il voto di ogni giocatore in formation
                         if (score == -5000) {
                             //se invece non gioca, l' inserimento viene fatto in take_card_from_bench
@@ -126,7 +128,7 @@ public class calculate_matchday {
 
     }
 
-    private static Double take_card_from_bench(int i, Map<String, Double> player_score, JSONObject cards, JSONArray modulo, String username, int matchday) {
+    private static Double take_card_from_bench(int i, Map<Long, Double> player_score, JSONObject cards, JSONArray modulo, String username, int matchday) {
 
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
@@ -146,10 +148,10 @@ public class calculate_matchday {
                 if(i==0){
                     //portiere
                     JSONObject card=(JSONObject) cards.get(String.valueOf(11)); //primo in panchina
-                    score=player_score.get(card.get("name"));
+                    score=player_score.get(card.get("id"));
                     if(score==-5000 || (Double)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(12));  //secondo in panchina
-                        score=player_score.get(card.get("name"));
+                        score=player_score.get(card.get("id"));
                         if(score==-5000 || (Double)card.get("vote")!=0){
                             return Double.valueOf(0); //non avra rimpiazzo dalla panchina
                         }
@@ -162,10 +164,10 @@ public class calculate_matchday {
                 else if(i<=num_dif){
                         //difensore
                     JSONObject card=(JSONObject) cards.get(String.valueOf(13)); //primo in panchina
-                    score=player_score.get(card.get("name"));
+                    score=player_score.get(card.get("id"));
                     if(score==-5000 || (Double)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(14));  //secondo in panchina
-                        score=player_score.get(card.get("name"));
+                        score=player_score.get(card.get("id"));
                         if(score==-5000 || (Double)card.get("vote")!=0){
                             return Double.valueOf(0);//non avra rimpiazzo dalla panchina
                         }
@@ -178,10 +180,10 @@ public class calculate_matchday {
                 } else if (i<=num_dif+num_mid) {
                     //centrocampista
                     JSONObject card=(JSONObject) cards.get(String.valueOf(15)); //primo in panchina
-                    score=player_score.get(card.get("name"));
+                    score=player_score.get(card.get("id"));
                     if(score==-5000 || (Double)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(16));  //secondo in panchina
-                        score=player_score.get(card.get("name"));
+                        score=player_score.get(card.get("id"));
                         if(score==-5000 || (Double)card.get("vote")!=0){
                             return Double.valueOf(0);//non avra rimpiazzo dalla panchina
                         }
@@ -194,10 +196,10 @@ public class calculate_matchday {
                 else{
                     //attaccante
                     JSONObject card=(JSONObject) cards.get(String.valueOf(17)); //primo in panchina
-                    score=player_score.get(card.get("name"));
+                    score=player_score.get(card.get("id"));
                     if(score==-5000 || (Double)card.get("vote")!=0){
                         card=(JSONObject) cards.get(String.valueOf(18));  //secondo in panchina
-                        score=player_score.get(card.get("name"));
+                        score=player_score.get(card.get("id"));
                         if(score==-5000 || (Double)card.get("vote")!=0){
                             return Double.valueOf(0);//non avra rimpiazzo dalla panchina
                         }
@@ -235,7 +237,7 @@ public class calculate_matchday {
 
     public static void calculate_card_score(int matchday) {
 
-        Map<String,Double> player_score=new HashMap<String,Double>();  //per calcolo score di un team di un player
+        Map<Long,Double> player_score=new HashMap<Long,Double>();  //per calcolo score di un team di un player
 
         //String url = "mongodb://localhost:27017";
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
@@ -255,6 +257,8 @@ public class calculate_matchday {
                 JSONObject json_player = (JSONObject) parser.parse(player);
 
                 String player_name= (String) json_player.get("fullname");
+                Long player_id= (Long) json_player.get("player_id");
+                String role=(String) json_player.get("position");
                 //System.out.println(player_name);
 
                 int credits= ((Long) json_player.get("credits")).intValue();  //prende credits player per poi modificarlo
@@ -313,19 +317,49 @@ public class calculate_matchday {
                 String goals_conceded= (String) matchday_stat.get("Goals Conceded");
                 String pen_saves= (String) matchday_stat.get("Pen Saves");
                 String pen_goals_conceded= (String) matchday_stat.get("Pen Goals Conceded");
+                String xG=(String) matchday_stat.get("xG");
+                String xGBuildup=(String) matchday_stat.get("xGBuildup");
+                String xGChain=(String) matchday_stat.get("xGChain");
+                String xA=(String) matchday_stat.get("xA");
 
                 float score;
 
                 if(Integer.parseInt(mins)>14) {
-                    score =   Float.parseFloat(plus) + Float.parseFloat(apps) + Float.parseFloat(starter)/2 + 3*Float.parseFloat(goals) + Float.parseFloat(shots)/2 + Float.parseFloat(on_tar_shots)
+                    /*score =   Float.parseFloat(plus) + Float.parseFloat(apps) + Float.parseFloat(starter)/2 + 3*Float.parseFloat(goals) + Float.parseFloat(shots)/2 + Float.parseFloat(on_tar_shots)
                             + Float.parseFloat(pen_goals)/3 + Float.parseFloat(successful_dribbles) + Float.parseFloat(assists) + Float.parseFloat(acc_pass)/100 + Float.parseFloat(key_pass)/2 - Float.parseFloat(fouls)/2
-                            + Float.parseFloat(was_fouled)/2 + Float.parseFloat(yc) + Float.parseFloat(rc) + Float.parseFloat(rec_ball)/3 + Float.parseFloat(tackles)/5 + Float.parseFloat(clean_sheets)
-                            + Float.parseFloat(woods) + Float.parseFloat(headed_goals)/10 + Float.parseFloat(freekick_goals)/3 - Float.parseFloat(big_chance_missed)/4 + Float.parseFloat(goal_min)/100 + Float.parseFloat(shot_con_rate)/100
+                            + Float.parseFloat(was_fouled)/10 + Float.parseFloat(yc) + Float.parseFloat(rc) + Float.parseFloat(rec_ball)/3 + Float.parseFloat(tackles)/5 + Float.parseFloat(clean_sheets)
+                            + Float.parseFloat(woods) + Float.parseFloat(headed_goals)/2 + Float.parseFloat(freekick_goals)/3 - Float.parseFloat(big_chance_missed)/4 + Float.parseFloat(goal_min)/100 + Float.parseFloat(shot_con_rate)/100
                             + Float.parseFloat(total_dribbles)/4 +  Float.parseFloat(passes)/100 + Float.parseFloat(acc_pass_per)/100
                             + Float.parseFloat(big_chance_created)/4 + Float.parseFloat(cross)/4 + Float.parseFloat(acc_cross)
                             + Float.parseFloat(cross_no_corner) + Float.parseFloat(second_yc) - Float.parseFloat(err_leading_to_goal) + Float.parseFloat(og) + Float.parseFloat(interception)/2 + Float.parseFloat(won_duels)/3
                             - Float.parseFloat(lost_duels)/3 + Float.parseFloat(aer_duels_won)/3 - Float.parseFloat(aer_duels_lost)/3 + Float.parseFloat(saves)/4 - Float.parseFloat(goals_conceded)/3 + Float.parseFloat(pen_saves)*3
-                            - Float.parseFloat(pen_goals_conceded)/2;
+                            - Float.parseFloat(pen_goals_conceded)/2;*/
+                    score= (float) (6+3*Float.parseFloat(goals)+Float.parseFloat(headed_goals)/2+Float.parseFloat(assists)+Float.parseFloat(was_fouled)/10-Float.parseFloat(yc)/2-Float.parseFloat(rc)+Float.parseFloat(on_tar_shots)/5
+                                                +(Float.parseFloat(goals)-Float.parseFloat(xG))-Float.parseFloat(big_chance_missed)+Float.parseFloat(rec_ball)/10+Float.parseFloat(interception)/10+(Float.parseFloat(assists)-Float.parseFloat(xA))
+                                                +(Float.parseFloat(aer_duels_won)-Float.parseFloat(aer_duels_lost))/5-Float.parseFloat(fouls)/10+Float.parseFloat(successful_dribbles)/10+(Float.parseFloat(on_tar_shots)*2-Float.parseFloat(shots))/10
+                                                +Float.parseFloat(cross_no_corner)/10+(1.2*Float.parseFloat(acc_pass)-Float.parseFloat(passes))+Float.parseFloat(woods)/10+Float.parseFloat(xGBuildup)+Float.parseFloat(xGChain)-Float.parseFloat(err_leading_to_goal)
+                                                +Float.parseFloat(saves)/2+Float.parseFloat(starter)/10-2*Float.parseFloat(og)-0.3*Float.parseFloat(lost_duels)
+                                                +Float.parseFloat(big_chance_created)/2+Float.parseFloat(tackles)/10+Float.parseFloat(won_duels)/10-0.7*Float.parseFloat(second_yc)+Float.parseFloat(freekick_goals)/2
+                                                +Float.parseFloat(cross)/10+Float.parseFloat(key_pass)/5+Float.parseFloat(total_dribbles)/10);
+
+
+                    if(Float.parseFloat(acc_pass_per)>90){
+                            score+=0.5;
+                    }
+
+                    if(role.equals("Goalkeeper")){
+                            score+=3*Float.parseFloat(pen_saves);
+                            score+=Float.parseFloat(clean_sheets);
+                            score-=Float.parseFloat(goals_conceded)/5;
+                    }
+                    else{
+                            score+=Float.parseFloat(clean_sheets)*0.3;
+                    }
+
+                    if(Float.parseFloat(shot_con_rate)<30){
+                            score-=1;
+                    }
+
                 }
                 else{
                     score=-5000;  //per riconoscere che non ha giocato
@@ -348,7 +382,7 @@ public class calculate_matchday {
                 UpdateOptions options = new UpdateOptions().upsert(true);
                 System.out.println(coll.updateOne(filter, update, options));
 
-                player_score.put(player_name,Double.valueOf(score));
+                player_score.put(player_id,Double.valueOf(score));
 
 
 
@@ -441,10 +475,10 @@ public class calculate_matchday {
 
         //Get player first name
         JSONObject matchday_ins = (JSONObject) playerObject.get("matchday" + matchday);
-        matchday_ins.put("xG", 0);
-        matchday_ins.put("xA", 0);
-        matchday_ins.put("xGChain", 0);
-        matchday_ins.put("xGBuildup", 0);
+        matchday_ins.put("xG", "0");
+        matchday_ins.put("xA", "0");
+        matchday_ins.put("xGChain", "0");
+        matchday_ins.put("xGBuildup", "0");
 
         JSONArray shots=new JSONArray();
 

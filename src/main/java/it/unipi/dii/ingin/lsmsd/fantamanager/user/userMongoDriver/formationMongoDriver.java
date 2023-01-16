@@ -59,7 +59,7 @@ public class formationMongoDriver {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(json);
+        //System.out.println(json);
         JSONObject JsonFormation=create_object_formation(json);
         //Document formations=(Document) formation;
         //System.out.println(JsonFormation);

@@ -67,7 +67,7 @@ public class formation {
         //passo dal ruolo alla posizione nell'array che deve avere il giocatore
         int index=get_index(role, module);
         players.put(index,p);
-        System.out.println("inserito il player "+p.getName()+" nella posizione di "+role+"corrispondente all'indice "+ index);
+        //System.out.println("inserito il player "+p.getName()+" nella posizione di "+role+"corrispondente all'indice "+ index);
 
     }
     public static int get_index( String role,int[] mod){
