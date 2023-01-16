@@ -417,7 +417,12 @@ public class calculate_matchday {
                 return 0;
             }
             else{
-                return 1;
+                if(score>15) {
+                    return 2;
+                }
+                else{
+                    return 1;
+                }
             }
         }
     }
