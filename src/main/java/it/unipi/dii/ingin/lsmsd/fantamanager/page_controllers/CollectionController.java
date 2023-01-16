@@ -40,6 +40,7 @@ public class CollectionController implements Initializable {
     @FXML private Text delete_warning;
     @FXML private Pane delete_confirm;
     @FXML private Pane delete_cancel;
+    @FXML private Text delete_credits_info;
     
     @FXML
     protected void click_home() throws IOException {
@@ -67,13 +68,12 @@ public class CollectionController implements Initializable {
         ArrayList<card_collection> coll=collection.load_collection(global.id_user);
 
         for(int i=0; i<coll.size();i++){
-                if(coll.get(i).get_name().equals(name_player)){
-                        System.out.println("player_deleted:"+name_player);
-                        collection.delete_card_from_collection(coll.get(i));
-                        int credits_received= CardMongoDriver.retrieve_card_credits(name_player); //recupero valore carta
-                        //System.out.println(credits_received+" "+credits_received/2);
-                        OptionsMongoDriver.update_user_credits(true,global.user.username,credits_received/2); //e rendo la metà arrotondata per difetto all'utente
-                }
+            if(coll.get(i).get_name().equals(name_player)){
+                System.out.println("player_deleted:"+name_player);
+                collection.delete_card_from_collection(coll.get(i));
+                int credits_received = CardMongoDriver.retrieve_card_credits(name_player)/2; //recupero valore carta e lo dimezzo
+                OptionsMongoDriver.update_user_credits(true,global.user.username,credits_received); //e rendo la metà arrotondata per difetto all'utente
+            }
         }
 
         //ricarico la pagina
@@ -100,7 +100,9 @@ public class CollectionController implements Initializable {
 
                 //System.out.println(newValue.fieldProperty("Name").getValue());
                 player_selected.setText(newValue.fieldProperty("Name").getValue());
-
+                hide_delete_buttons();
+                int credits_received = CardMongoDriver.retrieve_card_credits(newValue.fieldProperty("Name").getValue())/2;
+                delete_credits_info.setText("You will receive "+credits_received+" credits");
                 if(!player_selected.getText().isEmpty()){
                         delete_button.setDisable(false);
                 }
@@ -148,12 +150,14 @@ public class CollectionController implements Initializable {
     	delete_warning.setText("Confirm");
     	delete_cancel.setVisible(true);
     	delete_confirm.setVisible(true);
+    	delete_credits_info.setVisible(true);
     }
 
     public void hide_delete_buttons() {
     	delete_warning.setText("");
     	delete_cancel.setVisible(false);
     	delete_confirm.setVisible(false);
+    	delete_credits_info.setVisible(false);
     }
     
 }
