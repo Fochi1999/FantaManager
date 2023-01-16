@@ -279,9 +279,9 @@ public class calculate_matchday {
                 JSONObject matchday_stat = (JSONObject) matchday_K.get("stats");
 
                 //take all statistics for matchday of that player
-                String cr= (String) matchday_stat.get("CR");
-                String plus= (String) matchday_stat.get("Plus");
-                String apps= (String) matchday_stat.get("Apps");
+                //String cr= (String) matchday_stat.get("CR");
+                String plus= (String) matchday_stat.get("Plus");  //TODO usare
+                //String apps= (String) matchday_stat.get("Apps");
                 String starter= (String) matchday_stat.get("Starter");
                 String mins= (String) matchday_stat.get("Mins");
                 String goals= (String) matchday_stat.get("Goals");
@@ -348,7 +348,7 @@ public class calculate_matchday {
                                                 +Float.parseFloat(cross_no_corner)/10+(1.2*Float.parseFloat(acc_pass)-Float.parseFloat(passes))+Float.parseFloat(woods)/10+Float.parseFloat(xGBuildup)+Float.parseFloat(xGChain)-Float.parseFloat(err_leading_to_goal)
                                                 +Float.parseFloat(saves)/2+Float.parseFloat(starter)/10-2*Float.parseFloat(og)-0.3*Float.parseFloat(lost_duels)
                                                 +Float.parseFloat(big_chance_created)/2+Float.parseFloat(tackles)/10+Float.parseFloat(won_duels)/10-0.7*Float.parseFloat(second_yc)+Float.parseFloat(freekick_goals)/2
-                                                +Float.parseFloat(cross)/10+Float.parseFloat(key_pass)/5+Float.parseFloat(total_dribbles)/10);
+                                                +Float.parseFloat(cross)/10+Float.parseFloat(key_pass)/5+Float.parseFloat(total_dribbles)/10+ Float.parseFloat(acc_cross)/100);
 
 
                     if(Float.parseFloat(acc_pass_per)>90){
