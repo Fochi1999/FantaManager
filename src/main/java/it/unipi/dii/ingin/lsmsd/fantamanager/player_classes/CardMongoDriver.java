@@ -3,12 +3,15 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.player_classes;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.security.NoSuchAlgorithmException;
@@ -306,6 +309,17 @@ public class CardMongoDriver {
                 result.add(resultDoc.next());
             }
             return result;
+    }
+
+    public static void update_gen_stats(long player_id, JSONObject gen_json){
+        openConnection();
+
+        Bson filter= Filters.eq("player_id", player_id);
+        Bson update = Updates.set("general_statistics",gen_json);
+        UpdateOptions options = new UpdateOptions().upsert(true);
+        System.out.println(collection.updateOne(filter, update, options));
+
+        closeConnection();
     }
 
 }

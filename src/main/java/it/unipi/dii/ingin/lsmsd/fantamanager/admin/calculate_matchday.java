@@ -47,8 +47,8 @@ public class calculate_matchday {
         MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
 
         try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){
-            //while(cursor.hasNext()) {
-            for(int j=0;j<10;j++){
+            while(cursor.hasNext()) {
+            //for(int j=0;j<10;j++){
                 //Double total_score = Double.valueOf(0);
 
                 String doc = cursor.next().toJson();

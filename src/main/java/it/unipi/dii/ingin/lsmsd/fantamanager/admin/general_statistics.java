@@ -11,6 +11,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
@@ -170,13 +171,13 @@ public class general_statistics {
         //crea oggetto general_statistics nuovo
         //e su mongo carichi uno sommato tra i due
 
-        MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
+        //MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
         // Access a Database
-        MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
+        //MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
 
         // Access a Collection
-        MongoCollection<Document> coll = database2.getCollection(global.CARDS_COLLECTION_NAME);
+        //MongoCollection<Document> coll = database2.getCollection(global.CARDS_COLLECTION_NAME);
 
 
         long games_appearence=0;
@@ -255,10 +256,12 @@ public class general_statistics {
         JSONParser parser = new JSONParser();
         JSONObject gen_json = (JSONObject) parser.parse(gen_string);
 
-        Bson filter= Filters.eq("player_id", player_id);  //AND per risolvere problema L.Pellegrini
-        Bson update = Updates.set("general_statistics",gen_json);
-        UpdateOptions options = new UpdateOptions().upsert(true);
-        System.out.println(coll.updateOne(filter, update, options));
+        //Bson filter= Filters.eq("player_id", player_id);
+        //Bson update = Updates.set("general_statistics",gen_json);
+        //UpdateOptions options = new UpdateOptions().upsert(true);
+        //System.out.println(coll.updateOne(filter, update, options));
+
+        CardMongoDriver.update_gen_stats(player_id,gen_json);
 
     }
 }
