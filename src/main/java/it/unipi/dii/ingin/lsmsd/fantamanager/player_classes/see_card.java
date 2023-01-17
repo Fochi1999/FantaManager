@@ -73,20 +73,20 @@ public class see_card {
 	    
 	    output = "Games Appearences: "+stats.get("games_appearences").toString() + "\nGames Lineup: " + stats.get("games_lineup").toString() +
 	    		"\nGames Minutes: "+ stats.get("games_minutes").toString() + "\nSubstitutes In: " + stats.get("substitutes_in").toString() +
-	    		"\nSubstitutes Out: " + stats.get("substitutes_out").toString() + "\nSubstitutes Bench: " + stats.get("substitutes_bench").toString() +
+	    		"\nSubstitutes Out: " + stats.get("substitutes_out").toString() +/* "\nSubstitutes Bench: " + stats.get("substitutes_bench").toString() +*/
 	    		"\nShots Total: " + stats.get("shots_total").toString() + "\nShots On: " + stats.get("shots_on").toString() +
 	    		"\nGoals Total: "+ stats.get("goals_total").toString() + "\nGoals Conceded: " + stats.get("goals_conceded").toString() +
 	    		"\nGoals Assists: " + stats.get("goals_assists").toString() + "\nGoals Saves: "+stats.get("goals_saves").toString() +
 	    		"\nPasses Total: "+stats.get("passes_total").toString() + "\nPasses Key: "+ stats.get("passes_key").toString() + 
 	    		"\nPasses Accuracy: "+stats.get("passes_accuracy").toString()+ "\nTackles Total: "+stats.get("tackles_total").toString() +
-	    		"\nTackles Blocks: "+stats.get("tackles_blocks").toString() + "\nTackles Interceptions: "+stats.get("tackles_interceptions").toString()+
+	    		/*"\nTackles Blocks: "+stats.get("tackles_blocks").toString() +*/ "\nTackles Interceptions: "+stats.get("tackles_interceptions").toString()+
 	    		"\nDuels Total: "+stats.get("duels_total").toString() +"\nDuels Won: "+stats.get("duels_won").toString() +
 	    		"\nDribbles Attempts: "+stats.get("dribbles_attempts").toString()+"\nDribbles Success: "+stats.get("dribbles_success").toString()+
-	    		"\nDribbles Past: "+stats.get("dribbles_past").toString()+"\nFouls Drawn: "+stats.get("fouls_drawn").toString()+
+	    		/*"\nDribbles Past: "+stats.get("dribbles_past").toString()+*/"\nFouls Drawn: "+stats.get("fouls_drawn").toString()+
 	    		"\nFouls Committed: "+stats.get("fouls_committed").toString()+"\nYellow Cards: "+stats.get("cards_yellow").toString()+
 	    		"\nRed Cards: "+stats.get("cards_red").toString()+"\nYellow/Red Cards: "+stats.get("cards_yellowred").toString()+
-	    		"\nPenalty Won: "+stats.get("penalty_won").toString()+"\nPenalty Commutted: "+stats.get("penalty_commutted").toString()+
-	    		"\nPenalty Scored: "+stats.get("penalty_scored").toString()+"\nPenalty Missed: "+stats.get("penalty_missed").toString()+
+	    		/*"\nPenalty Won: "+stats.get("penalty_won").toString()+"\nPenalty Commutted: "+stats.get("penalty_commutted").toString()+*/
+	    		"\nPenalty Scored: "+stats.get("penalty_scored").toString()+/*"\nPenalty Missed: "+stats.get("penalty_missed").toString()+*/
 	    		"\nPenalty Saved: "+stats.get("penalty_saved").toString();
 		return output;
 	}
