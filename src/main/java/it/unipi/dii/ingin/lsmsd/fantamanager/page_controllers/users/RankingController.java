@@ -1,4 +1,4 @@
-package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
+package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.users;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,7 +55,7 @@ public class RankingController implements Initializable{
 	@FXML
     private Parent root;
 	
-	static String user_input;
+	public static String user_input;
 	
 	private ArrayList<Document> users_doc;
 	

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-background-radius: 7; -fx-border-width: 3;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-background-radius: 7; -fx-border-width: 3;" stylesheets="@css/menu.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.formation.ChoisePlayerFormationController">
    <children>
       <TableView fx:id="table_collection" layoutX="99.0" layoutY="52.0" prefHeight="495.0" prefWidth="466.0">
          <columns>

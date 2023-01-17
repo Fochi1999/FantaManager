@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-background-radius: 7; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.SeeCardController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="692.0" prefWidth="664.0" style="-fx-background-color: BLACK; -fx-background-radius: 7; -fx-border-color: WHITE; -fx-border-radius: 8; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.cards.SeeCardController">
    <children>
       <AnchorPane layoutX="267.0" layoutY="27.0" prefHeight="645.0" prefWidth="370.0" style="-fx-border-color: WHITE; -fx-border-width: 3; -fx-border-radius: 8;">
          <children>

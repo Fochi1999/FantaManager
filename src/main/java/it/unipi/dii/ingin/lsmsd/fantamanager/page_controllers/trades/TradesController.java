@@ -1,4 +1,4 @@
-package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
+package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.trades;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;

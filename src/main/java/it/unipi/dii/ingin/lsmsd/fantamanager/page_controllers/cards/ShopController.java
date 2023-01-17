@@ -1,4 +1,4 @@
-package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
+package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.cards;
 
 import java.io.IOException;
 import java.net.URL;
@@ -54,7 +54,7 @@ public class ShopController implements Initializable {
 	@FXML
     private Parent root;
 	
-	static String card_id_input;
+	public static String card_id_input;
 
 	@FXML
 	private ChoiceBox skill;

@@ -1,4 +1,4 @@
-package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
+package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.formation;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;

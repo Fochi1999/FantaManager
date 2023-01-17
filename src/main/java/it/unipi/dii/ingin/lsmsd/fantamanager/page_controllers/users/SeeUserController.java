@@ -1,4 +1,4 @@
-package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
+package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.users;
 
 import java.io.IOException;
 import java.net.URL;
@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.formation.SeeUserFormationController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;

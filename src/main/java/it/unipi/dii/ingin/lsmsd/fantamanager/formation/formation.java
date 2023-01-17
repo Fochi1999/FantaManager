@@ -2,7 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.formation;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.ChoisePlayerFormationController;
+import it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers.formation.ChoisePlayerFormationController;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
