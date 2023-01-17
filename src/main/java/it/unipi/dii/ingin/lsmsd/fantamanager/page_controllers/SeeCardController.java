@@ -165,11 +165,11 @@ public class SeeCardController implements Initializable{
 			card_collection bought_card = new card_collection(card_doc.getInteger("player_id"), card_doc.getString("fullname"), 1, card_doc.getString("team"), card_doc.getString("position"));
 			collection.add_card_to_collection(bought_card, global.id_user);
 			System.out.println("Card bought");
-			matchday_error.setText("Card successfully bought.");
+			buy_card_text.setText("Card successfully bought.");
 		}
 		else{
 			System.out.println("Not enough credits.");
-			matchday_error.setText("Not enough credits.");
+			buy_card_text.setText("Not enough credits.");
 		}
     }
 	private boolean check_credits(int value) {	//checks if the user owns a correct value of credits to buy this card

@@ -89,7 +89,6 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Text fx:id="buy_card_text" fill="RED" layoutX="28.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insufficient credits!" textAlignment="CENTER" wrappingWidth="117.59999999999991" />
          </children>
       </AnchorPane>
       <Button fx:id="general_stats" layoutX="52.0" layoutY="315.0" mnemonicParsing="false" onMouseClicked="#get_general_stats" prefHeight="38.0" prefWidth="158.0" text="General statistics">
@@ -109,5 +108,6 @@
             <Font size="15.0" />
          </font>
       </Button>
+      <Text fx:id="buy_card_text" fill="RED" layoutX="43.0" layoutY="550.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insufficient credits!" textAlignment="CENTER" wrappingWidth="174.39999999999986" />
    </children>
 </AnchorPane>
