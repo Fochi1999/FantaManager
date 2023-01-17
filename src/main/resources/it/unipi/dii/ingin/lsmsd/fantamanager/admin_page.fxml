@@ -54,11 +54,23 @@
             <Font size="15.0" />
          </font>
       </TextArea>
-      <ChoiceBox fx:id="matchday_list" layoutX="42.0" layoutY="487.0" prefHeight="40.0" prefWidth="50.0" />
-      <Button fx:id="calculate_button" layoutX="94.0" layoutY="487.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="163.0" text="Calculate matchday">
+      <ChoiceBox fx:id="matchday_list" layoutX="42.0" layoutY="535.0" prefHeight="40.0" prefWidth="50.0" />
+      <Button fx:id="calculate_button" layoutX="92.0" layoutY="535.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="163.0" text="Calculate matchday">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
+      <ChoiceBox fx:id="matchday_list1" layoutX="42.0" layoutY="480.0" prefHeight="40.0" prefWidth="50.0" />
+      <Button fx:id="retrieve_button" layoutX="92.0" layoutY="480.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="163.0" text="Retrieve matchday">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text fx:id="end_op_mex" fill="#fa0606" layoutX="255.0" layoutY="645.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Matchday retrieved" wrappingWidth="264.80002441406236">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

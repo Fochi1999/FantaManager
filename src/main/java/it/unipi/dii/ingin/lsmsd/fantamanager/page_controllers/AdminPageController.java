@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,6 +28,14 @@ public class AdminPageController implements Initializable {
     public ChoiceBox matchday_list;
     @FXML
     private Button calculate_button;
+
+    @FXML
+    private Button retrieve_button;
+
+    public ChoiceBox matchday_list1;
+
+    @FXML
+    private Text end_op_mex;
 
     @FXML
     private HBox admin_hbox;
@@ -47,23 +56,33 @@ public class AdminPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+            end_op_mex.setVisible(false);
+
             //for choice box to calculate matchday score
             for (int i = 1; i <= 38; i++) {
                 matchday_list.getItems().add(i);
+                matchday_list1.getItems().add(i);
             }
 
+            retrieve_button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+
+                    //qui da admin/calculate_matchday
+                    retrieve_matchday.retrieve_info_matchday((Integer) matchday_list1.getValue());
+                    end_op_mex.setText("Matchday retrieved");
+                    end_op_mex.setVisible(true);
+                }
+            });
             calculate_button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    //System.out.println("QUI INSERIRE COME CALCOLARE LA GIORNATA");
-                    //qui da player_class
-                    //retrieve_matchday((Integer) matchday_list.getValue());
-                    //calculate_matchday((Integer) matchday_list.getValue());
-                    //calculate_player_score((Integer) matchday_list.getValue());
 
                     //qui da admin/calculate_matchday
-                    retrieve_matchday.retrieve_info_matchday((Integer) matchday_list.getValue());
+                    //retrieve_matchday.retrieve_info_matchday((Integer) matchday_list.getValue());
                     calculate_card_score((Integer) matchday_list.getValue());
+                    end_op_mex.setText("Matchday calculated");
+                    end_op_mex.setVisible(true);
                 }
             });
 
