@@ -272,13 +272,13 @@ public class ShopController implements Initializable {
 		int i = 0;
 		while(i < result.size()) {
 			Document card_doc = result.get(i);
-			System.out.println(card_doc);
+			//System.out.println(card_doc);
 			String card_id = card_doc.get("_id").toString();
 			String card_fullname = card_doc.get("fullname").toString();
 			String card_credits = card_doc.get("credits").toString();
 			String card_team = card_doc.getString("team");
 			String card_role = card_doc.getString("position");
-			int card_skill= (int) card_doc.get(skill.getValue());
+			Long card_skill= (Long) card_doc.get(skill.getValue());
 			String card_output = card_fullname + " - Cost: " + card_credits +
 					" - Role: " + card_role + " - Team: " + card_team +" - "+skill.getValue()+": "+card_skill +" - ID: " + card_id;
 			list.add(card_output);

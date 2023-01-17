@@ -290,22 +290,24 @@ public class CardMongoDriver {
             ArrayList<Document> result=new ArrayList<>();
             //System.out.println("best cards");
 
-            Bson p1=project(fields(computed("statistics.matchday", eq("$objectToArray", "$statistics.matchday")),include("fullname"), include("team"),include("credits"),include("position")));
+            Bson p1=project(fields(computed("statistics.matchday", eq("$objectToArray", "$statistics.matchday")),include("fullname"), include("team"),include("credits"),include("position"), include("_id")));
             Bson match=match(gte("statistics.matchday.v.score-value.score",10));
             Bson u=unwind("$statistics.matchday");
             Bson group=group("$fullname", sum("count",1), first("fullname","$fullname"), first("credits","$credits"), first("position","$position"),
                     first("team","$team"), first("id","$_id"));
             Bson order=sort(descending("count"));
             Bson limit=limit(10);
-
+            Bson p2=project(fields(excludeId(),computed("_id","$id"),include("fullname"), include("team"),include("credits"),include("position"),include("count")));
 
             try{
-                resultDoc = collection.aggregate(Arrays.asList(p1,u,match,group,order,limit)).iterator();
+                //resultDoc = collection.aggregate(Arrays.asList(p1,u,match,group,order,limit,p2)).iterator();
+                resultDoc = collection.aggregate(Arrays.asList(p1,match,u,match,group,order,limit,p2)).iterator();
             } catch (Exception e) {
                     return null;
             }
 
             while(resultDoc.hasNext()) {
+                //System.out.println(resultDoc.next());
                 result.add(resultDoc.next());
             }
             return result;
