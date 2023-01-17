@@ -1,16 +1,10 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.admin;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.google.gson.Gson;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
-import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
+import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import org.bson.Document;
@@ -20,8 +14,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -112,6 +105,10 @@ public class calculate_matchday {
                     Bson update1 = Updates.set("formations." + matchday + ".tot", total_score);
                     UpdateOptions options = new UpdateOptions().upsert(true);
                     System.out.println(coll.updateOne(filter, update1, options));
+
+                    //poi assegniamo il punteggio ottenuto (arrotondato per difetto) come crediti all' utente
+                    System.out.println("punteggio:"+(int) Math.floor(total_score));
+                    OptionsMongoDriver.update_user_credits(true,username, (int) Math.floor(total_score));
                 }
                 else{
                     //l-utente non ha inserito la formazione
@@ -129,6 +126,8 @@ public class calculate_matchday {
                 }
             }
         } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
 
@@ -333,15 +332,7 @@ public class calculate_matchday {
                 float score;
 
                 if(Integer.parseInt(mins)>14) {
-                    /*score =   Float.parseFloat(plus) + Float.parseFloat(apps) + Float.parseFloat(starter)/2 + 3*Float.parseFloat(goals) + Float.parseFloat(shots)/2 + Float.parseFloat(on_tar_shots)
-                            + Float.parseFloat(pen_goals)/3 + Float.parseFloat(successful_dribbles) + Float.parseFloat(assists) + Float.parseFloat(acc_pass)/100 + Float.parseFloat(key_pass)/2 - Float.parseFloat(fouls)/2
-                            + Float.parseFloat(was_fouled)/10 + Float.parseFloat(yc) + Float.parseFloat(rc) + Float.parseFloat(rec_ball)/3 + Float.parseFloat(tackles)/5 + Float.parseFloat(clean_sheets)
-                            + Float.parseFloat(woods) + Float.parseFloat(headed_goals)/2 + Float.parseFloat(freekick_goals)/3 - Float.parseFloat(big_chance_missed)/4 + Float.parseFloat(goal_min)/100 + Float.parseFloat(shot_con_rate)/100
-                            + Float.parseFloat(total_dribbles)/4 +  Float.parseFloat(passes)/100 + Float.parseFloat(acc_pass_per)/100
-                            + Float.parseFloat(big_chance_created)/4 + Float.parseFloat(cross)/4 + Float.parseFloat(acc_cross)
-                            + Float.parseFloat(cross_no_corner) + Float.parseFloat(second_yc) - Float.parseFloat(err_leading_to_goal) + Float.parseFloat(og) + Float.parseFloat(interception)/2 + Float.parseFloat(won_duels)/3
-                            - Float.parseFloat(lost_duels)/3 + Float.parseFloat(aer_duels_won)/3 - Float.parseFloat(aer_duels_lost)/3 + Float.parseFloat(saves)/4 - Float.parseFloat(goals_conceded)/3 + Float.parseFloat(pen_saves)*3
-                            - Float.parseFloat(pen_goals_conceded)/2;*/
+
                     score= (float) (6+3*Float.parseFloat(goals)+Float.parseFloat(headed_goals)/2+Float.parseFloat(assists)+Float.parseFloat(was_fouled)/10-Float.parseFloat(yc)/2-Float.parseFloat(rc)+Float.parseFloat(on_tar_shots)/5
                                                 +(Float.parseFloat(goals)-Float.parseFloat(xG))-Float.parseFloat(big_chance_missed)+Float.parseFloat(rec_ball)/10+Float.parseFloat(interception)/10+(Float.parseFloat(assists)-Float.parseFloat(xA))
                                                 +(Float.parseFloat(aer_duels_won)-Float.parseFloat(aer_duels_lost))/5-Float.parseFloat(fouls)/10+Float.parseFloat(successful_dribbles)/10+(Float.parseFloat(on_tar_shots)*2-Float.parseFloat(shots))/10
@@ -374,7 +365,7 @@ public class calculate_matchday {
                 }
 
                 //System.out.println(score);
-                int mod_value=calculate_mod_value(score);
+                int mod_value=calculate_mod_value(score,plus);
                 //matchday_stat.put("score",score);  //inserisce score nel matchday
                 //System.out.println(matchday_stat.get("score"));
 
@@ -402,29 +393,32 @@ public class calculate_matchday {
         //formation.calculate_team_score(player_score);
         calulate_user_team_score(matchday,player_score);   //per calcolo score di un team di un user
 
-        //TODO gestire vettore su redis dei match calcolati
         utilities.update_matchday(matchday); //da qui cambia vettore e anche la variabile della prossima giornata su redis
     }
 
 
-    private static int calculate_mod_value(float score) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore
+    private static int calculate_mod_value(float score, String plus) {  //in base allo score della giornata calcola di quanto deve essere modificato il valore del giocatore
 
+        int mod=0;
         if(score<=0){
-            return -1;
+            mod=-1;
         }
         else{
             if(score<7){
-                return 0;
+                mod=0;
             }
             else{
-                if(score>15) {
-                    return 2;
+                if(score>=15) {
+                    mod=2;
                 }
                 else{
-                    return 1;
+                    mod=1;
                 }
             }
         }
+        int pluss= (int) Math.floor(Float.parseFloat(plus));
+        mod=mod+pluss;
+        return mod;
     }
 
 }

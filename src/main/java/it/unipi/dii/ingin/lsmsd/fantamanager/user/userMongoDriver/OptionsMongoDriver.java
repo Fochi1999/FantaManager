@@ -115,17 +115,26 @@ public class OptionsMongoDriver {
 
 	public static void update_user_credits(Boolean add, String username, int new_credits) throws NoSuchAlgorithmException{
 
-		int user_credits = global.user.getCredits();
+		int user_credits=0;
+		//System.out.println("credito prec:"+user_credits);
 		if(add){
 			if(global.user.getUsername().equals(username)) {
+				user_credits = global.user.getCredits();
 				global.user.setCredits(user_credits + new_credits);
+			}
+			else{
+					user_credits=Integer.parseInt(UserMongoDriver.retrieve_user_attribute(username,"credits"));
 			}
 			//OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits+new_credits));
 			edit_attribute(username, "credits", Integer.toString(user_credits+new_credits));
 		}
 		else {
 			if(global.user.getUsername().equals(username)) {
+				user_credits = global.user.getCredits();
 				global.user.setCredits(user_credits - new_credits);
+			}
+			else{
+				user_credits=Integer.parseInt(UserMongoDriver.retrieve_user_attribute(username,"credits"));
 			}
 			//OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits-new_credits));
 			edit_attribute(username, "credits", Integer.toString(user_credits-new_credits));

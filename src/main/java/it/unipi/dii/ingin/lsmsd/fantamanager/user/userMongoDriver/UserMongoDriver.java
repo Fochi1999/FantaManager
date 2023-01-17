@@ -1,11 +1,11 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Updates;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import org.bson.Document;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class UserMongoDriver {
     private static MongoClient mongoClient;
@@ -20,5 +20,23 @@ public class UserMongoDriver {
 
     public static void closeConnection(){
         mongoClient.close();
+    }
+
+    public static String retrieve_user_attribute(String username,String attribute_name){
+                openConnection();
+                String attribute_value = "";
+                try(MongoCursor<Document> result=collection.find(eq("username",username)).iterator()){
+                            while(result.hasNext()){
+                                if(attribute_name.equals("credits") || attribute_name.equals("collection") || attribute_name.equals("points")) {
+                                    //int nv=Integer.parseInt(new_value);
+                                    int value=(Integer) result.next().get(attribute_name);
+                                    attribute_value=Integer.toString(value);
+                                }
+                                else {
+                                    attribute_value= (String) result.next().get(attribute_name);
+                                }
+                            }
+                }
+                return attribute_value;
     }
 }

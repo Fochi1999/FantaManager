@@ -12,7 +12,7 @@ public class global {
     public static formation saved_formation_server=null;
     
     public static final String MONGO_URI = "mongodb://localhost:27017";
-    public static final String DATABASE_NAME = "FantaManager";
+    public static final String DATABASE_NAME = "FantaManagerHope";
     public static final String USERS_COLLECTION_NAME = "Users";
     public static final String TRADES_COLLECTION_NAME = "Trades";
     public static final String CARDS_COLLECTION_NAME = "Cards";
