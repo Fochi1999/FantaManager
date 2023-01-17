@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import javafx.scene.control.*;
@@ -313,7 +313,7 @@ public class ShopController implements Initializable {
 				System.out.println(card_doc);
 				card_collection card_extracted=new card_collection(card_doc.getInteger("player_id"), card_doc.getString("fullname"), 1, card_doc.getString("team"), card_doc.getString("position"));
 
-				collection.add_card_to_collection(card_extracted, global.id_user);
+				collectionRedisDriver.add_card_to_collection(card_extracted, global.id_user);
 				card_extracted_list.add(card_doc);
 			}
 			selected_card.setText("Packet bought. Here it is what cards you got!");

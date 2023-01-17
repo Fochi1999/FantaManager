@@ -1,7 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
@@ -32,7 +32,6 @@ import java.util.ResourceBundle;
 import javafx.collections.*;
 import javafx.stage.Stage;
 import org.bson.types.ObjectId;
-import org.json.simple.JSONObject;
 
 public class TradesController implements Initializable{
 
@@ -132,7 +131,7 @@ public class TradesController implements Initializable{
 			
 			for(Document card:cards){
 				card_collection card_to= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
-				if(!collection.presence_card(card_to,global.id_user))
+				if(!collectionRedisDriver.presence_card(card_to,global.id_user))
 						return false;
 			}
 			return true;
@@ -201,7 +200,7 @@ public class TradesController implements Initializable{
     		//return cards into a user's collection (cards were removed after the creation of the trade)
     		for(Document card:chosen_trade.get_card_from()){
     			card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
-    			collection.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
+    			collectionRedisDriver.add_card_to_collection(card_from,global.id_user);  //riaggiungo in collection i giocatori che stavo offrendo
     		}
     		System.out.print("Redis...OK\t\n");
     	}
@@ -366,14 +365,14 @@ public class TradesController implements Initializable{
 				try {
 					for(Document card:chosen_trade.get_card_from()){
 						card_collection card_from= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
-						collection.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
+						collectionRedisDriver.add_card_to_collection(card_from,global.id_user);  //aggiunti all' utente che ha accettato, ovvero quello loggato
 						//dalla collection dell' altro tizio non vanno tolti in quanto si sono tolti al momento in cui lui li ha offerti
 					}
 
 					for(Document card:chosen_trade.get_card_to()){
 						card_collection card_to= new card_collection((int)card.get("card_id"),(String)card.get("card_name"),1,(String)card.get("card_team"),(String)card.get("card_position"));
-						collection.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, l'utente loggato, i giocatori richiesti da chi ha generato il trade
-						collection.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
+						collectionRedisDriver.delete_card_from_collection(card_to); //elimino dalla collection del giocatore che ha accettato, l'utente loggato, i giocatori richiesti da chi ha generato il trade
+						collectionRedisDriver.add_card_to_collection(card_to,(RankingMongoDriver.retrieve_user(true,chosen_trade.get_user_from())).get(0).get("_id").toString()); //aggiunti alla collection di quello che aveva proposto il trade
 					}
 				}
 				catch(Exception e) {

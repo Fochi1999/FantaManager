@@ -1,7 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.login;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
@@ -10,7 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

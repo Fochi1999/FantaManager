@@ -45,7 +45,7 @@ public class CollectionController implements Initializable {
     @FXML
     protected void click_home() throws IOException {
 
-        collection.closePool();
+        collectionRedisDriver.closePool();
 
         Stage stage= (Stage)root.getScene().getWindow();
         util_controller.back_to_home(stage);
@@ -54,7 +54,7 @@ public class CollectionController implements Initializable {
     @FXML
     protected void click_shop() throws IOException {
 
-        collection.closePool();
+        collectionRedisDriver.closePool();
 
         Stage stage= (Stage)root.getScene().getWindow();
         util_controller.go_to_shop(stage);
@@ -65,12 +65,12 @@ public class CollectionController implements Initializable {
 
         String name_player=player_selected.getText();
 
-        ArrayList<card_collection> coll=collection.load_collection(global.id_user);
+        ArrayList<card_collection> coll= collectionRedisDriver.load_collection(global.id_user);
 
         for(int i=0; i<coll.size();i++){
             if(coll.get(i).get_name().equals(name_player)){
                 System.out.println("player_deleted:"+name_player);
-                collection.delete_card_from_collection(coll.get(i));
+                collectionRedisDriver.delete_card_from_collection(coll.get(i));
                 int credits_received = CardMongoDriver.retrieve_card_credits(name_player)/2; //recupero valore carta e lo dimezzo
                 OptionsMongoDriver.update_user_credits(true,global.user.username,credits_received); //e rendo la metà arrotondata per difetto all'utente
             }
@@ -90,8 +90,8 @@ public class CollectionController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         System.out.println("Opening collection page...");
-        collection.apertura_pool();
-        create_table(collection.load_collection(global.id_user));
+        collectionRedisDriver.apertura_pool();
+        create_table(collectionRedisDriver.load_collection(global.id_user));
 
         delete_button.setDisable(true);
         hide_delete_buttons();

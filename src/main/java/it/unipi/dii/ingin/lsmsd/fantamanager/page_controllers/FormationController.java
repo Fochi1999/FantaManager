@@ -1,7 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
@@ -24,8 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+
 import org.json.simple.parser.ParseException;
 
 public class FormationController implements Initializable {
@@ -178,7 +177,7 @@ public class FormationController implements Initializable {
 
         }
 
-        players= collection.load_collection(global.id_user);
+        players= collectionRedisDriver.load_collection(global.id_user);
 
     }
     @FXML

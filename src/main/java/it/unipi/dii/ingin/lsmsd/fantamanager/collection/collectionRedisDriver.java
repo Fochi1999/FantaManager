@@ -7,9 +7,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.*;
 
-import org.controlsfx.control.spreadsheet.SpreadsheetCellType.IntegerType;
-
-public class collection {
+public class collectionRedisDriver {
 
             int id_user;
 
@@ -18,7 +16,7 @@ public class collection {
 
             static JedisPool pool;
 
-            public collection(int id_user,ArrayList<card_collection> player_card_collection){
+            public collectionRedisDriver(int id_user, ArrayList<card_collection> player_card_collection){
                     this.id_user=id_user;
                     this.player_card_collection=player_card_collection;
             }

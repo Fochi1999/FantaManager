@@ -5,7 +5,7 @@ import com.mongodb.client.model.Filters;
 import java.util.ArrayList;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 
 public class SeeUserMongoDriver {
@@ -33,10 +33,10 @@ public class SeeUserMongoDriver {
 	
 	public static boolean delete_user(String username, String _id) {
 		
-		ArrayList<card_collection> user_card_list = collection.load_collection(_id);
+		ArrayList<card_collection> user_card_list = collectionRedisDriver.load_collection(_id);
 		//REDIS
 		try {
-			collection.delete_user_card_collection(_id);
+			collectionRedisDriver.delete_user_card_collection(_id);
 			System.out.print("Redis..OK\t");
 		}
 		catch(Exception e) {
@@ -54,7 +54,7 @@ public class SeeUserMongoDriver {
 		catch(Exception e) {	//handling exception
 			int i=0;
 			while(i<user_card_list.size()) {
-				collection.add_card_to_collection(user_card_list.get(i), _id);
+				collectionRedisDriver.add_card_to_collection(user_card_list.get(i), _id);
 				i++;
 			}
 			

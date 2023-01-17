@@ -1,37 +1,22 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.page_controllers;
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.see_card;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 

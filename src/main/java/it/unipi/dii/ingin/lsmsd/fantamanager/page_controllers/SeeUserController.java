@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -108,7 +108,7 @@ public class SeeUserController implements Initializable{
     	region_field.setText(user_doc.getString("region"));
     	points_field.setText(user_doc.get("points").toString());
     	System.out.println(user_doc.get("_id").toString());
-		ArrayList<card_collection> collection_user_selected= collection.load_collection(user_doc.get("_id").toString());
+		ArrayList<card_collection> collection_user_selected= collectionRedisDriver.load_collection(user_doc.get("_id").toString());
 		show_collection(collection_user_selected);
 	}
 

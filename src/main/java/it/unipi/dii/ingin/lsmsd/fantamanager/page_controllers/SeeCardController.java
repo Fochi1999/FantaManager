@@ -7,8 +7,7 @@ import java.util.ResourceBundle;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.SeeUserMongoDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.OptionsMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import javafx.fxml.FXML;
@@ -22,8 +21,6 @@ import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ChoiceBox;
 
 import org.bson.Document;
@@ -162,7 +159,7 @@ public class SeeCardController implements Initializable{
 		if(check_credits((int)credits)) {
 			OptionsMongoDriver.update_user_credits(false, global.user.username, credits);
 			card_collection bought_card = new card_collection(card_doc.getInteger("player_id"), card_doc.getString("fullname"), 1, card_doc.getString("team"), card_doc.getString("position"));
-			collection.add_card_to_collection(bought_card, global.id_user);
+			collectionRedisDriver.add_card_to_collection(bought_card, global.id_user);
 			System.out.println("Card bought");
 			buy_card_text.setText("Card successfully bought.");
 		}

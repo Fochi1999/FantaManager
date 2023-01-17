@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.app;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
@@ -234,7 +234,7 @@ public class NewTradeController implements Initializable{
 		//REDIS
 		try {
 			for(String card:card_from_collection){
-				collection.delete_card_from_collection(card);
+				collectionRedisDriver.delete_card_from_collection(card);
 			}
 			System.out.print("Redis...OK\t\n");
 		}
@@ -274,8 +274,8 @@ public class NewTradeController implements Initializable{
 		list.removeAll(list);	//clearing the list
 		
 		if (cards_owned == null){	//retrieve cards only one time
-			collection.apertura_pool();
-			cards_owned = collection.load_collection(global.id_user);
+			collectionRedisDriver.apertura_pool();
+			cards_owned = collectionRedisDriver.load_collection(global.id_user);
 			System.out.println("Card owned list retrieved from DB");
 		}
 		
@@ -287,7 +287,7 @@ public class NewTradeController implements Initializable{
 		}
 		card_list.getItems().clear();
 		card_list.getItems().addAll(list);
-		collection.closePool();
+		collectionRedisDriver.closePool();
 
 	}
 	

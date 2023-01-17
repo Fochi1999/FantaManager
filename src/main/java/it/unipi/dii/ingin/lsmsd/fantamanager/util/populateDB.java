@@ -6,20 +6,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collection;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
-import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.statistics_class;
@@ -32,8 +28,6 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -41,8 +35,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Transaction;
 
 import static com.mongodb.client.model.Projections.fields;
@@ -699,7 +691,7 @@ public class populateDB {
 	public static void create_random_formations(int matchday) throws ParseException {
 		ArrayList<Document> user_list = get_users_collection_mongoDB();
 		for(int i=0;i<user_list.size();i++){
-			ArrayList<card_collection>Cards= collection.load_collection(user_list.get(i).get("_id").toString());
+			ArrayList<card_collection>Cards= collectionRedisDriver.load_collection(user_list.get(i).get("_id").toString());
 			if(user_list.get(i).get("username").equals("admin")){
 				continue;
 			}
