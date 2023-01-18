@@ -54,7 +54,7 @@ public class formation {
         ChoisePlayerFormationController.p=p;
         ChoisePlayerFormationController.role=roles;
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Collection page");
+        stage.setTitle("Choose player page");
         stage.setScene(scene);
         stage.show();
     }
