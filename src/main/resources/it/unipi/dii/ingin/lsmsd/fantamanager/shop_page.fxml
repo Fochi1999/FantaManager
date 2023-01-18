@@ -71,10 +71,10 @@
             </TextField>
          </children>
       </AnchorPane>
-      <Button fx:id="search_by_skill" layoutX="357.0" layoutY="614.0" mnemonicParsing="false" onMouseClicked="#search_by_skill" text="Search_by_skills" />
-      <ChoiceBox fx:id="team" layoutX="177.0" layoutY="648.0" />
-      <ChoiceBox fx:id="role" layoutX="334.0" layoutY="648.0" />
-      <ChoiceBox fx:id="skill" layoutX="176.0" layoutY="614.0" prefWidth="150.0" />
+      <Button fx:id="search_by_skill" layoutX="389.0" layoutY="624.0" mnemonicParsing="false" onMouseClicked="#search_by_skill" text="Search by skills" />
+      <ChoiceBox fx:id="team" layoutX="244.0" layoutY="655.0" prefHeight="25.0" prefWidth="107.0" />
+      <ChoiceBox fx:id="role" layoutX="390.0" layoutY="655.0" prefHeight="25.0" prefWidth="96.0" />
+      <ChoiceBox fx:id="skill" layoutX="244.0" layoutY="624.0" prefHeight="25.0" prefWidth="107.0" />
       <Button layoutX="213.0" layoutY="229.0" mnemonicParsing="false" onMouseClicked="#reload_page" prefHeight="42.0" prefWidth="99.0" text="Reset">
          <font>
             <Font size="15.0" />
@@ -112,6 +112,9 @@
             </Pane>
          </children>
       </AnchorPane>
-      <Button layoutX="94.0" layoutY="635.0" mnemonicParsing="false" onMouseClicked="#best_cards" prefHeight="42.0" prefWidth="74.0" text="Best Cards" />
+      <Button layoutX="114.0" layoutY="635.0" mnemonicParsing="false" onMouseClicked="#best_cards" prefHeight="42.0" prefWidth="93.0" text="Best Cards">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
    </children>
 </AnchorPane>
