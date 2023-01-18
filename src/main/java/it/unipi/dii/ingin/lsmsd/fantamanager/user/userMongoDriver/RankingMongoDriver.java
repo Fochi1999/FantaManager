@@ -102,11 +102,10 @@ public class RankingMongoDriver {
 		Bson group=group("$region", first("username","$username"), first("credits","$credits"), first("points","$points"), first("id","$_id"));
 		Bson p1=project(fields(excludeId(),include("username"),include("points"),computed("_id","$id"),computed("region","$_id")));
 		Bson order=sort(descending("points"));
-		Bson limit = limit(100);
 		
 		//searching
 		try{
-			MongoCursor<Document> cursor=UserMongoDriver.collection.aggregate(Arrays.asList(order,group,p1,limit)).iterator();
+			MongoCursor<Document> cursor=UserMongoDriver.collection.aggregate(Arrays.asList(order,group,p1,order)).iterator();
 			while(cursor.hasNext()){
 				resultDoc.add(cursor.next());
 			}
