@@ -58,7 +58,7 @@ public class TradeMongoDriver {
 
     	openConnection();
     	
-    	if(offered_wanted.equals("offered")){
+    	if(offered_wanted.equals("Offered")){
             //20 most frequent player offered in completed trades
             Bson match1=match(eq("status",1));
             Bson u=unwind("$card_from");
