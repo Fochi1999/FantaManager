@@ -149,10 +149,8 @@ public class CardMongoDriver {
 
             Bson groupMultiple= new Document("$group",new Document("_id",new Document("position","$position").append("team","$team")).append("fullname",new Document("$first","$fullname"))
                     .append("credits",new Document("$first","$credits")).append("id",new Document("$first","$_id")).append("position",new Document("$first","$position")).append("team",new Document("$first","$team")).append(skill,new Document("$first","$general_statistics."+skill)));
-            //Bson match=match(eq("_id.position",role));
             Bson order=sort(descending("general_statistics."+skill));
             Bson p1=project(fields(excludeId(),include("fullname"),include("credits"),computed("_id","$id"),include("team"),include("position"),include(skill)));
-            //Bson first_five=limit(5);
             Bson order1=sort(descending(skill));
 
             try{
