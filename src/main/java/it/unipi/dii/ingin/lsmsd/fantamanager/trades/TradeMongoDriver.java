@@ -59,7 +59,7 @@ public class TradeMongoDriver {
     	openConnection();
     	
     	if(offered_wanted.equals("offered")){
-            //10 most frequent player offered in completed trades
+            //20 most frequent player offered in completed trades
             Bson match1=match(eq("status",1));
             Bson u=unwind("$card_from");
             Bson group=group("$card_from", Accumulators.sum("count",1));
@@ -74,7 +74,7 @@ public class TradeMongoDriver {
 
         }else{
 
-            //10 most frequent player wanted in completed trades
+            //20 most frequent player wanted in completed trades
             Bson match1=match(eq("status",1));
             Bson u=unwind("$card_to");
             Bson group=group("$card_to",Accumulators.sum("count",1));
