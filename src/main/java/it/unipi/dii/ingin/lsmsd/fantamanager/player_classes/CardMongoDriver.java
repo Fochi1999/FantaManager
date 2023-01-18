@@ -283,7 +283,7 @@ public class CardMongoDriver {
 
     public static ArrayList<Document> best_cards(){
 
-            //10 giocatori che hanno preso piu volte un voto superiore a 10(da rivedere punteggio)
+            //10 giocatori che hanno preso piu volte un voto superiore a 10
 
             openConnection();
             MongoCursor<Document> resultDoc = null;
@@ -303,6 +303,7 @@ public class CardMongoDriver {
                 //resultDoc = collection.aggregate(Arrays.asList(p1,u,match,group,order,limit,p2)).iterator();
                 resultDoc = collection.aggregate(Arrays.asList(p1,match,u,match,group,order,limit,p2)).iterator();
             } catch (Exception e) {
+                    closeConnection();
                     return null;
             }
 
@@ -310,6 +311,7 @@ public class CardMongoDriver {
                 //System.out.println(resultDoc.next());
                 result.add(resultDoc.next());
             }
+            closeConnection();
             return result;
     }
 
