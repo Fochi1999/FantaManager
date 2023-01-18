@@ -179,7 +179,7 @@ public class RankingController implements Initializable{
 		 System.out.println("Opening user page...");
 		 FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("see_user_page.fxml"));
 	     Scene scene = new Scene(fxmlLoader.load());
-	     stage.setTitle("Card info");
+	     stage.setTitle("User info");
 	     stage.setScene(scene);
 	     stage.show();
 	 }
