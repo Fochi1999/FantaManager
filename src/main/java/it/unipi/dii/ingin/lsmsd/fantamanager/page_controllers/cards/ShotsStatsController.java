@@ -45,19 +45,19 @@ public class ShotsStatsController implements Initializable{
 		//buy_card.setDisable(true);	//disabling the buy button
 		
 		search_card();
-			//TODO implementare
-		System.out.println(card_doc.toString());
+		//TODO implementare next_matchday o gestire eccezione shots_info vuoto
+
 		Document stats=(Document)card_doc.get("statistics");
-		System.out.println(stats.toString());
+
 		Document matchdays=(Document)stats.get("matchday");
-		System.out.println(matchdays.toString());
+
 		for(int i=1;i<=38;i++){
 			if(global.updated_matchdays[i-1]==1) {
 				Document matchday = (Document) matchdays.get("matchday" + i);
-				System.out.println(matchday.toString());
+
 				Document statsmatchday = (Document) matchday.get("stats");
 				ArrayList<Document> shotsInfo = (ArrayList<Document>) statsmatchday.get("shotsInfo");
-				System.out.println(shotsInfo.toString() + " class " + shotsInfo.getClass());
+
 				for (int j = 0; j < shotsInfo.size(); j++) {
 					Document shot = shotsInfo.get(j);
 					String minS = (String) shot.get("min");
