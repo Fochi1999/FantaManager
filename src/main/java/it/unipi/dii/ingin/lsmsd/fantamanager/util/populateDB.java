@@ -114,7 +114,7 @@ public class populateDB {
     	System.out.println("Users retrieved..");
     	
     	//connecting to redis
-    	JedisPool pool = new JedisPool("localhost", 6379);
+    	JedisPool pool = new JedisPool(global.REDIS_URI, global.REDIS_PORT);
     	
         //insert
         try(Jedis jedis=pool.getResource()){
@@ -517,7 +517,6 @@ public class populateDB {
 	public static void create_cards_collection_mongoDB(){
 
 		//connecting to mongoDB
-		String uri = "mongodb://localhost:27017";
 		MongoClient myClient = MongoClients.create(global.MONGO_URI);
 		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
 		MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME);

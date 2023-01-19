@@ -123,8 +123,8 @@ public class SeeUserController implements Initializable{
 
 			String card_output="";
 
-			card_output = card_output + ">>id: " + card.get_id() + "//name: " + card.get_name()
-					+ "//team: "+card.get_team()+ "//role: "+card.get_position()+"//quantity: "+card.get_quantity();
+			card_output = card_output + card.get_name() + " - Team: "+card.get_team()+ " - Role: "+card.get_position() +
+					" - Quantity: "+card.get_quantity() + " - ID: " + card.get_id();
 
 			list.add(card_output);
 		}

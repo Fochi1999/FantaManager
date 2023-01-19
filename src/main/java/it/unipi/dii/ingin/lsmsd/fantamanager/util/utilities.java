@@ -50,7 +50,7 @@ public class utilities {
 			return;
 		}
 		
-		JedisPool pool = new JedisPool("localhost", 6379);
+		JedisPool pool = new JedisPool(global.REDIS_URI, global.REDIS_PORT);
 		
 		//set
         try(Jedis jedis=pool.getResource()){
@@ -78,7 +78,7 @@ public class utilities {
 
 	//function that retrieve the array of updated matchdays
 	public static int[] get_updated_matchdays() {
-		JedisPool pool = new JedisPool("localhost", 6379);
+		JedisPool pool = new JedisPool(global.REDIS_URI, global.REDIS_PORT);
 		int[] array = new int[38];
 		//set
         try(Jedis jedis=pool.getResource()){
@@ -107,7 +107,7 @@ public class utilities {
 	}
 
 	private static void get_next_matchday() {   //prende da redis il valore della prossima giornata del campionato e lo inserisce in global.next_matchday
-		JedisPool pool = new JedisPool("localhost", 6379);
+		JedisPool pool = new JedisPool(global.REDIS_URI, global.REDIS_PORT);
 		int next_matchday;
 		try(Jedis jedis=pool.getResource()){
 			String value=jedis.get("admin:next_matchday");
@@ -135,7 +135,7 @@ public class utilities {
 	}
 
 	public static void set_next_matchday_redis(int next_matchday) {
-		JedisPool pool = new JedisPool("localhost", 6379);
+		JedisPool pool = new JedisPool(global.REDIS_URI, global.REDIS_PORT);
 
 		try(Jedis jedis=pool.getResource()){
 			jedis.set("admin:next_matchday", String.valueOf(next_matchday));

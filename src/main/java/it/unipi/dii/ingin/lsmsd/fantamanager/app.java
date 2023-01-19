@@ -34,7 +34,7 @@ public class app extends Application {
     		//utilities.update_matchday(-1);							//initialize the update_matchday matrix with all zero
             //utilities.set_next_matchday_redis(1);                   //initialize the next_matchday a 1, prima che inizi il campionato
 
-    		//global.updated_matchdays = utilities.get_updated_matchdays();
+    		global.updated_matchdays = utilities.get_updated_matchdays();
             //populateDB.create_random_formations(1);
     	} catch(Exception e){
     		e.printStackTrace();

@@ -18,6 +18,9 @@ public class global {
     public static final String TRADES_COLLECTION_NAME = "Trades";
     public static final String CARDS_COLLECTION_NAME = "Cards";
     
+    public static final String REDIS_URI = "localhost";
+    public static final int REDIS_PORT = 6379;
+    
     public static int next_matchday = 0;
     public static int updated_matchdays[] = new int[38];
 }

@@ -30,7 +30,7 @@ public class calculate_matchday {
 
 
 
-        //String url = "mongodb://localhost:27017";
+        
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
         // Access a Database
@@ -245,7 +245,7 @@ public class calculate_matchday {
 
         Map<Long,Double> player_score=new HashMap<Long,Double>();  //per calcolo score di un team di un player
 
-        //String url = "mongodb://localhost:27017";
+       
         MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
         // Access a Database

@@ -3,7 +3,6 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.*;
 
@@ -22,7 +21,7 @@ public class collectionRedisDriver {
             }
 
             public static void apertura_pool(){
-                pool=new JedisPool("localhost",6379);
+                pool=new JedisPool(global.REDIS_URI,global.REDIS_PORT);
             }
 
             public static String crea_chiave_load(String user_id) {  //solo per fare il retrieve delle info dell-user in questione
@@ -38,8 +37,7 @@ public class collectionRedisDriver {
                 //String key_load = crea_chiave_load(user_id);
                 String key_load="user_id:"+user_id+":card_id:";
                 
-                JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-            	JedisPool pool = new JedisPool(jedisPoolConfig, "localhost", 6379);
+            	apertura_pool();
                 try (Jedis jedis = pool.getResource()) {
                 	
                     int i = 0;
@@ -64,10 +62,12 @@ public class collectionRedisDriver {
                         i++;
                     }
                 }
+                closePool();
                 return cards;
             }
-
-            private static void retrieve_key_info(String key, card_collection card,String value) {
+            
+/* 
+            private static void retrieve_key_info(String key, card_collection card,String value) { UNUSED
 
                 String[] words=key.split(":");
                 String attribute=words[4];
@@ -80,12 +80,13 @@ public class collectionRedisDriver {
 
             }
 
-            private static int retrieve_id_card(String key) {
+            private static int retrieve_id_card(String key) { UNUSED
 
                 String[] words=key.split(":");
                 return Integer.parseInt(words[3]);
             }
-
+*/
+            
             public static void closePool(){
                 pool.close();
             }
@@ -211,6 +212,7 @@ public class collectionRedisDriver {
                         }
                     }
                     closePool();
+                    scanner.close();
             }
 
             public void change_position_of_card(int card_id){ //funzione che potrebbe servire all' admin per cambiare il ruolo di un certo giocatore su tutto redis
@@ -233,16 +235,16 @@ public class collectionRedisDriver {
                     }
                 }
                 closePool();
+                scanner.close();
             }
             
         public static void delete_user_card_collection(String user_id) {
         	
-        	String key_load = crea_chiave_load(user_id);  //qui dovremmo inserire this.user_id, oppure togliere il parametro e farlo come commentato sopra
+        	String key_load = crea_chiave_load(user_id);  
+            apertura_pool();
             
-            JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        	JedisPool pool = new JedisPool(jedisPoolConfig, "localhost", 6379);
             try (Jedis jedis = pool.getResource()) {
-            	
+            
                 int i = 0;
             	while (i<=global.max_card_id) {	
                     String key_name = key_load+i+":name";
@@ -261,5 +263,6 @@ public class collectionRedisDriver {
                     i++;
                 }
             }
+            closePool();
         }
 }
