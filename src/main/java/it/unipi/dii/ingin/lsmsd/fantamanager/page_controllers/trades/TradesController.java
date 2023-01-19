@@ -352,7 +352,7 @@ public class TradesController implements Initializable{
 					}
 					total_credits = 0-total_credits;
 					//update status trade
-					TradeMongoDriver.update_trade(chosen_trade,"status");
+					TradeMongoDriver.update_trade_status(chosen_trade,1);
 					
 					System.out.print("MongoDB...OK\t");
 				}
@@ -389,7 +389,7 @@ public class TradesController implements Initializable{
 					}
 					
 					//revert trade status to pending
-					TradeMongoDriver.revert_trade(chosen_trade,"status");
+					TradeMongoDriver.update_trade_status(chosen_trade,0);
 					
 					selected_trade.setText("Network error! Try again later");
 					return;
