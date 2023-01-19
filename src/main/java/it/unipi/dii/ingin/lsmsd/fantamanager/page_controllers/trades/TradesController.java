@@ -175,6 +175,9 @@ public class TradesController implements Initializable{
     	}
     	Trade chosen_trade=retrieve_trade();
     	
+    	accept_button.setDisable(true);
+		delete_button.setDisable(true);
+    	
     	//MongoDB
     	String words_arr[] = trade_text.split(" ");
     	ObjectId trade_id = new ObjectId(words_arr[words_arr.length-1]);
@@ -191,7 +194,7 @@ public class TradesController implements Initializable{
     		System.out.print("MongoDB...OK\t");
     	}
     	catch(Exception e){	//handling error
-    		selected_trade.setText("Network error! Try again later");
+    		selected_trade.setText("Network error! Refresh the page and try again later");
     		return;
     	}
     			
@@ -205,7 +208,7 @@ public class TradesController implements Initializable{
     		System.out.print("Redis...OK\t\n");
     	}
     	catch(Exception e){ //handling error
-    		selected_trade.setText("Network error! Try again later");
+    		selected_trade.setText("Network error! Refresh the page and try again later");
     				
     		//revert credit value
         	if(chosen_trade.get_credits() < 0) {	
@@ -337,6 +340,10 @@ public class TradesController implements Initializable{
 
 				Trade chosen_trade=retrieve_trade();
 				int total_credits = chosen_trade.get_credits();
+				
+				accept_button.setDisable(true);
+				delete_button.setDisable(true);
+				
 				//CHANGES ON DBs
 				
 				//MONGODB
@@ -357,7 +364,7 @@ public class TradesController implements Initializable{
 					System.out.print("MongoDB...OK\t");
 				}
 				catch(Exception e) {
-					selected_trade.setText("Network error! Try again later");
+					selected_trade.setText("Network error! Refresh the page and try again later");
 					return;
 				}
 				
@@ -391,12 +398,10 @@ public class TradesController implements Initializable{
 					//revert trade status to pending
 					TradeMongoDriver.update_trade_status(chosen_trade,0);
 					
-					selected_trade.setText("Network error! Try again later");
+					selected_trade.setText("Network error! Refresh the page and try again later");
 					return;
 				}
 				
-				accept_button.setDisable(true);
-				delete_button.setDisable(true);
 				show_all_button_onclick();
 				
 	}

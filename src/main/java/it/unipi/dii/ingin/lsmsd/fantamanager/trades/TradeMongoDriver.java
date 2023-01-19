@@ -127,17 +127,18 @@ public class TradeMongoDriver {
         Pattern pattern1 = Pattern.compile(to_input, Pattern.CASE_INSENSITIVE);
         Bson card_to_equal = Filters.regex("card_to.card_name", pattern1);
 
+        Bson status = Filters.eq("status",0);
 
         //searching for the trades
         try {
             if (!from_input.isEmpty() && !to_input.isEmpty()) { 	//both inputs
-                resultDoc = collection.find(Filters.and(card_from_equal,card_to_equal)).iterator();
+                resultDoc = collection.find(Filters.and(card_from_equal,card_to_equal,status)).iterator();
             }
             else if(!from_input.isEmpty()) { 						//only user input
-                resultDoc = collection.find(card_from_equal).iterator();
+                resultDoc = collection.find(Filters.and(card_from_equal,status)).iterator();
             }
             else if(!to_input.isEmpty()) { 						//only card input
-                resultDoc = collection.find(card_to_equal).iterator();
+                resultDoc = collection.find(Filters.and(card_to_equal,status)).iterator();
             }
             else {													//no inputs
                 System.out.println("No elements to search....");
