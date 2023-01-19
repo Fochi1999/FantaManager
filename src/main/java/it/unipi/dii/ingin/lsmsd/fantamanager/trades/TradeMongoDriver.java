@@ -236,7 +236,7 @@ public class TradeMongoDriver {
         closeConnection();
     }
     
-    public static ObjectId create_new_trade(Trade new_trade){  //TODO finire
+    public static ObjectId create_new_trade(Trade new_trade){  
 
             openConnection();
 

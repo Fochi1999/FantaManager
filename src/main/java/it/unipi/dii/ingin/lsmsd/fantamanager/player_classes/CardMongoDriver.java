@@ -234,7 +234,7 @@ public class CardMongoDriver {
             String team = player_doc.getString("team");
             String position = player_doc.getString("position");
             player=new card_collection(player_id,fullname,1,team,position);
-            //update_status_trade();  //TODO
+            //update_status_trade(); 
 
         }
         return player;

@@ -10,6 +10,7 @@ public class global {
     public static user user;
     public static formation saved_formation_local;
     public static formation saved_formation_server=null;
+    public static int max_card_id = 531;
     
     public static final String MONGO_URI = "mongodb://localhost:27017";
     public static final String DATABASE_NAME = "FantaManager";

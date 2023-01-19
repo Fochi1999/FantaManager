@@ -31,7 +31,6 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 
 public class OptionController implements Initializable {
 	
-//TODO remove collection field
 
     @FXML
     private Parent root;
@@ -56,7 +55,6 @@ public class OptionController implements Initializable {
     @FXML private TextField region_field;
     @FXML private TextField email_field;
     @FXML private TextField credits_field;
-    @FXML private TextField collection_field;
     @FXML private TextField points_field;
     
     @FXML private Text username_warning;
