@@ -46,6 +46,7 @@ public class ShotsStatsController implements Initializable{
 		
 		search_card();
 		//TODO implementare next_matchday o gestire eccezione shots_info vuoto
+		//TODO fare in modo che il pulsante 'back' ritorni alla pagina della carta e non su shop (o aggiungere un'altro pulsante che permetta questa azione)
 
 		Document stats=(Document)card_doc.get("statistics");
 
