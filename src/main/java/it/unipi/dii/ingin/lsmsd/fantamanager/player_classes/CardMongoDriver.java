@@ -240,7 +240,7 @@ public class CardMongoDriver {
         return player;
     }*/
 
-    public static MongoCursor<Document> retrieve_player_for_trade(){
+    /*public static MongoCursor<Document> retrieve_player_for_trade(){
         openConnection();
 
         MongoCursor<Document> resultDoc;
@@ -257,7 +257,7 @@ public class CardMongoDriver {
             }
 
             return resultDoc;
-    }
+    }*/
 
     public static int retrieve_card_credits(String username){
 
