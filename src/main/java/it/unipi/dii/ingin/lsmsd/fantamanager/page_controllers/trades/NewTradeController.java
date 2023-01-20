@@ -74,8 +74,8 @@ public class NewTradeController implements Initializable{
 	@FXML private Button offer;
 	@FXML private Button want;
 	
-	private ArrayList<Document> all_cards_list = null;
-	private ArrayList<card_collection> cards_owned = null;
+	private ArrayList<Document> all_cards_list = global.full_card_list;
+	private ArrayList<card_collection> cards_owned = global.owned_cards_list;
 	
 	@Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -254,6 +254,8 @@ public class NewTradeController implements Initializable{
 		System.out.println("Trade created - "+card_from +" || "+ card_to +" || "+ card_from_collection);
 		
 		//reload of the page
+		//System.out.println("Reloading collection");
+		//global.owned_cards_list = collectionRedisDriver.load_collection(global.id_user);
 		reload_page_trades();
 	}
 

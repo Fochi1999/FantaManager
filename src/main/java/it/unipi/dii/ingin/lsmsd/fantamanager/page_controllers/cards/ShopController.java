@@ -166,10 +166,14 @@ public class ShopController implements Initializable {
 		
 		String cards_input = text_field.getText();
 		System.out.println("Searching for: "+ cards_input);
+		ArrayList<Document> resultDoc;
 		
-
-    	ArrayList<Document> resultDoc = CardMongoDriver.retrieve_cards(cards_input);
-    	
+		if(cards_input.equals("")) { //case of empty research
+			resultDoc = global.full_card_list;
+		}
+		else {
+			resultDoc = CardMongoDriver.retrieve_cards(cards_input);
+		}
 
     	int i=0;
     	//while(i < resultDoc.size()) {  //questa cosa va fatta una volta sola

@@ -35,9 +35,24 @@
                   <Image url="@../../../../../../imm/ballicon_white.png" />
                </image>
             </ImageView>
-            <Text fx:id="welcomeText" fill="WHITE" layoutX="-29.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benvenuto" textAlignment="CENTER" wrappingWidth="569.2000732421875">
+            <Text fx:id="welcomeText" fill="WHITE" layoutX="-29.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, *user*!" textAlignment="CENTER" wrappingWidth="569.2000732421875">
                <font>
                   <Font size="40.0" />
+               </font>
+            </Text>
+            <Text fx:id="wait_text" fill="RED" layoutX="154.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please wait...">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="wait_gif" fitHeight="56.0" fitWidth="42.0" layoutX="320.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../imm/Loading_icon.gif" />
+               </image>
+            </ImageView>
+            <Text fx:id="err_text" fill="RED" layoutX="108.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dear user, the system is currently unavailable :( Please, exit the application and try reconnecting later." textAlignment="CENTER" wrappingWidth="295.0">
+               <font>
+                  <Font size="14.0" />
                </font>
             </Text>
          </children>

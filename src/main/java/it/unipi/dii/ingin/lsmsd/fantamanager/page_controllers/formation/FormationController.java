@@ -177,7 +177,7 @@ public class FormationController implements Initializable {
 
         }
 
-        players= collectionRedisDriver.load_collection(global.id_user);
+        players= global.owned_cards_list;
 
     }
     @FXML

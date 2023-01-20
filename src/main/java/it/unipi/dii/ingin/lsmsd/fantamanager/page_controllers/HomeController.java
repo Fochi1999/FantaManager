@@ -4,11 +4,14 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.app;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.login;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
+import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
+import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,10 +22,17 @@ import javafx.stage.Stage;
 
 public class HomeController implements Initializable {
 	
-	//Stage stage = new Stage();
 	
     @FXML
     private Text welcomeText;
+    @FXML
+    private Text wait_text; 
+    @FXML
+    private Text err_text;
+    @FXML
+    private ImageView wait_gif;
+    
+    
     @FXML
     private Parent root;
 
@@ -94,7 +104,17 @@ public class HomeController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        welcomeText.setText("Welcome "+ global.user.username + "!");
+    	
+    	//hiding 'loading' items
+    	err_text.setVisible(false);
+    	wait_text.setVisible(false);
+    	wait_gif.setVisible(false);
+    	welcomeText.setText("Welcome "+ global.user.username + "!");
+    	
+    	if(global.owned_cards_list == null || global.full_card_list == null) {
+    			load_collections();
+    		}
+    	
     }
     
     public void logout() throws IOException{
@@ -103,4 +123,43 @@ public class HomeController implements Initializable {
     	util_controller.go_to_login(stage);
     }
     
+    
+    public void load_collections(){
+    	new Thread(() -> {
+    		wait_text.setVisible(true);
+        	wait_gif.setVisible(true);
+        	System.out.println("Reading card collection..");
+        	welcomeText.setText("Loading card collection...");
+        	try{
+        		global.owned_cards_list = collectionRedisDriver.load_collection(global.id_user);
+        	}		
+        	catch(Exception e){
+        		wait_text.setText("Error");
+        		welcomeText.setText("Error");
+            	wait_gif.setVisible(false);
+        		err_text.setVisible(true);
+        		return;
+        	}
+        	
+        	if(global.full_card_list == null) {
+        		System.out.println("Reading full card list..");
+            	welcomeText.setText("Loading full card list...");
+            	try {
+            		global.full_card_list = CardMongoDriver.retrieve_cards("");
+            	}
+            	catch(Exception e){
+            		wait_text.setText("Error");
+            		welcomeText.setText("Error");
+                	wait_gif.setVisible(false);
+            		err_text.setVisible(true);
+            		return;
+            	}
+            }
+        	wait_text.setVisible(false);
+        	wait_gif.setVisible(false);
+        	System.out.println("Load complete.");
+        	
+        	welcomeText.setText("Welcome "+ global.user.username + "!");
+    	}).start();	
+    }    
 }

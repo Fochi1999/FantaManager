@@ -81,7 +81,8 @@ public class login {
     	global.id_user = null;
     	global.saved_formation_local = null;
     	global.saved_formation_server = null;
-    	
+    	global.owned_cards_list = null;
+   
     	System.out.println("User logged out.");
     }
     

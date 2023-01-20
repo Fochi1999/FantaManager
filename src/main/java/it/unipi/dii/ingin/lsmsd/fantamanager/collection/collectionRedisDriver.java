@@ -59,6 +59,7 @@ public class collectionRedisDriver {
                         	card_collection card=new card_collection(i,value_name,Integer.parseInt(value_qnt),value_team,value_pos);
                             cards.add(card);
                         }
+                        System.out.println("Reading card: "+i+"/"+global.max_card_id); 
                         i++;
                     }
                 }

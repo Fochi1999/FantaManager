@@ -91,7 +91,7 @@ public class CollectionController implements Initializable {
 
         System.out.println("Opening collection page...");
         collectionRedisDriver.apertura_pool();
-        create_table(collectionRedisDriver.load_collection(global.id_user));
+        create_table(global.owned_cards_list);
 
         delete_button.setDisable(true);
         hide_delete_buttons();
