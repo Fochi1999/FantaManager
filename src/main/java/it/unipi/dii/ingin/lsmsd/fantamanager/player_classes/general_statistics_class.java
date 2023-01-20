@@ -2,7 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.player_classes;
 
 import it.unipi.dii.ingin.lsmsd.fantamanager.admin.general_statistics;
 
-public class general_statistics_class {
+/*public class general_statistics_class {
 
 	public long games_appearences;
 	public long games_lineup;
@@ -99,7 +99,7 @@ public class general_statistics_class {
 		gen_stats.penalty_saved += penalty_saved;
 
 		return gen_stats;
-	}*/
+	}
 	//CONSTRUCTOR
 	public general_statistics_class(){
 		this.games_appearences = 0;
@@ -147,7 +147,154 @@ public class general_statistics_class {
 		this.penalty_saved = 0;
 	}
 	
+}*/
+
+public class general_statistics_class {
+
+	public long games_appearences;
+	public long games_lineup;
+	public long games_minutes;
+
+	public long substitutes_in;
+	public long substitutes_out;
+	//public long substitutes_bench;
+
+	public long shots_total;
+	public long shots_on;
+
+	public long goals_total;
+	public long goals_conceded;
+	public long goals_assists;
+	public long goals_saves;
+
+	public long passes_total;
+	public long passes_key;
+	public long passes_accuracy;
+
+	public long tackles_total;
+	//public long tackles_blocks;
+	public long tackles_interceptions;
+
+	public long duels_total;
+	public long duels_won;
+
+	public long dribbles_attempts;
+	public long dribbles_success;
+	//public long dribbles_past;
+
+	public long fouls_drawn;
+	public long fouls_committed;
+
+	public long cards_yellow;
+	public long cards_red;
+	public long cards_yellowred;
+
+	//public long penalty_won;
+	//public long penalty_commutted;
+	public long penalty_scored;
+	//public long penalty_missed;
+	public long penalty_saved;
+
+	public general_statistics_class(long games_appearences,long games_lineup,long games_minutes,long substitutes_in,long substitutes_out, long substitutes_bench, long shots_total, long shots_on, long goals_total, long goals_conceded, long goals_assists,
+									long goals_saves, long passes_total, long passes_key, long passes_accuracy, long tackles_total,long tackles_blocks, long tackles_interceptions, long duels_total, long duels_won, long dribbles_attempts,
+									long dribbles_success, long dribbles_past, long fouls_drawn, long fouls_committed, long cards_yellow, long cards_red, long cards_yellowred, long penalty_won, long penalty_commutted,
+									long penalty_scored,long penalty_missed, long penalty_saved){
+
+		this.games_appearences = games_appearences;
+		this.games_lineup = games_lineup;
+		this.games_minutes = games_minutes;
+
+		this.substitutes_in = substitutes_in;
+		this.substitutes_out = substitutes_out;
+		//this.substitutes_bench = substitutes_bench;
+
+		this.shots_total = shots_total;
+		this.shots_on = shots_on;
+
+		this.goals_total = goals_total;
+		this.goals_conceded = goals_conceded;
+		this.goals_assists = goals_assists;
+		this.goals_saves = goals_saves;
+
+		this.passes_total = passes_total;
+		this.passes_key = passes_key;
+		this.passes_accuracy = passes_accuracy;
+
+		this.tackles_total = tackles_total;
+		//this.tackles_blocks = tackles_blocks;
+		this.tackles_interceptions = tackles_interceptions;
+
+		this.duels_total = duels_total;
+		this.duels_won = duels_won;
+
+		this.dribbles_attempts = dribbles_attempts;
+		this.dribbles_success = dribbles_success;
+		//this.dribbles_past = dribbles_past;
+
+		this.fouls_drawn = fouls_drawn;
+		this.fouls_committed = fouls_committed;
+
+		this.cards_yellow = cards_yellow;
+		this.cards_red = cards_red;
+		this.cards_yellowred = cards_yellowred;
+
+		//this.penalty_won = penalty_won;
+		//this.penalty_commutted = penalty_commutted;
+		this.penalty_scored = penalty_scored;
+		//this.penalty_missed = penalty_missed;
+		this.penalty_saved = penalty_saved;
+
+	}
+	//CONSTRUCTOR
+	public general_statistics_class(){
+		this.games_appearences = 0;
+		this.games_lineup = 0;
+		this.games_minutes = 0;
+
+		this.substitutes_in = 0;
+		this.substitutes_out = 0;
+		//this.substitutes_bench = 0;
+
+		this.shots_total = 0;
+		this.shots_on = 0;
+
+		this.goals_total = 0;
+		this.goals_conceded = 0;
+		this.goals_assists = 0;
+		this.goals_saves = 0;
+
+		this.passes_total = 0;
+		this.passes_key = 0;
+		this.passes_accuracy = 0;
+
+		this.tackles_total = 0;
+		//this.tackles_blocks = 0;
+		this.tackles_interceptions = 0;
+
+		this.duels_total = 0;
+		this.duels_won = 0;
+
+		this.dribbles_attempts = 0;
+		this.dribbles_success = 0;
+		//this.dribbles_past = 0;
+
+		this.fouls_drawn = 0;
+		this.fouls_committed = 0;
+
+		this.cards_yellow = 0;
+		this.cards_red = 0;
+		this.cards_yellowred = 0;
+
+		//this.penalty_won = 0;
+		//this.penalty_commutted = 0;
+		this.penalty_scored = 0;
+		//this.penalty_missed = 0;
+		this.penalty_saved = 0;
+	}
+
 }
+
+
 	
 	
 	

@@ -649,7 +649,7 @@ public class populateDB {
 
 		//creating the new player json file with only the needed information
 		player_class new_player = new player_class(playerFullname, playerFirstname, playerLastname, id, Math.toIntExact(playerAge), playerBirthDate, playerBirthPlace, playerBirthCountry, playerNationality,
-				playerHeight, playerWeight, playerPosition, playerTeam, player_career, 30);
+				playerHeight, playerWeight, playerPosition, playerTeam, player_career,30, 30);
 		general_statistics_class new_gen_stats = new general_statistics_class();
 		statistics_class new_stats = new statistics_class();
 		new_player.general_statistics = new_gen_stats;
