@@ -172,7 +172,7 @@
          </font>
       </Text>
       <ListView fx:id="card_list" layoutX="33.0" layoutY="474.0" prefHeight="142.0" prefWidth="598.0" />
-      <TextField fx:id="selected_card" editable="false" layoutX="127.0" layoutY="428.0" prefHeight="38.0" prefWidth="406.0" promptText="Select a card to view..." style="-fx-border-color: BLUE;">
+      <TextField fx:id="selected_card" editable="false" layoutX="33.0" layoutY="426.0" prefHeight="42.0" prefWidth="329.0" promptText="Select a card to view..." style="-fx-border-color: BLUE;">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -186,5 +186,11 @@
             <Font size="14.0" />
          </font>
       </Button>
+      <TextField fx:id="search_card" layoutX="372.0" layoutY="426.0" prefHeight="42.0" prefWidth="153.0" promptText="Search for a card..." style="-fx-border-color: BLUE;">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </TextField>
+      <Button fx:id="search" layoutX="540.0" layoutY="428.0" mnemonicParsing="false" onMouseClicked="#show_all_cards" prefHeight="37.0" prefWidth="76.0" text="Search" />
    </children>
 </AnchorPane>

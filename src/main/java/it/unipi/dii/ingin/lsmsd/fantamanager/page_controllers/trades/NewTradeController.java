@@ -56,6 +56,8 @@ public class NewTradeController implements Initializable{
 	@FXML private TextField card_to2;
 	@FXML private TextField card_to3;
 	@FXML private TextField credits_to;
+
+	@FXML private TextField search_card;
 	
 	@FXML private CheckBox card_from_checkbox1;
 	@FXML private CheckBox card_from_checkbox2;
@@ -73,6 +75,8 @@ public class NewTradeController implements Initializable{
 
 	@FXML private Button offer;
 	@FXML private Button want;
+
+	@FXML private Button search;
 	
 	private ArrayList<Document> all_cards_list = global.full_card_list;
 	private ArrayList<card_collection> cards_owned = global.owned_cards_list;
@@ -87,6 +91,7 @@ public class NewTradeController implements Initializable{
 		card_to_checkbox1.setDisable(true);
 		card_to_checkbox2.setDisable(true);
 		card_to_checkbox3.setDisable(true);
+		search.setDisable(true);
 
 		
 		disable_fields();
@@ -521,6 +526,7 @@ public class NewTradeController implements Initializable{
 
 			offer.setDisable(true);
 			want.setDisable(false);
+			search.setDisable(true);
 			selected_card.setText("");
 
 			open_cards_collection();
@@ -556,18 +562,20 @@ public class NewTradeController implements Initializable{
 
 			offer.setDisable(false);
 			want.setDisable(true);
+			search.setDisable(false);
 			selected_card.setText("");
 			
 			show_all_cards();
 	}
 
+	@FXML
 	private void show_all_cards() {
 		//showing off cards
 		ObservableList<String> list = FXCollections.observableArrayList();
 		list.removeAll(list);	//clearing the list
 
 		if(all_cards_list == null) {	//retrieve cards only one time
-			all_cards_list = CardMongoDriver.retrieve_cards("");
+			all_cards_list = CardMongoDriver.retrieve_cards(search_card.getText());
 			System.out.println("All cards list retrieved from DB");
 		}
 		int i=0;
