@@ -118,7 +118,7 @@ public class utilities {
 		System.out.println("next match:"+global.next_matchday);
 	}
 
-	private static void get_last_match_updated(int[] value) {  //restituisce ultima partita calcolata, quindi dal vettore salvato su redis
+	public static int get_last_match_updated(int[] value) {  //restituisce ultima partita calcolata, quindi dal vettore salvato su redis
 
 			int last_match_updated=0;
 
@@ -127,6 +127,7 @@ public class utilities {
 						last_match_updated=i+1;
 					}
 			}
+			return last_match_updated;
 
 	}
 

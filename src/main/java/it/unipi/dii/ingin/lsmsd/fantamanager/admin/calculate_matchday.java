@@ -280,7 +280,7 @@ public class calculate_matchday {
 
                 //take all statistics for matchday of that player
                 //String cr= (String) matchday_stat.get("CR");
-                String plus= (String) matchday_stat.get("Plus");  //TODO usare
+                String plus= (String) matchday_stat.get("Plus");
                 //String apps= (String) matchday_stat.get("Apps");
                 String starter= (String) matchday_stat.get("Starter");
                 String mins= (String) matchday_stat.get("Mins");
@@ -387,8 +387,13 @@ public class calculate_matchday {
 
                 player_score.put(player_id,Double.valueOf(score));
 
-                general_statistics.handle_general_statistics(player_id,gen_stats,mins,starter,shots,on_tar_shots,goals,goals_conceded,assists,saves,passes,key_pass,acc_pass,tackles,interception,lost_duels,won_duels,total_dribbles,successful_dribbles,was_fouled,fouls,yc,rc,second_yc,pen_saves,pen_goals,pen_goals_conceded);
-
+                if(global.updated_matchdays[matchday-1]==0) {
+                    general_statistics.handle_general_statistics(player_id, gen_stats, mins, starter, shots, on_tar_shots, goals, goals_conceded, assists, saves, passes, key_pass, acc_pass, tackles, interception, lost_duels, won_duels, total_dribbles, successful_dribbles, was_fouled, fouls, yc, rc, second_yc, pen_saves, pen_goals, pen_goals_conceded);
+                }
+                else{
+                    //match already calculated
+                    general_statistics.handle_already_calculated_match(player_id,playermatch);
+                }
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
