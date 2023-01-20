@@ -276,6 +276,7 @@ public class calculate_matchday {
                 JSONObject playermatch = (JSONObject) playerObject.get("matchday");
                 JSONObject matchday_K = (JSONObject) playermatch.get("matchday" + matchday);
                 JSONObject matchday_stat = (JSONObject) matchday_K.get("stats");
+                JSONObject matchday_score=(JSONObject) matchday_K.get("score-value");
 
                 //take all statistics for matchday of that player
                 //String cr= (String) matchday_stat.get("CR");
@@ -368,6 +369,8 @@ public class calculate_matchday {
                 int mod_value=calculate_mod_value(score,plus);
                 //matchday_stat.put("score",score);  //inserisce score nel matchday
                 //System.out.println(matchday_stat.get("score"));
+                int mod_value_old=((Long)matchday_score.get("modif_value")).intValue();//così se la partita è nuova ritorna solo mod, in quanto matchdayK_modif_value sarà a 0,
+                                                                        // altrimenti se ricalcoli la partita leva il vecchio valore da quello nuovo, e sommerà al totale il risultato corretto
 
                 JSONObject score_value=new JSONObject();
                 score_value.put("score",score);
@@ -376,7 +379,8 @@ public class calculate_matchday {
                 //Bson filter = Filters.eq("fullname", player_name);   //change 1045
                 Bson filter= Filters.and(eq("fullname", player_name),eq("team", team));  //AND per risolvere problema L.Pellegrini
                 Bson update1 = Updates.set("statistics.matchday.matchday" + matchday+".score-value", score_value);
-                Bson update2= Updates.set("credits", credits+mod_value);
+                Bson update2= Updates.set("credits", credits+mod_value-mod_value_old);  //ci sottraggo quello presente nel DB, se la partita è stata calcolata per la prima volta sarà a zero, altrimenti viene tolto il vecchio valore dalla somma dei credits
+                                                                                        //della card e aggiunto quello nuovo, per non sommare piu volte il valore della partita
                 Bson update=Updates.combine(update1,update2);
                 UpdateOptions options = new UpdateOptions().upsert(true);
                 System.out.println(coll.updateOne(filter, update, options));
