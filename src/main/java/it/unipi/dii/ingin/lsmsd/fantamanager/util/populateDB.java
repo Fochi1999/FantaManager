@@ -687,9 +687,11 @@ public class populateDB {
 		ArrayList<Document> user_list = get_users_collection_mongoDB();
 		for(int i=0;i<user_list.size();i++){
 			ArrayList<card_collection>Cards= collectionRedisDriver.load_collection(user_list.get(i).get("_id").toString());
+			/*
 			if(user_list.get(i).get("username").equals("admin")){
 				continue;
-			}
+			}*/
+			
 			/*HashMap<Integer,formation> formations=new HashMap<>();
 			String formationJson=user_list.get(i).get("formations").toString();
 			try {
