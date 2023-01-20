@@ -122,9 +122,11 @@ public class populateDB {
         	for(int i=0;i<user_list.size();i++){
         	
         		Transaction transaction = jedis.multi();
+        		/*
         		if(user_list.get(i).getString("username").equals("admin")) {	//admin doesn't play
         			i++;
-        		}
+        		}*/
+        		
         		String user_id = user_list.get(i).get("_id").toString();
         		int random_total_cards = ThreadLocalRandom.current().nextInt(30, 40);	//user's cards collection size
         		
@@ -342,7 +344,7 @@ public class populateDB {
 				String user_username = myReader.nextLine();
 				String user_password = hash.MD5(user_username);    //the password is the same as the username
 				int user_credits = ThreadLocalRandom.current().nextInt(50, 351);
-				int user_points = ThreadLocalRandom.current().nextInt(0, 2001);    //TODO inizializzare a 0 quando sarà finito calculate matchday/formations
+				int user_points = 0;
 				String user_email = generate_random_email();
 				int random1 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
 				String user_region = utilities.regionList[random1];
@@ -427,11 +429,11 @@ public class populateDB {
 		//adding the admin first
 		String admin_username = "admin";
     	String admin_password = hash.MD5(admin_username);	//the password is the same as the username
-		int admin_credits = 0;
+		int admin_credits = ThreadLocalRandom.current().nextInt(50, 351);;
 		int admin_points = 0;
 		int admin_privilege=2;
 		String admin_email = generate_random_email();
-		int random0 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
+		int random0 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
 		String admin_region = utilities.regionList[random0];
 
 		//user admin=new user(admin_username,admin_password,admin_region,admin_email,admin_credits,2,admin_points);
@@ -460,7 +462,7 @@ public class populateDB {
 				String user_username = myReader.nextLine();
 				String user_password = hash.MD5(user_username);    //the password is the same as the username
 				int user_credits = ThreadLocalRandom.current().nextInt(50, 351);
-				int user_points = ThreadLocalRandom.current().nextInt(0, 2001);    //TODO inizializzare a 0 quando sarà finito calculate matchday/formations
+				int user_points = 0;
 				String user_email = generate_random_email();
 				int random1 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
 				String user_region = utilities.regionList[random1];
