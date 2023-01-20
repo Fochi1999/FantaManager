@@ -40,6 +40,7 @@ public class player_class {
     public String position;
     public String team;
     public String career;
+    public int credits_init;
     public int credits;
     public general_statistics_class general_statistics;
     public statistics_class statistics;
@@ -48,7 +49,7 @@ public class player_class {
     //CONSTRUCTOR
     public player_class(String player_fullname_input, String player_firstname_input, String player_lastname_input, int id_input, int age_input, String birth_date_input, String birth_place_input,
                         String birth_country_input, String nationality_input, String height_input, String weight_input, String position_input,
-                        String team_input, String career_input, int credits_input) {
+                        String team_input, String career_input, int credits_init, int credits_input) {
         this.player_id = id_input;
         this.fullname = player_fullname_input;
         this.firstname = player_firstname_input;
@@ -63,6 +64,7 @@ public class player_class {
         this.position = position_input;
         this.team = team_input;
         this.career = career_input;
+        this.credits_init=credits_init;
         this.credits = credits_input;
 
         this.general_statistics = new general_statistics_class();

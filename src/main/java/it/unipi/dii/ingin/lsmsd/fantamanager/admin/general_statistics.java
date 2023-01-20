@@ -14,6 +14,7 @@ import com.mongodb.client.model.Updates;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.simple.JSONObject;
@@ -217,7 +218,7 @@ public class general_statistics {
 
         general_statistics old_gen_stats=new general_statistics();
 
-        System.out.println(gen_stats.toString());
+        //System.out.println(gen_stats.toString());
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -245,5 +246,129 @@ public class general_statistics {
 
         CardMongoDriver.update_gen_stats(player_id,gen_json);
 
+    }
+
+    public static void handle_already_calculated_match(Long player_id,JSONObject playermatch) throws ParseException {
+
+            general_statistics gen_stats=new general_statistics();
+
+            for(int i=1;i<= utilities.get_last_match_updated(global.updated_matchdays);i++){
+                JSONObject matchday_K = (JSONObject) playermatch.get("matchday" + i);
+                JSONObject matchday_stat = (JSONObject) matchday_K.get("stats");
+
+                String plus= (String) matchday_stat.get("Plus");
+                //String apps= (String) matchday_stat.get("Apps");
+                String starter= (String) matchday_stat.get("Starter");
+                String mins= (String) matchday_stat.get("Mins");
+                String goals= (String) matchday_stat.get("Goals");
+                String shots= (String) matchday_stat.get("Shots");
+                String on_tar_shots= (String) matchday_stat.get("On Tar. Shots");
+                String pen_goals= (String) matchday_stat.get("Pen Goals");
+                String successful_dribbles= (String) matchday_stat.get("Successful Dribbles");
+                //String ast= (String) matchday_stat.get("Ast");  //gia presente assist
+                String acc_pass= (String) matchday_stat.get("Acc Pass");
+                String key_pass= (String) matchday_stat.get("Key Pass");
+                String fouls= (String) matchday_stat.get("Fouls");
+                String was_fouled= (String) matchday_stat.get("Was Fouled");
+                String yc= (String) matchday_stat.get("YC");
+                String rc= (String) matchday_stat.get("RC");
+                String rec_ball= (String) matchday_stat.get("Rec Ball");
+                String tackles= (String) matchday_stat.get("Tackles");
+                String clean_sheets= (String) matchday_stat.get("Clean Sheets");
+                String woods= (String) matchday_stat.get("Woods");
+                String headed_goals= (String) matchday_stat.get("Headed Goals");
+                String freekick_goals= (String) matchday_stat.get("Freekick Goals");
+                String big_chance_missed= (String) matchday_stat.get("Big Chance Missed");
+                String goal_min= (String) matchday_stat.get("Goal/Min");
+                String shot_con_rate= (String) matchday_stat.get("Shot Con Rate");
+                String total_dribbles= (String) matchday_stat.get("Total Dribbles");
+                String assists= (String) matchday_stat.get("Assists");
+                String passes= (String) matchday_stat.get("Passes");
+                String acc_pass_per= (String) matchday_stat.get("Acc Pass %");
+                String big_chance_created= (String) matchday_stat.get("Big Chance Created");
+                String cross= (String) matchday_stat.get("Cross");
+                String acc_cross= (String) matchday_stat.get("Acc Cross");
+                String cross_no_corner= (String) matchday_stat.get("Cross no Corner");
+                String second_yc= (String) matchday_stat.get("2nd YC");
+                String err_leading_to_goal= (String) matchday_stat.get("Err leading to Goal");
+                String og= (String) matchday_stat.get("OG");
+                String interception= (String) matchday_stat.get("Interception");
+                String won_duels= (String) matchday_stat.get("Won Duels");
+                String lost_duels= (String) matchday_stat.get("Lost Duels");
+                String aer_duels_won= (String) matchday_stat.get("Aer. Duels Won");
+                String aer_duels_lost= (String) matchday_stat.get("Aer. Duels Lost");
+                String saves= (String) matchday_stat.get("Saves");
+                String goals_conceded= (String) matchday_stat.get("Goals Conceded");
+                String pen_saves= (String) matchday_stat.get("Pen Saves");
+                String pen_goals_conceded= (String) matchday_stat.get("Pen Goals Conceded");
+                String xG=(String) matchday_stat.get("xG");
+                String xGBuildup=(String) matchday_stat.get("xGBuildup");
+                String xGChain=(String) matchday_stat.get("xGChain");
+                String xA=(String) matchday_stat.get("xA");
+
+                long games_appearence=0;
+                if(Integer.parseInt(mins)>0){
+                    games_appearence= Long.valueOf(1);
+                }
+
+                long min=Long.valueOf(mins);
+                long start=Long.valueOf(starter);
+                long shot=Long.valueOf(shots);
+                long on_tar_shot=Long.valueOf(on_tar_shots);
+                long goal=Long.valueOf(goals);
+                long goal_con=Long.valueOf(goals_conceded);
+                long assist=Long.valueOf(assists);
+                long save=Long.valueOf(saves);
+                long pass=Long.valueOf(passes);
+                long key_p=Long.valueOf(key_pass);
+                long acc_p=Long.valueOf(acc_pass);
+                long tackle=Long.valueOf(tackles);
+                //long tackle_block=Long.valueOf(interception);
+                long tackle_inter=Long.valueOf(interception);
+                long total_duel=Long.valueOf(lost_duels)+Long.valueOf(won_duels);
+                long duel_won=Long.valueOf(won_duels);
+                long dribbles=Long.valueOf(total_dribbles);
+                long succ_dribbles=Long.valueOf(successful_dribbles);
+                //long dribbles_past=Long.valueOf(0);  //dribbles past
+                long was_foul=Long.valueOf(was_fouled);
+                long foul=Long.valueOf(fouls);
+                long yellow_card=Long.valueOf(yc);
+                long red_card=Long.valueOf(rc);
+                long second_yellow=Long.valueOf(second_yc);
+                //long penalty_won=Long.valueOf(0); //penalty won
+                //long penalty_commuted=Long.valueOf(0); //penalty commuted
+                long pen_goal=Long.valueOf(pen_goals);
+                //long pen_missed=Long.valueOf(0);  //penalty_missed
+                long pen_save=Long.valueOf(pen_saves);
+                long substitutes_in=0;
+                long substitutes_out = 0;
+                //long substitutes_bench=0;  //che differenza con quello sopra?
+
+                if(start==1 && min<90){
+                    substitutes_out=1;
+                }
+                if(start==0 && min>0){
+                    substitutes_in=1;
+                    //substitutes_bench=1;
+                }
+
+                add_info(gen_stats, games_appearence, start, min, substitutes_in, substitutes_out, shot, on_tar_shot, goal, goal_con, assist, save, pass, key_p, acc_p, tackle, tackle_inter,
+                        total_duel, duel_won, dribbles, succ_dribbles, was_foul, foul, yellow_card, red_card, second_yellow, pen_goal, pen_save);
+
+
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                String gen_string = null;
+                try {
+                    gen_string = ow.writeValueAsString(gen_stats);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
+                JSONParser parser = new JSONParser();
+                JSONObject gen_json = (JSONObject) parser.parse(gen_string);
+                //System.out.println("nuovo json:"+gen_json);
+
+                CardMongoDriver.update_gen_stats(player_id,gen_json);
+            }
     }
 }
