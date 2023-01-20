@@ -98,6 +98,11 @@ public class see_card {
 	    JSONObject matchday = card.getJSONObject("statistics").getJSONObject("matchday").getJSONObject("matchday" + num_matchday);
 	    
 	    String score = matchday.getJSONObject("score-value").get("score").toString();
+	    if(score.equals("-5000.0")) {
+	    	output = "Matchday not played \n";
+	    	return output;
+	    }
+	    
 	    output = "Matchday score: " + score + "\n";
 	    
 	    JSONObject stats = matchday.getJSONObject("stats");
