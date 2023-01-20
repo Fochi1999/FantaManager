@@ -343,7 +343,7 @@ public class populateDB {
 				String user_password = hash.MD5(user_username);    //the password is the same as the username
 				int user_credits = ThreadLocalRandom.current().nextInt(50, 351);
 				int user_points = ThreadLocalRandom.current().nextInt(0, 2001);    //TODO inizializzare a 0 quando sarà finito calculate matchday/formations
-				String user_email = generate_random_email();
+				String user_email = generate_random_email(user_username);
 				int random1 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
 				String user_region = utilities.regionList[random1];
 				int user_privilege=1;
@@ -430,7 +430,7 @@ public class populateDB {
 		int admin_credits = 0;
 		int admin_points = 0;
 		int admin_privilege=2;
-		String admin_email = generate_random_email();
+		String admin_email = generate_random_email("admin");
 		int random0 = ThreadLocalRandom.current().nextInt(0,utilities.regionList.length);
 		String admin_region = utilities.regionList[random0];
 
@@ -461,7 +461,7 @@ public class populateDB {
 				String user_password = hash.MD5(user_username);    //the password is the same as the username
 				int user_credits = ThreadLocalRandom.current().nextInt(50, 351);
 				int user_points = ThreadLocalRandom.current().nextInt(0, 2001);    //TODO inizializzare a 0 quando sarà finito calculate matchday/formations
-				String user_email = generate_random_email();
+				String user_email = generate_random_email(user_username);
 				int random1 = ThreadLocalRandom.current().nextInt(0, utilities.regionList.length);
 				String user_region = utilities.regionList[random1];
 				int user_privilege=1;
@@ -501,16 +501,9 @@ public class populateDB {
 	}
 	
 	
-	private static String generate_random_email() throws NoSuchAlgorithmException{
-		String emailAddress = "";
-		String alphabet = "abcdefghijklmnopqrstuvwxyz";
-		while (emailAddress.length() < 8) {
-		    int character = (int) (Math.random() * 26);
-		    emailAddress += alphabet.substring(character, character + 1);
-		emailAddress += Integer.valueOf((int) (Math.random() * 99)).toString();
-		emailAddress = hash.MD5(emailAddress);
+	private static String generate_random_email(String s) throws NoSuchAlgorithmException{
+		String emailAddress = s;
 		emailAddress += "@unipi.it";
-		}
 		return emailAddress;
 	}
 
