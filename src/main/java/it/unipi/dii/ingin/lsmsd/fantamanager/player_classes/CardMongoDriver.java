@@ -35,6 +35,7 @@ public class CardMongoDriver {
 
     private static void openConnection(){
         mongoClient= MongoClients.create(global.MONGO_URI);
+
         database = mongoClient.getDatabase(global.DATABASE_NAME);
         collection = database.getCollection(global.CARDS_COLLECTION_NAME);
     }
