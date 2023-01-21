@@ -104,11 +104,7 @@ public class collectionRedisDriver {
 
             public static void delete_card_from_collection(card_collection card){  //dalla  mia, viene sempre eliminato dall apropria, quindi non l' ho generalizzata
 
-
-                    System.out.println("Card deleted: "+ card);
-
-                //if(presence_card(card,global.id_user)) {
-                    apertura_pool();
+            		apertura_pool();
                     //devo aumentare solo la quantity
                     String key = "user_id:" + global.id_user + ":card_id:" + card.card_id + ":quantity";
                     try (Jedis jedis = pool.getResource()) {
@@ -124,14 +120,20 @@ public class collectionRedisDriver {
                             jedis.del("user_id:" + global.id_user + ":card_id:" + card.card_id + ":position");
                         }
                     }
-                //}
+                
                     closePool();
+                    
+                    //remove card
+                    remove_card_from_local(card.card_id);
+                    
+                    System.out.println("Card deleted: "+ card);
+
             }
 
             
             public static void delete_card_from_collection(String card_id){  //Emmanuel
 
-            	//if(presence_card(card,global.id_user)) {
+            	
                 apertura_pool();
                 //devo aumentare solo la quantity
                 String key = "user_id:" + global.id_user + ":card_id:" + card_id + ":quantity";
@@ -148,8 +150,11 @@ public class collectionRedisDriver {
                         jedis.del("user_id:" + global.id_user + ":card_id:" + card_id + ":position");
                     }
                 }
-          //  }
+     
                 closePool();
+                remove_card_from_local(Integer.parseInt(card_id));
+                System.out.println("Card deleted: "+ card_id);
+
         }
             
             public static void add_card_to_collection(card_collection card, String retrieve_user) {
@@ -178,6 +183,7 @@ public class collectionRedisDriver {
                         }
                     }
                     closePool();
+                    add_card_to_local(card.card_id);
                     System.out.println("Card added to "+retrieve_user+":"+card.name);
             }
 
@@ -276,4 +282,31 @@ public class collectionRedisDriver {
             }
             closePool();
         }
+        
+        public static void remove_card_from_local(int input_card_id) {
+        	
+        	int i=0;
+        	while(i<global.owned_cards_list.size()) {
+        		card_collection card = global.owned_cards_list.get(i);
+        		if(card.card_id == input_card_id) {
+        			card.quantity--;
+        		}
+        		i++;
+        	}
+        	
+        }
+        
+        public static void add_card_to_local(int input_card_id) {
+        	
+        	int i=0;
+        	while(i<global.owned_cards_list.size()) {
+        		card_collection card = global.owned_cards_list.get(i);
+        		if(card.card_id == input_card_id) {
+        			card.quantity++;
+        		}
+        		i++;
+        	}
+        	
+        }
+        
 }

@@ -65,7 +65,7 @@ public class CollectionController implements Initializable {
 
         String name_player=player_selected.getText();
 
-        ArrayList<card_collection> coll= collectionRedisDriver.load_collection(global.id_user);
+        ArrayList<card_collection> coll= global.owned_cards_list;
 
         for(int i=0; i<coll.size();i++){
             if(coll.get(i).get_name().equals(name_player)){
@@ -130,7 +130,9 @@ public class CollectionController implements Initializable {
         for(int i=0; i<databaseObject.size();i++){
            
             card_collection player=databaseObject.get(i);
-         
+            
+            if(player.get_quantity() == 0)
+            	continue;
             Map<String, String> record = new HashMap<>();
 
             record.put("Position", player.get_position());

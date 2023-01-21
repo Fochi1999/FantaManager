@@ -288,6 +288,8 @@ public class NewTradeController implements Initializable{
 		}
 		
 		for(card_collection card:cards_owned){
+			if(card.get_quantity() == 0)
+				continue;
 						//da qui ogni player ha le sue quattro informazioni e poi usarle agile
 			String card_output = card.get_name() + " <> Position: " + card.get_position() +" <> Team: " 
 					+ card.get_team() + " <> Quantity: " + card.get_quantity() + " <> ID: " + card.get_id();
