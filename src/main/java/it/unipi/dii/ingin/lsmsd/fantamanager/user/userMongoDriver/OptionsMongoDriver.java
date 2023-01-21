@@ -139,7 +139,7 @@ public class OptionsMongoDriver {
 			//OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits-new_credits));
 			edit_attribute(username, "credits", Integer.toString(user_credits-new_credits));
 		}
-		System.out.println("Credits updated for: " + username);
+		//System.out.println("Credits updated for: " + username);
 	}
 
 	/*public static void update_user_collection(Boolean add, String username, int new_cards) throws NoSuchAlgorithmException{

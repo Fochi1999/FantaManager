@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -33,6 +34,8 @@ public class retrieve_matchday {
 
         JSONParser jsonParser = new JSONParser();
 
+        AtomicInteger i= new AtomicInteger();
+
         try (FileReader reader = new FileReader("json_stats/matchday_stats/kickest_stats.json")) {   //C:\Users\matte\OneDrive\Desktop\LargeScale\jsonEdo\json_stats\matchday_stats\kickest_stats.json  //C:\Users\matte\DataMiningJupyter\fantacalcio_LSKickest_completo_portiere.json
             //Read JSON file
             Object obj = jsonParser.parse(reader);
@@ -41,7 +44,7 @@ public class retrieve_matchday {
             //System.out.println(playerList);
 
             //Iterate over player array
-            playerList.forEach(player -> parsePlayerObject((JSONObject) player, matchday, coll));
+            playerList.forEach(player -> parsePlayerObject((JSONObject) player, matchday, coll, i.getAndIncrement()));
 
         } //catch (FileNotFoundException e) {
         //e.printStackTrace();
@@ -51,9 +54,10 @@ public class retrieve_matchday {
         } catch (org.json.simple.parser.ParseException e) {
             e.printStackTrace();
         }
+        System.out.println("Retrieved all the matchday stats");
     }
 
-    private static void parsePlayerObject(JSONObject player, Integer matchday, MongoCollection<Document> coll) {
+    private static void parsePlayerObject(JSONObject player, Integer matchday, MongoCollection<Document> coll,int num) {
 
         //JSONObject playerObj = (JSONObject) player.get("Player");
         String name = (String) player.get("Player");
@@ -107,8 +111,9 @@ public class retrieve_matchday {
         Bson filter= Filters.and(eq("fullname", name),eq("team", team));  //AND per risolvere problema L.Pellegrini
         Bson update = Updates.set("statistics.matchday.matchday" + matchday+".stats", matchday_ins);
         UpdateOptions options = new UpdateOptions().upsert(true);
-        System.out.println(coll.updateOne(filter, update, options));
-
+        //System.out.println(coll.updateOne(filter, update, options));
+        coll.updateOne(filter, update, options);
+        System.out.println("Retrieved card"+num+"/532");
     }
 
 
@@ -190,8 +195,8 @@ public class retrieve_matchday {
                 String[] words2 = player.split(" ");
                 if(words2.length>1) {
                     if (name.equals(words2[0])) {
-                        System.out.println(words2[0]);
-                        System.out.println(words2[1]);
+                        //System.out.println(words2[0]);
+                        //System.out.println(words2[1]);
                         player = words2[0];
                     } else{
                         //System.out.println(words2[1]);

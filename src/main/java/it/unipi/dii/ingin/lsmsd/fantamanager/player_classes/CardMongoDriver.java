@@ -211,6 +211,7 @@ public class CardMongoDriver {
         while(resultDoc.hasNext()) {
         	result.add(resultDoc.next());
         }
+        //la close connection viene fatta dopo il return, nella funzione che chiama questa
         return result;
     }
 
@@ -320,7 +321,8 @@ public class CardMongoDriver {
         Bson filter= Filters.eq("player_id", player_id);
         Bson update = Updates.set("general_statistics",gen_json);
         UpdateOptions options = new UpdateOptions().upsert(true);
-        System.out.println(collection.updateOne(filter, update, options));
+        //System.out.println(collection.updateOne(filter, update, options));
+        collection.updateOne(filter, update, options);
 
         closeConnection();
     }
