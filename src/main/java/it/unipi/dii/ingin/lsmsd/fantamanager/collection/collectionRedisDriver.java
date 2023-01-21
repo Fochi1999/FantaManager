@@ -183,7 +183,7 @@ public class collectionRedisDriver {
                         }
                     }
                     closePool();
-                    add_card_to_local(card.card_id);
+                    add_card_to_local(card);
                     System.out.println("Card added to "+retrieve_user+":"+card.name);
             }
 
@@ -290,23 +290,29 @@ public class collectionRedisDriver {
         		card_collection card = global.owned_cards_list.get(i);
         		if(card.card_id == input_card_id) {
         			card.quantity--;
+        			return;
         		}
         		i++;
         	}
         	
         }
         
-        public static void add_card_to_local(int input_card_id) {
+        public static void add_card_to_local(card_collection input_card) {
         	
         	int i=0;
         	while(i<global.owned_cards_list.size()) {
         		card_collection card = global.owned_cards_list.get(i);
-        		if(card.card_id == input_card_id) {
+        		if(card.card_id == input_card.card_id) {
         			card.quantity++;
+        			return;
         		}
         		i++;
         	}
         	
+        	//if the end of the list is reached this means that the card is not in the list; it is added at the end of the list
+        	card_collection new_card = input_card;
+        	new_card.set_quantity(1);
+        	global.owned_cards_list.add(new_card);        	
         }
         
 }
