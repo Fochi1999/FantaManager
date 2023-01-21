@@ -84,11 +84,11 @@ public class calculate_matchday {
                                 card.put("vote", null);
                             } else {
                                 //altrimenti significa che nemmeno quelli della panchina erano validi o erano gia presi in altre posizioni, quindi il voto resta zero per quello che era titolare e non ha avuto rimpiazzo dalla panchina
-                                System.out.println(card.get("name") + " non sara rimpiazzato");
+                                //System.out.println(card.get("name") + " non sara rimpiazzato");
                             }
                         } else {
 
-                            System.out.println("titolare" + card.get("name"));
+                            //System.out.println("titolare" + card.get("name"));
                             Bson filter = Filters.and(eq("username", username));
                             Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", score);
                             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -107,12 +107,12 @@ public class calculate_matchday {
                     System.out.println(coll.updateOne(filter, update1, options));
 
                     //poi assegniamo il punteggio ottenuto (arrotondato per difetto) come crediti all' utente
-                    System.out.println("punteggio:"+(int) Math.floor(total_score));
+                    //System.out.println("punteggio:"+(int) Math.floor(total_score));
                     OptionsMongoDriver.update_user_credits(true,username, (int) Math.floor(total_score));
                 }
                 else{
                     //l-utente non ha inserito la formazione
-                    System.out.println("formazione non inserita");
+                    //System.out.println("formazione non inserita");
 
                     JSONObject formation_null=new JSONObject();
                     formation_null.put("valid",false);
