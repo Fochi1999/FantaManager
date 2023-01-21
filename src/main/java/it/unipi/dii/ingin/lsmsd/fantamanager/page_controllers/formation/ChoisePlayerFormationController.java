@@ -42,6 +42,8 @@ public class ChoisePlayerFormationController implements Initializable {
         squad.setCellValueFactory(new PropertyValueFactory<player_formation, String>("team"));
         player.setCellValueFactory(new PropertyValueFactory<player_formation,String>("name"));
         for(int i=0;i<p.size();i++){
+        	if(p.get(i).get_quantity() == 0)
+        		continue;
             table_collection.getItems().add(new player_formation(p.get(i)));
         }
     }
