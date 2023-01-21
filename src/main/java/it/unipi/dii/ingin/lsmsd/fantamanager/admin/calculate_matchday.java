@@ -39,6 +39,8 @@ public class calculate_matchday {
         // Access a Collection
         MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
 
+        int j=0;
+
         try(MongoCursor<Document> cursor=coll.find().projection(fields(include("formations"), include("username"))).iterator()){
             while(cursor.hasNext()) {
             //for(int j=0;j<10;j++){
@@ -78,7 +80,8 @@ public class calculate_matchday {
                                 Bson filter = Filters.and(eq("username", username));
                                 Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", null);
                                 UpdateOptions options = new UpdateOptions().upsert(true);
-                                System.out.println(coll.updateOne(filter, update1, options));
+                                //System.out.println(coll.updateOne(filter, update1, options));
+                                coll.updateOne(filter, update1, options);
 
                                 //setto voto anche nella variabile cards
                                 card.put("vote", null);
@@ -92,7 +95,8 @@ public class calculate_matchday {
                             Bson filter = Filters.and(eq("username", username));
                             Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", score);
                             UpdateOptions options = new UpdateOptions().upsert(true);
-                            System.out.println(coll.updateOne(filter, update1, options));
+                            //System.out.println(coll.updateOne(filter, update1, options));
+                            coll.updateOne(filter, update1, options);
 
                             //setto voto anche nella variabile cards
                             card.put("vote", score);
@@ -104,7 +108,8 @@ public class calculate_matchday {
                     Bson filter = Filters.and(eq("username", username));
                     Bson update1 = Updates.set("formations." + matchday + ".tot", total_score);
                     UpdateOptions options = new UpdateOptions().upsert(true);
-                    System.out.println(coll.updateOne(filter, update1, options));
+                    //System.out.println(coll.updateOne(filter, update1, options));
+                    coll.updateOne(filter, update1, options);
 
                     //poi assegniamo il punteggio ottenuto (arrotondato per difetto) come crediti all' utente
                     //System.out.println("punteggio:"+(int) Math.floor(total_score));
@@ -122,16 +127,18 @@ public class calculate_matchday {
                     Bson filter = Filters.and(eq("username", username));
                     Bson update1 = Updates.set("formations." + matchday,formation_null);
                     UpdateOptions options = new UpdateOptions().upsert(true);
-                    System.out.println(coll.updateOne(filter, update1, options));
+                    //System.out.println(coll.updateOne(filter, update1, options));
+                    coll.updateOne(filter, update1, options);
                 }
+                System.out.println("Calculated user's team score: "+j++);
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-
-
+        mongoClient2.close();
+        System.out.println("User's teams score calculated");
     }
 
     private static Double take_card_from_bench(int i, Map<Long, Double> player_score, JSONObject cards, JSONArray modulo, String username, int matchday) {
@@ -223,12 +230,13 @@ public class calculate_matchday {
         Bson filter = Filters.and(eq("username", username));
         Bson update1 = Updates.set("formations." + matchday + ".players."+place_of_bench+".vote",score);
         UpdateOptions options = new UpdateOptions().upsert(true);
-        System.out.println(coll.updateOne(filter, update1, options));
+        //System.out.println(coll.updateOne(filter, update1, options));
+        coll.updateOne(filter, update1, options);
 
         //setto voto anche nella variabile cards
         card.put("vote",score);
 
-
+        mongoClient2.close();
         return score;
     }
 
@@ -383,7 +391,8 @@ public class calculate_matchday {
                                                                                         //della card e aggiunto quello nuovo, per non sommare piu volte il valore della partita
                 Bson update=Updates.combine(update1,update2);
                 UpdateOptions options = new UpdateOptions().upsert(true);
-                System.out.println(coll.updateOne(filter, update, options));
+                //System.out.println(coll.updateOne(filter, update, options));
+                coll.updateOne(filter, update, options);
 
                 player_score.put(player_id,Double.valueOf(score));
 
@@ -394,12 +403,14 @@ public class calculate_matchday {
                     //match already calculated
                     general_statistics.handle_already_calculated_match(player_id,playermatch);
                 }
+                System.out.println("Calculated player score:"+player_id+"/531");
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
         System.out.println("calculate matchday completed");
         //formation.calculate_team_score(player_score);
+        mongoClient2.close();
         calulate_user_team_score(matchday,player_score);   //per calcolo score di un team di un user
 
         utilities.update_matchday(matchday); //da qui cambia vettore e anche la variabile della prossima giornata su redis

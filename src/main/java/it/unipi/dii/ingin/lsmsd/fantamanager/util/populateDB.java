@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
-import it.unipi.dii.ingin.lsmsd.fantamanager.collection.collectionRedisDriver;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class;
@@ -685,31 +684,119 @@ public class populateDB {
 	}
 	public static void create_random_formations(int matchday) throws ParseException {
 		ArrayList<Document> user_list = get_users_collection_mongoDB();
+		System.out.println("users retrieved..");
+		ArrayList<Document> cards_list = get_cards_collection_mongoDB();
+		System.out.println("cards retrieved..");
 		for(int i=0;i<user_list.size();i++){
-			ArrayList<card_collection>Cards= collectionRedisDriver.load_collection(user_list.get(i).get("_id").toString());
-			/*
-			if(user_list.get(i).get("username").equals("admin")){
-				continue;
-			}*/
-			
-			/*HashMap<Integer,formation> formations=new HashMap<>();
-			String formationJson=user_list.get(i).get("formations").toString();
-			try {
-				ObjectMapper mapper = new ObjectMapper();
-				TypeReference<HashMap<Integer, formation>> typeRef = new TypeReference<HashMap<Integer, formation>>() {};
-				Map<Integer,formation> map = mapper.readValue(formationJson, typeRef);
-				formations= new HashMap<Integer, formation>(map);
-				System.out.println(formations.toString());
-			} catch(Exception e){
-				//e.printStackTrace();
-				formations=new HashMap<>();
-				System.out.println("formazione non trovata");
-			}*/
+			//ArrayList<card_collection>Cards= collectionRedisDriver.load_collection(user_list.get(i).get("_id").toString());
+			ArrayList<card_collection>Cards=create_random_team(cards_list);
 			formation f=formation.getRandomFormation(Cards);
 			//formations.put(matchday,f);
 			formationMongoDriver.insert_formation(user_list.get(i).getString("username"),f,matchday);
 			System.out.println("Formation created: "+(i+1)+"/"+user_list.size());
 		}
+	}
+
+	private static ArrayList<card_collection> create_random_team(ArrayList<Document> cards_list) {
+
+		ArrayList<card_collection> random_team=new ArrayList<>();
+
+
+				int random_total_cards = ThreadLocalRandom.current().nextInt(30, 40);	//user's cards collection size
+
+				for(int j=0; j<5; j++) {	//at least 5 attacker
+
+					int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+					String card_position = cards_list.get(random_card).getString("position");
+					if(!card_position.equals("Attacker")){
+						j--;
+						continue;
+					}
+
+					int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);
+					String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+
+					String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+					String card_team = cards_list.get(random_card).getString("team");			//card team
+
+					card_collection card=new card_collection(random_card,card_name,rndm_quantity,card_team,card_position);
+					random_team.add(card);
+				}
+				random_total_cards -= 5;
+
+				for(int j=0; j<4; j++) {	//at least 4 goalkeepers
+
+					int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+					String card_position = cards_list.get(random_card).getString("position");
+					if(!card_position.equals("Goalkeeper")){
+						j--;
+						continue;
+					}
+
+					int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);
+					String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+
+					String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+					String card_team = cards_list.get(random_card).getString("team");			//card team
+
+					card_collection card=new card_collection(random_card,card_name,rndm_quantity,card_team,card_position);
+					random_team.add(card);
+				}
+				random_total_cards -= 4;
+
+				for(int j=0; j<7; j++) {	//at least 7 midfielders
+
+					int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+					String card_position = cards_list.get(random_card).getString("position");
+					if(!card_position.equals("Midfielder")){
+						j--;
+						continue;
+					}
+
+					int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);
+					String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+
+					String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+					String card_team = cards_list.get(random_card).getString("team");			//card team
+
+					card_collection card=new card_collection(random_card,card_name,rndm_quantity,card_team,card_position);
+					random_team.add(card);
+				}
+				random_total_cards -= 7;
+
+				for(int j=0; j<7; j++) {	//at least 7 defenders
+
+					int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+					String card_position = cards_list.get(random_card).getString("position");
+					if(!card_position.equals("Defender")){
+						j--;
+						continue;
+					}
+
+					int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);
+					String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+
+					String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+					String card_team = cards_list.get(random_card).getString("team");			//card team
+
+					card_collection card=new card_collection(random_card,card_name,rndm_quantity,card_team,card_position);
+					random_team.add(card);
+				}
+				random_total_cards -= 7;
+
+				for(int j=0; j<random_total_cards; j++) {
+
+					int random_card = ThreadLocalRandom.current().nextInt(0, cards_list.size()-1);	//card id
+					int rndm_quantity = ThreadLocalRandom.current().nextInt(1, 4);
+					String random_quantity = Integer.toString(rndm_quantity);	//card quantity
+					String card_position = cards_list.get(random_card).getString("position");		//card position
+					String card_name = cards_list.get(random_card).getString("fullname");			//card fullname
+					String card_team = cards_list.get(random_card).getString("team");			//card team
+
+					card_collection card=new card_collection(random_card,card_name,rndm_quantity,card_team,card_position);
+					random_team.add(card);
+				}
+				return random_team;
 	}
 
 	private static String convert_team(String team) {
