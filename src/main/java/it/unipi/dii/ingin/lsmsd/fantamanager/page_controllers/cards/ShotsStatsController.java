@@ -45,7 +45,6 @@ public class ShotsStatsController implements Initializable{
 		//buy_card.setDisable(true);	//disabling the buy button
 		
 		search_card();
-		//TODO implementare next_matchday o gestire eccezione shots_info vuoto
 
 		Document stats=(Document)card_doc.get("statistics");
 
