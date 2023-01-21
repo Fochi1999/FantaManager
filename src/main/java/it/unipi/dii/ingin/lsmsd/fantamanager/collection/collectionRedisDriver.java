@@ -34,11 +34,41 @@ public class collectionRedisDriver {
 
                 ArrayList<card_collection> cards=new ArrayList<>();
 
-                //String key_load = crea_chiave_load(user_id);
                 String key_load="user_id:"+user_id+":card_id:";
                 
             	apertura_pool();
-                try (Jedis jedis = pool.getResource()) {
+            	
+            	
+            	try(Jedis jedis = pool.getResource()){
+            		int i = 0;
+                	while (i<=global.max_card_id) {	
+                        String key_name = key_load+i+":name";
+                        Boolean exists = jedis.exists(key_name);	//if 'name' key exists, other keys exists too
+                        
+                        if (exists){
+                            String value_name = jedis.get(key_name);
+                        	
+                        	String key_pos = key_load+i+":position";
+                            String value_pos = jedis.get(key_pos);
+                            
+                            
+                            String key_qnt = key_load+i+":quantity";
+                            String value_qnt = jedis.get(key_qnt);
+                            
+                            String key_team = key_load+i+":team";
+                            String value_team = jedis.get(key_team);
+                            
+                        	card_collection card=new card_collection(i,value_name,Integer.parseInt(value_qnt),value_team,value_pos);
+                            cards.add(card);
+                        }
+                        System.out.println("Reading card: "+i+"/"+global.max_card_id); 
+                        i++;
+                    }
+                }
+                   	
+            	/*
+            	//old version of load_collection
+                try (Jedis jedis = pool.getResource()) { 
                 	
                     int i = 0;
                 	while (i<=global.max_card_id) {	
@@ -62,31 +92,11 @@ public class collectionRedisDriver {
                         System.out.println("Reading card: "+i+"/"+global.max_card_id); 
                         i++;
                     }
-                }
+                }*/
                 closePool();
                 return cards;
             }
             
-/* 
-            private static void retrieve_key_info(String key, card_collection card,String value) { UNUSED
-
-                String[] words=key.split(":");
-                String attribute=words[4];
-
-                //System.out.println(player);
-
-                card.set_key_info(attribute,value);
-
-                //System.out.println(player);
-
-            }
-
-            private static int retrieve_id_card(String key) { UNUSED
-
-                String[] words=key.split(":");
-                return Integer.parseInt(words[3]);
-            }
-*/
             
             public static void closePool(){
                 pool.close();

@@ -82,10 +82,10 @@ public class login_registrationController implements Initializable{
         if(login.login(loginUsernameField.getText(), hashPass)) {
         	//open a new window (prevents uncorrect positioning of the window)
         	Stage stage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("home_page.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("loading_screen.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setResizable(false);
-            stage.setTitle("Welcome to Fantamanager!");
+            stage.setTitle("Loading...");
             stage.setScene(scene);
             stage.show();
             
@@ -140,10 +140,10 @@ public class login_registrationController implements Initializable{
         String hashPass = hash.MD5(loginPasswordFieldReg.getText());
         if(login.register(loginUsernameFieldReg.getText(),hashPass, email, region)) {
             Stage stage = (Stage) root.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("home_page.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("loading_screen.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setResizable(false);
-            stage.setTitle("Welcome to Fantamanager!");
+            stage.setTitle("Loading...");
             stage.setScene(scene);
             stage.show();
         }
