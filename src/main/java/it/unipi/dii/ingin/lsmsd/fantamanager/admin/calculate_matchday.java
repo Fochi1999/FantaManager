@@ -72,7 +72,7 @@ public class calculate_matchday {
                         //inserisce il voto di ogni giocatore in formation
                         if (score == -5000) {
                             //se invece non gioca, l' inserimento viene fatto in take_card_from_bench
-                            score = take_card_from_bench(i, player_score, cards, modulo, username, matchday);
+                            score = take_card_from_bench(i, player_score, cards, modulo, username, matchday,coll);
 
                             //e in quello che non ha giocato ma era schierato titolare metto null
                             if (score != 0) {
@@ -141,15 +141,15 @@ public class calculate_matchday {
         System.out.println("User's teams score calculated");
     }
 
-    private static Double take_card_from_bench(int i, Map<Long, Double> player_score, JSONObject cards, JSONArray modulo, String username, int matchday) {
+    private static Double take_card_from_bench(int i, Map<Long, Double> player_score, JSONObject cards, JSONArray modulo, String username, int matchday, MongoCollection<Document> coll) {
 
-        MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
+        //MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
 
         // Access a Database
-        MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
+        //MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
 
         // Access a Collection
-        MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
+        //MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
 
         Double score = Double.valueOf(0);
         int place_of_bench=0;
@@ -236,7 +236,7 @@ public class calculate_matchday {
         //setto voto anche nella variabile cards
         card.put("vote",score);
 
-        mongoClient2.close();
+        //mongoClient2.close();
         return score;
     }
 
