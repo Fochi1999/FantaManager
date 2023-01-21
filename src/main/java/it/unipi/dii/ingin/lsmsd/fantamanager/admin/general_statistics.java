@@ -225,7 +225,7 @@ public class general_statistics {
             TypeReference<general_statistics> typeRef = new TypeReference<general_statistics>() {};
             old_gen_stats = mapper.readValue(gen_stats.toString(), typeRef);
         } catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("gen_stats non trovate");
         }
 

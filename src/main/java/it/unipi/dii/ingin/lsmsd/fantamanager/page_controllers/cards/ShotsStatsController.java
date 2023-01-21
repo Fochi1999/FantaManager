@@ -45,8 +45,6 @@ public class ShotsStatsController implements Initializable{
 		//buy_card.setDisable(true);	//disabling the buy button
 		
 		search_card();
-		//TODO implementare next_matchday o gestire eccezione shots_info vuoto
-		//TODO fare in modo che il pulsante 'back' ritorni alla pagina della carta e non su shop (o aggiungere un'altro pulsante che permetta questa azione)
 
 		Document stats=(Document)card_doc.get("statistics");
 
@@ -107,7 +105,7 @@ public class ShotsStatsController implements Initializable{
     protected void click_back() throws IOException {
 		System.out.println("Returning back to the shop page...");
         Stage stage = (Stage)root.getScene().getWindow();
-        util_controller.go_to_shop(stage);   
+        util_controller.go_to_card_page(stage);
     }
 	
 	@FXML
