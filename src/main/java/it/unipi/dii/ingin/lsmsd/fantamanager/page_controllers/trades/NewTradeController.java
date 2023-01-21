@@ -91,6 +91,7 @@ public class NewTradeController implements Initializable{
 		card_to_checkbox1.setDisable(true);
 		card_to_checkbox2.setDisable(true);
 		card_to_checkbox3.setDisable(true);
+		search_card.setDisable(true);
 		search.setDisable(true);
 
 		
@@ -528,6 +529,8 @@ public class NewTradeController implements Initializable{
 			want.setDisable(false);
 			search.setDisable(true);
 			selected_card.setText("");
+			search_card.setText("");
+			search_card.setDisable(true);
 
 			open_cards_collection();
 	}
@@ -564,6 +567,7 @@ public class NewTradeController implements Initializable{
 			want.setDisable(true);
 			search.setDisable(false);
 			selected_card.setText("");
+			search_card.setDisable(false);
 			
 			show_all_cards();
 	}
@@ -574,10 +578,14 @@ public class NewTradeController implements Initializable{
 		ObservableList<String> list = FXCollections.observableArrayList();
 		list.removeAll(list);	//clearing the list
 
-		if(all_cards_list == null) {	//retrieve cards only one time
+		if(!search_card.getText().equals("")) {
 			all_cards_list = CardMongoDriver.retrieve_cards(search_card.getText());
 			System.out.println("All cards list retrieved from DB");
 		}
+		else {
+			all_cards_list = global.full_card_list;
+		}
+		
 		int i=0;
 		while( i < all_cards_list.size()) {
 			Document card = all_cards_list.get(i);

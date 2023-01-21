@@ -186,11 +186,14 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <TextField fx:id="search_card" layoutX="372.0" layoutY="426.0" prefHeight="42.0" prefWidth="153.0" promptText="Search for a card..." style="-fx-border-color: BLUE;">
+      <TextField fx:id="search_card" layoutX="401.0" layoutY="429.0" prefHeight="37.0" prefWidth="149.0" promptText="Search for a card...">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font size="14.0" />
          </font>
       </TextField>
-      <Button fx:id="search" layoutX="540.0" layoutY="428.0" mnemonicParsing="false" onMouseClicked="#show_all_cards" prefHeight="37.0" prefWidth="76.0" text="Search" />
+      <Button fx:id="search" layoutX="550.0" layoutY="429.0" mnemonicParsing="false" onMouseClicked="#show_all_cards" prefHeight="37.0" prefWidth="76.0" text="Search">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
    </children>
 </AnchorPane>

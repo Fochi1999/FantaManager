@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 
 public class HomeController implements Initializable {
 	
-	
     @FXML
     private Text welcomeText;
     @FXML
