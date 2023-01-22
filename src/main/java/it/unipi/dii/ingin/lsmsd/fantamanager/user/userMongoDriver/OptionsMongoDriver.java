@@ -116,7 +116,7 @@ public class OptionsMongoDriver {
 	public static void update_user_credits(Boolean add, String username, int new_credits) throws NoSuchAlgorithmException{
 
 		int user_credits=0;
-		//System.out.println("credito prec:"+user_credits);
+
 		if(add){
 			if(global.user.getUsername().equals(username)) {
 				user_credits = global.user.getCredits();
@@ -125,7 +125,7 @@ public class OptionsMongoDriver {
 			else{
 					user_credits=Integer.parseInt(UserMongoDriver.retrieve_user_attribute(username,"credits"));
 			}
-			//OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits+new_credits));
+
 			edit_attribute(username, "credits", Integer.toString(user_credits+new_credits));
 		}
 		else {
@@ -136,28 +136,11 @@ public class OptionsMongoDriver {
 			else{
 				user_credits=Integer.parseInt(UserMongoDriver.retrieve_user_attribute(username,"credits"));
 			}
-			//OptionsMongoDriver.edit_attribute(username, "credits", Integer.toString(user_credits-new_credits));
+
 			edit_attribute(username, "credits", Integer.toString(user_credits-new_credits));
 		}
 		//System.out.println("Credits updated for: " + username);
 	}
 
-	/*public static void update_user_collection(Boolean add, String username, int new_cards) throws NoSuchAlgorithmException{
-
-		int user_collection = global.user.getCollection();
-		if(add){
-			if(global.user.getUsername().equals(username)) {
-				global.user.setCollection(user_collection + new_cards);
-			}
-			OptionsMongoDriver.edit_attribute(username, "collection", Integer.toString(user_collection + new_cards));
-		}
-		else {
-			if(global.user.getUsername().equals(username)) {
-				global.user.setCollection(user_collection - new_cards);
-			}
-			OptionsMongoDriver.edit_attribute(username, "collection", Integer.toString(user_collection - new_cards));
-		}
-		System.out.println("Collection updated for: " + username);
-	}*/
 	
 }
