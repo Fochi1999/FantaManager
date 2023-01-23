@@ -118,8 +118,8 @@ public class calculate_matchday {
                     OptionsMongoDriver.update_user_credits(true,username, (int) Math.floor(total_score));
                     OptionsMongoDriver.update_user_points(username,(int) Math.floor(old_tot),(int) Math.floor(total_score));
                 }
-                else{
-                    //l-utente non ha inserito la formazione
+                /*else{
+                    //l-utente non ha inserito la formazione, quindi non dovrebbe far niente, questa cosa sotto serviva prima di decidere di mettere tutti i documents empty
                     //System.out.println("formazione non inserita");
 
                     JSONObject formation_null=new JSONObject();
@@ -132,7 +132,7 @@ public class calculate_matchday {
                     UpdateOptions options = new UpdateOptions().upsert(true);
                     //System.out.println(coll.updateOne(filter, update1, options));
                     coll.updateOne(filter, update1, options);
-                }
+                }*/
                 System.out.println("Calculated user's team score: "+j++);
             }
         } catch (ParseException e) {
