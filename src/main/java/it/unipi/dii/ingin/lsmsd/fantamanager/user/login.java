@@ -2,6 +2,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.mongodb.ReadPreference;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -16,8 +17,7 @@ public class login {
         
     	MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
         MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME);
-        
+        MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primaryPreferred());
         Document user_doc = usersCollection.find(Filters.and(Filters.eq("username", nick), Filters.eq("password", password))).first();
 
         if(user_doc == null) {
@@ -42,7 +42,7 @@ public class login {
     	
         MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
         MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME);
+        MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primaryPreferred());
         
         Document user = usersCollection.find(Filters.eq("username", Nick)).first();
         if (user != null) {

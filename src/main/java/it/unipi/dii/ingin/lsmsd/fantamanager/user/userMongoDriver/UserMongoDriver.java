@@ -1,5 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver;
 
+import com.mongodb.ReadPreference;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Updates;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
@@ -15,7 +16,7 @@ public class UserMongoDriver {
     public static void openConnection(){
         mongoClient= MongoClients.create(global.MONGO_URI);
         database = mongoClient.getDatabase(global.DATABASE_NAME);
-        collection = database.getCollection(global.USERS_COLLECTION_NAME);
+        collection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primaryPreferred());
     }
 
     public static void closeConnection(){

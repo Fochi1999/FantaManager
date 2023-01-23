@@ -1,5 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.player_classes;
 
+import com.mongodb.ReadPreference;
 import org.bson.Document;
 import java.util.Iterator;
 
@@ -23,7 +24,7 @@ public class see_card {
 		Document card_doc;
 		MongoClient myClient = MongoClients.create(global.MONGO_URI);
 		MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-		MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME);
+		MongoCollection<Document> collection = database.getCollection(global.CARDS_COLLECTION_NAME).withReadPreference(ReadPreference.nearest());
 		
 		try {
 			card_doc = collection.find(Filters.eq("_id", card_id)).first();

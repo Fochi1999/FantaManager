@@ -1,5 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.trades;
 
+import com.mongodb.ReadPreference;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Filters;
@@ -34,7 +35,7 @@ public class TradeMongoDriver {
     private static void openConnection(){
         mongoClient= MongoClients.create(global.MONGO_URI);
         database = mongoClient.getDatabase(global.DATABASE_NAME);
-        collection = database.getCollection(global.TRADES_COLLECTION_NAME);
+        collection = database.getCollection(global.TRADES_COLLECTION_NAME).withReadPreference(ReadPreference.primary());
     }
 
     public static void closeConnection(){

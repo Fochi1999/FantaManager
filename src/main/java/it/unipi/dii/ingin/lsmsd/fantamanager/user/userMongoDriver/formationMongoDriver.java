@@ -3,6 +3,7 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.mongodb.ReadPreference;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -25,7 +26,7 @@ public class formationMongoDriver {
     public static boolean change_formation() {
         MongoClient myClient = MongoClients.create(global.MONGO_URI);
         MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME);
+        MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primaryPreferred());
         Bson user = Filters.eq("username", global.user.username);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;

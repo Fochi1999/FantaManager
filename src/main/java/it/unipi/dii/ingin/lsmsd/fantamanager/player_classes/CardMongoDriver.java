@@ -1,5 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.player_classes;
 
+import com.mongodb.ReadPreference;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Filters;
@@ -37,7 +38,7 @@ public class CardMongoDriver {
         mongoClient= MongoClients.create(global.MONGO_URI);
 
         database = mongoClient.getDatabase(global.DATABASE_NAME);
-        collection = database.getCollection(global.CARDS_COLLECTION_NAME);
+        collection = database.getCollection(global.CARDS_COLLECTION_NAME).withReadPreference(ReadPreference.nearest());
     }
 
     public static void closeConnection(){
