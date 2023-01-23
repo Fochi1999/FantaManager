@@ -49,7 +49,8 @@ public class FormationController implements Initializable {
     private HBox box_def;
     @FXML
     private HBox box_por;
-
+    @FXML
+    private Text text_matchday;
 
 
     @FXML
@@ -178,7 +179,7 @@ public class FormationController implements Initializable {
         }
 
         players= global.owned_cards_list;
-
+        text_matchday.setText("Matchday: "+global.next_matchday);
     }
     @FXML
     protected synchronized void click_deploy_player(ActionEvent event) throws IOException {
