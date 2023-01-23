@@ -3,10 +3,6 @@ package it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
@@ -17,8 +13,6 @@ import java.util.regex.Matcher;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.hash;
 import it.unipi.dii.ingin.lsmsd.fantamanager.trades.TradeMongoDriver;
-
-import it.unipi.dii.ingin.lsmsd.fantamanager.trades.Trade;
 
 public class OptionsMongoDriver {
 	
@@ -142,5 +136,19 @@ public class OptionsMongoDriver {
 		//System.out.println("Credits updated for: " + username);
 	}
 
-	
+
+	public static void update_user_points(String username, int old_tot, int new_points) throws NoSuchAlgorithmException {
+
+		int user_points;
+		if(global.user.getUsername().equals(username)) {
+			user_points = global.user.getPoints();
+			global.user.setCredits(user_points + new_points);
+		}
+		else{
+			user_points=Integer.parseInt(UserMongoDriver.retrieve_user_attribute(username,"points"));
+		}
+
+		edit_attribute(username, "points", Integer.toString(user_points+new_points-old_tot));  //prima leggo punti che ci sono, se sono 0, qui aggiungo solo il totale nuovo fatto in quella partita, altrimenti
+																											// se sto calcolando una partita già calcolata, il punteggio vecchio lo toglie e aggiunge quello nuovo, altrimenti si sommerebbero due volte
+	}
 }

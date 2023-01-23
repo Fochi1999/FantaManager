@@ -60,6 +60,8 @@ public class calculate_matchday {
                     JSONArray modulo = (JSONArray) match.get("module");
 
                     JSONObject cards = (JSONObject) match.get("players");
+
+                    Double old_tot=(Double) match.get("tot");
                     //System.out.println(cards);
                     Double total_score = Double.valueOf(0);
 
@@ -114,6 +116,7 @@ public class calculate_matchday {
                     //poi assegniamo il punteggio ottenuto (arrotondato per difetto) come crediti all' utente
                     //System.out.println("punteggio:"+(int) Math.floor(total_score));
                     OptionsMongoDriver.update_user_credits(true,username, (int) Math.floor(total_score));
+                    OptionsMongoDriver.update_user_points(username,(int) Math.floor(old_tot),(int) Math.floor(total_score));
                 }
                 else{
                     //l-utente non ha inserito la formazione
