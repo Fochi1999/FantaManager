@@ -126,7 +126,7 @@ public class calculate_matchday {
                     formation_null.put("valid",false);
                     formation_null.put("players",new JSONObject());
                     formation_null.put("tot",0.0);
-                    formation_null.put("modulo",new ArrayList<>());
+                    formation_null.put("module",new ArrayList<>());
                     Bson filter = Filters.and(eq("username", username));
                     Bson update1 = Updates.set("formations." + matchday,formation_null);
                     UpdateOptions options = new UpdateOptions().upsert(true);

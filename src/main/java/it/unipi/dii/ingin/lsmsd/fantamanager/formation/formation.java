@@ -18,7 +18,7 @@ public class formation {
     public HashMap<Integer,player_formation> players;
     // 0: portiere, poi 11 giocatori a seconda del modulo es 3-4-3, 1-3: D, 4-7:M, 8-10: A, panchina, 11-12:P, 13-14:D,15-16:M,17-18:A
     public int[] module;
-    public int tot;
+    public double tot;
     public boolean valid;
     public formation(int[] m,ArrayList<player_formation> p){
         module =new int[3];
@@ -36,7 +36,7 @@ public class formation {
             module[i]=m[i];
         }
         players=new HashMap<>();
-        tot=0;
+        tot=Double.valueOf(0);
     }
     public formation(){
         players=new HashMap<>();
@@ -46,7 +46,7 @@ public class formation {
         }
 
         module =new int[4];
-        tot=0;
+        tot=Double.valueOf(0);
     }
     public static void choose_player(Stage stage, ArrayList<card_collection> p, String roles) throws IOException {
 
