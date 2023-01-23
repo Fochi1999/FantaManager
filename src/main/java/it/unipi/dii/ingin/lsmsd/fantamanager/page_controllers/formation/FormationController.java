@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -50,7 +51,7 @@ public class FormationController implements Initializable {
     @FXML
     private HBox box_por;
     @FXML
-    private Text text_matchday;
+    private Label text_matchday;
 
 
     @FXML
