@@ -14,9 +14,14 @@
             <TableColumn fx:id="squad" editable="false" minWidth="7.20001220703125" prefWidth="118.39996337890625" sortable="false" text="Squad" />
             <TableColumn fx:id="id" editable="false" prefWidth="122.39996337890625" text="id" />
          </columns></TableView>
-      <Button layoutX="272.0" layoutY="573.0" mnemonicParsing="false" onAction="#click_table" prefHeight="45.0" prefWidth="120.0" text="Select card">
+      <Button layoutX="386.0" layoutY="573.0" mnemonicParsing="false" onAction="#click_table" prefHeight="45.0" prefWidth="120.0" text="Select card">
          <font>
             <Font size="15.0" />
          </font></Button>
+      <Button layoutX="161.0" layoutY="573.0" mnemonicParsing="false" onAction="#click_back" prefHeight="45.0" prefWidth="120.0" text="Back">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

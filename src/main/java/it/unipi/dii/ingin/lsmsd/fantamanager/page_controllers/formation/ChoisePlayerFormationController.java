@@ -5,6 +5,7 @@ import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.player_formation;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
+import it.unipi.dii.ingin.lsmsd.fantamanager.util.util_controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -57,6 +58,15 @@ public class ChoisePlayerFormationController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("formation_page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Collection page");
+        stage.setScene(scene);
+        stage.show();
+    }
+    @FXML
+    protected void click_back() throws IOException {
+        Stage stage=(Stage)root.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(app.class.getResource("formation_page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Formation page");
         stage.setScene(scene);
         stage.show();
     }
