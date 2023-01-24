@@ -87,10 +87,7 @@ public class calculate_matchday {
 
                                 //setto voto anche nella variabile cards
                                 card.put("vote", null);
-                            } else {
-                                //altrimenti significa che nemmeno quelli della panchina erano validi o erano gia presi in altre posizioni, quindi il voto resta zero per quello che era titolare e non ha avuto rimpiazzo dalla panchina
-                                //System.out.println(card.get("name") + " non sara rimpiazzato");
-                            }
+                            } 
                         } else {
 
                             //System.out.println("titolare" + card.get("name"));
@@ -106,7 +103,7 @@ public class calculate_matchday {
                         total_score += score;
                     }
 
-                    //TODO controllo di questa query su tutti gli users
+                   
                     Bson filter = Filters.and(eq("username", username));
                     Bson update1 = Updates.set("formations." + matchday + ".tot", total_score);
                     UpdateOptions options = new UpdateOptions().upsert(true);
@@ -118,21 +115,7 @@ public class calculate_matchday {
                     OptionsMongoDriver.update_user_credits(true,username, (int) Math.floor(total_score));
                     OptionsMongoDriver.update_user_points(username,(int) Math.floor(old_tot),(int) Math.floor(total_score));
                 }
-                /*else{
-                    //l-utente non ha inserito la formazione, quindi non dovrebbe far niente, questa cosa sotto serviva prima di decidere di mettere tutti i documents empty
-                    //System.out.println("formazione non inserita");
-
-                    JSONObject formation_null=new JSONObject();
-                    formation_null.put("valid",false);
-                    formation_null.put("players",new JSONObject());
-                    formation_null.put("tot",0.0);
-                    formation_null.put("module",new ArrayList<>());
-                    Bson filter = Filters.and(eq("username", username));
-                    Bson update1 = Updates.set("formations." + matchday,formation_null);
-                    UpdateOptions options = new UpdateOptions().upsert(true);
-                    //System.out.println(coll.updateOne(filter, update1, options));
-                    coll.updateOne(filter, update1, options);
-                }*/
+                
                 System.out.println("Calculated user's team score: "+j++);
             }
         } catch (ParseException e) {
@@ -146,13 +129,7 @@ public class calculate_matchday {
 
     private static Double take_card_from_bench(int i, Map<Long, Double> player_score, JSONObject cards, JSONArray modulo, String username, int matchday, MongoCollection<Document> coll) {
 
-        //MongoClient mongoClient2 = MongoClients.create(global.MONGO_URI);
-
-        // Access a Database
-        //MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
-
-        // Access a Collection
-        //MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
+        
 
         Double score = Double.valueOf(0);
         int place_of_bench=0;
@@ -239,7 +216,7 @@ public class calculate_matchday {
         //setto voto anche nella variabile cards
         card.put("vote",score);
 
-        //mongoClient2.close();
+      
         return score;
     }
 

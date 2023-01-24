@@ -164,7 +164,7 @@ public class TradeMongoDriver {
         //searching for the trades
         Bson filter = Filters.eq("status",0);
         try {
-            resultDoc = collection.find(filter).limit(500).iterator();	//limit(500) because the load will be too much otherwise  //TODO, facciamo limit con un criterio, sennò non va bene
+            resultDoc = collection.find(filter).limit(500).iterator();	//limit(500) because the load will be too much otherwise  
         } catch (Exception e) {
             System.out.println("An error has occured while viewing trades!");
             return null;
