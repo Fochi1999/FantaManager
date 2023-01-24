@@ -42,9 +42,10 @@ public class SeeUserController implements Initializable{
 	
 	@FXML private TextField region_field;
 	@FXML private TextField points_field;
-	@FXML
-	private ListView<String> collection_list;
+	@FXML private TextField email_field;
+
 	@FXML private Text username_field;
+	@FXML private Text err_text;
 	
 	@FXML private AnchorPane admin_area;
 	@FXML private Text admin_edit_warning;
@@ -61,6 +62,7 @@ public class SeeUserController implements Initializable{
 		System.out.println("Opening user page...");
 		username_field.setText(username+"'s");
 		hide_delete_buttons();
+		err_text.setVisible(false);
 		
 		//hiding delete button from normal users
 		int priv = global.user.get_privilege();
@@ -98,21 +100,20 @@ public class SeeUserController implements Initializable{
 		
 		user_doc = SeeUserMongoDriver.search_user(username);
 		if(user_doc == null) { //handling user not found error
-			Text t1 = new Text("An error has occurred while searching for the user. Please, exit the page and try again later.");
-			t1.setStyle("-fx-font: 30 system;");
-			//text_flow.getChildren().add(t1);
-			collection_list.getItems().add(String.valueOf(t1));
+			err_text.setVisible(true);
 			return;
 		}
 		
     	//showing up the info
     	region_field.setText(user_doc.getString("region"));
     	points_field.setText(user_doc.get("points").toString());
+    	email_field.setText(user_doc.get("email").toString());
     	System.out.println(user_doc.get("_id").toString());
-		ArrayList<card_collection> collection_user_selected= collectionRedisDriver.load_collection(user_doc.get("_id").toString());
-		show_collection(collection_user_selected);
+    	
+		//ArrayList<card_collection> collection_user_selected= collectionRedisDriver.load_collection(user_doc.get("_id").toString());
+		//show_collection(collection_user_selected);
 	}
-
+/*
 	private void show_collection(ArrayList<card_collection> collection_user_selected) {
 		//showing off trades
 		ObservableList<String> list = FXCollections.observableArrayList();
@@ -132,7 +133,7 @@ public class SeeUserController implements Initializable{
 		collection_list.getItems().addAll(list);
 
 	}
-
+*/
 
 	public void click_delete() throws IOException{
 		
