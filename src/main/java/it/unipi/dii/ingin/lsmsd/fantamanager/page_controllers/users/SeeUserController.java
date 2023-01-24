@@ -40,6 +40,7 @@ public class SeeUserController implements Initializable{
 	@FXML private Pane confirm_delete;
 	@FXML private Pane cancel_delete;
 	
+	//@FXML private ListView<String> collection_list;
 	@FXML private TextField region_field;
 	@FXML private TextField points_field;
 	@FXML private TextField email_field;
@@ -108,7 +109,6 @@ public class SeeUserController implements Initializable{
     	region_field.setText(user_doc.getString("region"));
     	points_field.setText(user_doc.get("points").toString());
     	email_field.setText(user_doc.get("email").toString());
-    	System.out.println(user_doc.get("_id").toString());
     	
 		//ArrayList<card_collection> collection_user_selected= collectionRedisDriver.load_collection(user_doc.get("_id").toString());
 		//show_collection(collection_user_selected);
@@ -192,7 +192,7 @@ public class SeeUserController implements Initializable{
 			stage.setScene(scene);
 			stage.show();
 		}catch(Exception e){
-			System.out.println("Impossibile caricare formazione");
+			System.out.println("Not possible to load formation");
 		}
 	}
 	
