@@ -47,6 +47,7 @@ public class SeeUserController implements Initializable{
 
 	@FXML private Text username_field;
 	@FXML private Text err_text;
+	@FXML private Text err_text_formation;
 	
 	@FXML private AnchorPane admin_area;
 	@FXML private Text admin_edit_warning;
@@ -64,6 +65,7 @@ public class SeeUserController implements Initializable{
 		username_field.setText(username+"'s");
 		hide_delete_buttons();
 		err_text.setVisible(false);
+		err_text_formation.setVisible(false);
 		
 		//hiding delete button from normal users
 		int priv = global.user.get_privilege();
@@ -182,6 +184,7 @@ public class SeeUserController implements Initializable{
 	@FXML
 	protected void click_see_formation() throws IOException {
 		try {
+			err_text_formation.setVisible(false);
 			System.out.println("Going to user formations...");
 			SeeUserFormationController.matchday = (int) choise_box_formation.getSelectionModel().getSelectedItem();
 			SeeUserFormationController.user_document = user_doc;
@@ -192,6 +195,7 @@ public class SeeUserController implements Initializable{
 			stage.setScene(scene);
 			stage.show();
 		}catch(Exception e){
+			err_text_formation.setVisible(true);
 			System.out.println("Not possible to load formation");
 		}
 	}

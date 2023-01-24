@@ -12,7 +12,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.CardMongoDriver;
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.global;
 import it.unipi.dii.ingin.lsmsd.fantamanager.util.utilities;
 import org.bson.Document;

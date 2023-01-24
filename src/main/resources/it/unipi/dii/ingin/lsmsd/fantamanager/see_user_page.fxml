@@ -83,7 +83,12 @@
                   </Button>
                </children>
             </AnchorPane>
-            <Text fx:id="err_text" fill="RED" layoutX="80.0" layoutY="397.0" strokeType="OUTSIDE" strokeWidth="0.0" text="An error has occurred while searching for the user. Please, exit the page and try again later" wrappingWidth="216.0">
+            <Text fx:id="err_text" fill="RED" layoutX="80.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="An error has occurred while searching for the user. Please, exit the page and try again later" textAlignment="CENTER" wrappingWidth="216.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="err_text_formation" fill="RED" layoutX="101.0" layoutY="498.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Formation not found or not played already" textAlignment="CENTER" wrappingWidth="166.0">
                <font>
                   <Font size="15.0" />
                </font>

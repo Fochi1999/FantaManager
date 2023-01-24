@@ -1,6 +1,6 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager;
 
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,9 +27,8 @@ public class app extends Application {
 
     public static void main(String[] args) {
     	try {
-    		//populateDB.create_users_collection_mongoDB(1000);		//users collection - mongo	(50k = 2Gb)
-            //populateDB.create_cards_collection_mongoDB();  -->prendi file cardsDUMP.json da chat gruppo
-    		//populateDB.create_trade_collection_mongoDB(200000);		//trades collection - mongo
+    		//populateDB.create_users_collection_mongoDB(500);		//users collection - mongo	(50k = 2Gb)
+            //populateDB.create_trade_collection_mongoDB(300000);		//trades collection - mongo
     		//populateDB.create_user_card_collection_redis();			//user's card collection - redis
     		//utilities.update_matchday(-1);							//initialize the update_matchday matrix with all zero
             //utilities.set_next_matchday_redis(1);                   //initialize the next_matchday a 1, prima che inizi il campionato
