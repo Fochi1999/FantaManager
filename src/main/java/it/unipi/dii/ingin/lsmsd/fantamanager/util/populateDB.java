@@ -15,9 +15,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
 import it.unipi.dii.ingin.lsmsd.fantamanager.collection.card_collection;
 import it.unipi.dii.ingin.lsmsd.fantamanager.formation.formation;
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.general_statistics_class;
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.player_class;
-import it.unipi.dii.ingin.lsmsd.fantamanager.player_classes.statistics_class;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.user;
 import it.unipi.dii.ingin.lsmsd.fantamanager.user.userMongoDriver.formationMongoDriver;
 import org.bson.Document;
@@ -508,7 +505,7 @@ public class populateDB {
 		emailAddress += "@unipi.it";
 		return emailAddress;
 	}
-
+/*
 	public static void create_cards_collection_mongoDB(){
 
 		//connecting to mongoDB
@@ -542,7 +539,8 @@ public class populateDB {
 		System.out.print("'Player' DB created...\n");
 
 	}
-
+	*/
+/*
 	private static void findPlayerAPI(JSONObject player_kickest, MongoCollection<Document> collection) {
 		JSONParser jsonParser = new JSONParser();
 
@@ -598,7 +596,8 @@ public class populateDB {
 			e.printStackTrace();
 		}
 	}
-
+	*/
+/*
 	public static void createPlayerDocuments(JSONObject player_kickest, JSONObject player_API, int id, MongoCollection<Document> collection){
 
 
@@ -666,7 +665,7 @@ public class populateDB {
 
 
 	}
-
+*/
 	private static String trasformation(String player) {
 
 		String[] words = player.split(" ");
