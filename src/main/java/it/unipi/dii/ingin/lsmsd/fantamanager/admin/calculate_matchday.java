@@ -86,7 +86,7 @@ public class calculate_matchday {
                                 coll.updateOne(filter, update1, options);
 
                                 //setto voto anche nella variabile cards
-                                card.put("vote", null);
+                                card.put("vote", 0.0);
                             } 
                         } else {
 
