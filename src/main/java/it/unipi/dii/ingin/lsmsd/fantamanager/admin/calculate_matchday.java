@@ -80,7 +80,7 @@ public class calculate_matchday {
                             if (score != 0) {
                                 //System.out.println("titolare sostituito:" + card.get("name"));
                                 Bson filter = Filters.and(eq("username", username));
-                                Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", null);
+                                Bson update1 = Updates.set("formations." + matchday + ".players." + i + ".vote", 0.0);
                                 UpdateOptions options = new UpdateOptions().upsert(true);
                                 //System.out.println(coll.updateOne(filter, update1, options));
                                 coll.updateOne(filter, update1, options);
