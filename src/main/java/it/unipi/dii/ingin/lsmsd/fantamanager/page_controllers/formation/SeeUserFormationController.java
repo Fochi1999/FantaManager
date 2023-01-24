@@ -83,7 +83,6 @@ public class SeeUserFormationController implements Initializable {
 			}catch(Exception e){
 				try{
 					vote= Double.valueOf(playerDocument.getInteger("vote"));
-					//TODO secondo me nella riga sopra ci va getDouble("vote")
 				} catch (Exception ex) {
 					vote=0.0;
 				}
