@@ -398,7 +398,7 @@ public class populateDB {
 		player.put("name", "");
 		player.put("id", 0);
 		player.put("team", "");
-		player.put("vote", 0);
+		player.put("vote", Double.valueOf(0));
 		//ArrayList<JSONObject> players = new ArrayList<>();
 		JSONObject players =new JSONObject();
 		for(int i=0; i<=18;i++) {
