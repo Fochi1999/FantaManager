@@ -26,7 +26,7 @@ public class formationMongoDriver {
     public static boolean change_formation() {
         MongoClient myClient = MongoClients.create(global.MONGO_URI);
         MongoDatabase database = myClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primaryPreferred());
+        MongoCollection<Document> collection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primary());
         Bson user = Filters.eq("username", global.user.username);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;

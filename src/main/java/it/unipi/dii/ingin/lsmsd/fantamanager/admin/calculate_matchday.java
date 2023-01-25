@@ -1,5 +1,7 @@
 package it.unipi.dii.ingin.lsmsd.fantamanager.admin;
 
+import com.mongodb.ReadConcern;
+import com.mongodb.ReadPreference;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
@@ -37,7 +39,7 @@ public class calculate_matchday {
         MongoDatabase database2 = mongoClient2.getDatabase(global.DATABASE_NAME);
 
         // Access a Collection
-        MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME);
+        MongoCollection<Document> coll = database2.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primary());
 
         int j=0;
 

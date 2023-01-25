@@ -16,7 +16,7 @@ public class UserMongoDriver {
     public static void openConnection(){
         mongoClient= MongoClients.create(global.MONGO_URI);
         database = mongoClient.getDatabase(global.DATABASE_NAME);
-        collection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primaryPreferred());
+        collection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primary());
     }
 
     public static void closeConnection(){

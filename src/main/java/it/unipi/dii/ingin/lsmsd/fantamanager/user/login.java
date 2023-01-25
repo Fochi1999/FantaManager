@@ -17,7 +17,7 @@ public class login {
         
     	MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
         MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primaryPreferred());
+        MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primary());
         Document user_doc = usersCollection.find(Filters.and(Filters.eq("username", nick), Filters.eq("password", password))).first();
 
         if(user_doc == null) {
@@ -42,7 +42,7 @@ public class login {
     	
         MongoClient mongoClient=MongoClients.create(global.MONGO_URI);
         MongoDatabase database = mongoClient.getDatabase(global.DATABASE_NAME);
-        MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primaryPreferred());
+        MongoCollection<Document> usersCollection = database.getCollection(global.USERS_COLLECTION_NAME).withReadPreference(ReadPreference.primary());
         
         Document user = usersCollection.find(Filters.eq("username", Nick)).first();
         if (user != null) {
