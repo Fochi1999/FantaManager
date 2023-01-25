@@ -119,6 +119,7 @@ public class collectionRedisDriver {
                             jedis.del("user_id:" + global.id_user + ":card_id:" + card.card_id + ":team");
                             jedis.del("user_id:" + global.id_user + ":card_id:" + card.card_id + ":position");
                         }
+                        jedis.waitReplicas(2,10000);
                     }
                 
                     closePool();
@@ -149,8 +150,9 @@ public class collectionRedisDriver {
                         jedis.del("user_id:" + global.id_user + ":card_id:" + card_id + ":team");
                         jedis.del("user_id:" + global.id_user + ":card_id:" + card_id + ":position");
                     }
+                    jedis.waitReplicas(2,10000);
                 }
-     
+
                 closePool();
                 remove_card_from_local(Integer.parseInt(card_id));
                 System.out.println("Card deleted: "+ card_id);
@@ -166,10 +168,12 @@ public class collectionRedisDriver {
                         try (Jedis jedis = pool.getResource()) {
                             String value=jedis.get(key);
                             Integer quantity=Integer.parseInt(value);
-                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity+1)); 
+                            jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":quantity", String.valueOf(quantity+1));
+
+                            jedis.waitReplicas(2,10000);
                         }
-                    }
-                    else {
+                }
+                else {
                         apertura_pool();
                         //devo aggiungerlo per intero
                         try (Jedis jedis = pool.getResource()) {
@@ -179,9 +183,9 @@ public class collectionRedisDriver {
                             jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":team", card.team);
                             jedis.set("user_id:" + retrieve_user + ":card_id:" + card.card_id + ":position", card.position);
 
-
+                            jedis.waitReplicas(2,10000);
                         }
-                    }
+                }
                     closePool();
                     add_card_to_local(card);
                     System.out.println("Card added to "+retrieve_user+":"+card.name);
