@@ -70,7 +70,7 @@ public class ShotsStatsController implements Initializable{
 					System.out.println("x" + xS + " y " + yS + " result" + result);
 					double x = Double.parseDouble(xS);
 					double y = Double.parseDouble(yS);
-					create_points_shots(x, y, type, result, expectedgoals, minS, j + 1);
+					create_points_shots(x, y, type, result, expectedgoals, minS, i);
 				}
 			}
 

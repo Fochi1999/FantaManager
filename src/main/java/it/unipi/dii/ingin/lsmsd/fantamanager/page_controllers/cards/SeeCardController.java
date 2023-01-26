@@ -61,8 +61,8 @@ public class SeeCardController implements Initializable{
 		search_card();
 		get_general_info();
 		
-		last_updated_matchday = 1;	
-		for(int i=1; i<=last_updated_matchday; i++) {
+		last_updated_matchday = global.next_matchday;	
+		for(int i=1; i<last_updated_matchday; i++) {
 			matchday_list.getItems().add(i);
 		}
 	}

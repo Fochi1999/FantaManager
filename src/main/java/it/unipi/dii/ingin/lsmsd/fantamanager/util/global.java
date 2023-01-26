@@ -24,7 +24,7 @@ public class global {
     public static final String TRADES_COLLECTION_NAME = "Trades";
     public static final String CARDS_COLLECTION_NAME = "Cards";
     
-    public static final String REDIS_URI = "172.16.5.24";
+    public static final String REDIS_URI = "172.16.5.23";
     public static final int REDIS_PORT = 6379;
     
     public static int next_matchday = 0;

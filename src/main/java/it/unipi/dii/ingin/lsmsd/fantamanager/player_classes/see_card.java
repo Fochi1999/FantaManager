@@ -72,6 +72,11 @@ public class see_card {
 		JSONObject card = new JSONObject(card_doc.toJson());
 	    JSONObject stats = card.getJSONObject("general_statistics");
 	    
+	    int passes_accuracy = 0;
+	    if(!stats.get("games_appearences").toString().equals("0")) {
+	    	passes_accuracy = ((Integer.parseInt(stats.get("passes_accuracy").toString()))/(Integer.parseInt(stats.get("games_appearences").toString())));
+	    }
+	    
 	    output = "Games Appearences: "+stats.get("games_appearences").toString() + "\nGames Lineup: " + stats.get("games_lineup").toString() +
 	    		"\nGames Minutes: "+ stats.get("games_minutes").toString() + "\nSubstitutes In: " + stats.get("substitutes_in").toString() +
 	    		"\nSubstitutes Out: " + stats.get("substitutes_out").toString() +/* "\nSubstitutes Bench: " + stats.get("substitutes_bench").toString() +*/
@@ -79,7 +84,7 @@ public class see_card {
 	    		"\nGoals Total: "+ stats.get("goals_total").toString() + "\nGoals Conceded: " + stats.get("goals_conceded").toString() +
 	    		"\nGoals Assists: " + stats.get("goals_assists").toString() + "\nGoals Saves: "+stats.get("goals_saves").toString() +
 	    		"\nPasses Total: "+stats.get("passes_total").toString() + "\nPasses Key: "+ stats.get("passes_key").toString() + 
-	    		"\nPasses Accuracy: "+stats.get("passes_accuracy").toString()+ "\nTackles Total: "+stats.get("tackles_total").toString() +
+	    		"\nPasses Accuracy: "+passes_accuracy+ "\nTackles Total: "+stats.get("tackles_total").toString() +
 	    		/*"\nTackles Blocks: "+stats.get("tackles_blocks").toString() +*/ "\nTackles Interceptions: "+stats.get("tackles_interceptions").toString()+
 	    		"\nDuels Total: "+stats.get("duels_total").toString() +"\nDuels Won: "+stats.get("duels_won").toString() +
 	    		"\nDribbles Attempts: "+stats.get("dribbles_attempts").toString()+"\nDribbles Success: "+stats.get("dribbles_success").toString()+
