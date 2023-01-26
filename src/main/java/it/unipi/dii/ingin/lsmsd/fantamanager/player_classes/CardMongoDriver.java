@@ -217,51 +217,6 @@ public class CardMongoDriver {
     }
 
 
-    /*public static card_collection search_player_by_name(String name) {
-
-        openConnection();
-        MongoCursor<Document> resultDoc;
-        card_collection player=null;
-
-        Bson filter = Filters.eq("fullname",name);
-        try {
-            resultDoc = collection.find(filter).iterator();
-        } catch (Exception e) {
-            System.out.println("An error has occured while viewing trades!");
-            return null;
-        }
-        while(resultDoc.hasNext()){
-            Document player_doc = resultDoc.next();
-            Integer player_id = (Integer) player_doc.get("player_id");
-            String fullname=(String) player_doc.get("fullname");
-            String team = player_doc.getString("team");
-            String position = player_doc.getString("position");
-            player=new card_collection(player_id,fullname,1,team,position);
-            //update_status_trade(); 
-
-        }
-        return player;
-    }*/
-
-    /*public static MongoCursor<Document> retrieve_player_for_trade(){
-        openConnection();
-
-        MongoCursor<Document> resultDoc;
-
-        //blank search field
-
-
-            try {
-                resultDoc = collection.find().projection(fields(include("player_id","fullname","team","position"))).iterator();
-            }
-            catch(Exception e) {
-                System.out.println("Error on search.");
-                return null;
-            }
-
-            return resultDoc;
-    }*/
-
     public static int retrieve_card_credits(String username){
 
             openConnection();
