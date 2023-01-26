@@ -66,33 +66,7 @@ public class collectionRedisDriver {
                     }
                 }
                    	
-            	/*
-            	//old version of load_collection
-                try (Jedis jedis = pool.getResource()) { 
-                	
-                    int i = 0;
-                	while (i<=global.max_card_id) {	
-                        String key_name = key_load+i+":name";
-                        String value_name = jedis.get(key_name);
-                        
-                        if (value_name != null) {
-                        	String key_pos = key_load+i+":position";
-                            String value_pos = jedis.get(key_pos);
-                            
-                            
-                            String key_qnt = key_load+i+":quantity";
-                            String value_qnt = jedis.get(key_qnt);
-                            
-                            String key_team = key_load+i+":team";
-                            String value_team = jedis.get(key_team);
-                            
-                        	card_collection card=new card_collection(i,value_name,Integer.parseInt(value_qnt),value_team,value_pos);
-                            cards.add(card);
-                        }
-                        System.out.println("Reading card: "+i+"/"+global.max_card_id); 
-                        i++;
-                    }
-                }*/
+
                 closePool();
                 return cards;
             }
